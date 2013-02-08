@@ -23,8 +23,6 @@ namespace Sc2tvChat {
             InitializeComponent();
         }
 
-        int id;
-
         private void start_Click_1( object sender, RoutedEventArgs e ) {
             streamerNick.IsEnabled = false;
             start.IsEnabled = false;
@@ -43,7 +41,7 @@ namespace Sc2tvChat {
 
                         Properties.Settings.Default.streamerID = int.Parse(m.Groups[1].Value);
                         Properties.Settings.Default.streamerNick = rx.Match(b.Result).Groups[1].Value;
-                        this.DialogResult = true;
+                      //  this.DialogResult = true;
                     } else {
                         MessageBox.Show("Чат стримера не найден.");
                     }
@@ -53,6 +51,11 @@ namespace Sc2tvChat {
             });
 
             wc.DownloadStringAsync(new Uri(streamerNick.Text, UriKind.RelativeOrAbsolute));
+        }
+
+       
+        private void Window_Closed_1( object sender, EventArgs e ) {
+            Properties.Settings.Default.Save();
         }
     }
 }

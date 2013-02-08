@@ -46,5 +46,41 @@ namespace Sc2tvChat.Properties {
                 this["streamerNick"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool useLayered {
+            get {
+                return ((bool)(this["useLayered"]));
+            }
+            set {
+                this["useLayered"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("400")]
+        public double width {
+            get {
+                return ((double)(this["width"]));
+            }
+            set {
+                this["width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("155")]
+        public double height {
+            get {
+                return ((double)(this["height"]));
+            }
+            set {
+                this["height"] = value;
+            }
+        }
     }
 }

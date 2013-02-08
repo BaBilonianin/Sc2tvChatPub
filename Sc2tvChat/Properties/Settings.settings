@@ -8,5 +8,14 @@
     <Setting Name="streamerNick" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="useLayered" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="width" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">400</Value>
+    </Setting>
+    <Setting Name="height" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">155</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

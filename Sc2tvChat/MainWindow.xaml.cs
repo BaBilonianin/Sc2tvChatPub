@@ -25,15 +25,39 @@ namespace Sc2tvChat {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
+
+            RenderMessages = new List<RenderMessage>();
+            render = new DispatcherTimer();
+            next = new DispatcherTimer();
+
+
+
             PollBorder.Visibility = System.Windows.Visibility.Hidden;
+
+            Properties.Settings.Default.PropertyChanged += Default_PropertyChanged;
         }
+
+        void Default_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e ) {
+            if (e.PropertyName == "useLayered") {
+               
+            }
+        }
+
+        const double NameWidth = 115.0;
+        const string LinkReplacer = "%LINKLINK%";
 
         int PekaCount = 0;
         double TempCount = 0.0;
-
+        Regex UriDetector = new Regex(@"((http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?)");
         DispatcherTimer render, next;
+        Dictionary<string, Uri> SmilesUri = new Dictionary<string, Uri>();
+        Dictionary<string, BitmapImage> SmilesBmp = new Dictionary<string, BitmapImage>();
+        Dictionary<string, Achievement> Achivments = new Dictionary<string, Achievement>();
+        List<RenderMessage> RenderMessages;
+
 
         private void Window_Loaded_1( object sender, RoutedEventArgs e ) {
+          
           //  ;
             //<img src="/img/a.png?1" title=":happy:" width="30" height="30" class="chat-smile" alt=":happy:">
             SmilesUri[":happy: "] = new Uri("http://chat.sc2tv.ru/img/a.png?1");
@@ -148,13 +172,12 @@ namespace Sc2tvChat {
             //    s += string.Format("SmilesUri[\"{1} \"] = new Uri(\"http://chat.sc2tv.ru{0}\");\r\n", m.Groups[1].Value, m.Groups[2].Value);
             //}
 
-            RenderMessages = new List<RenderMessage>();
-            render = new DispatcherTimer();
+            
             render.Interval = TimeSpan.FromMilliseconds(50);
             render.Tick += render_Tick;
             render.Start();
 
-            next = new DispatcherTimer();
+            
             next.Interval = TimeSpan.FromSeconds(1);
             next.Tick += next_Tick;
             next.Start();
@@ -175,55 +198,47 @@ namespace Sc2tvChat {
 
             ClockTB.Text = string.Format("Time: {0:HH:mm:ss}, Peka's: {1}, Temp: {2:0.0}°C", DateTime.Now, PekaCount, TempCount);
 
-            if (TempCount > 50)
-                TempCount -= 0.01;
-            else
+            //if (TempCount > 50)
+            //    TempCount -= 0.004;
+            //else
                 TempCount -= 0.001;
 
-            double y = AnimCanvas.ActualHeight-5;
+            double y = AnimCanvas.ActualHeight;
           //  bool needScroll = false;
-            for (int j = RenderMessages.Count - 1; j >= (RenderMessages.Count-15); --j) {
+            for (int j = RenderMessages.Count - 1; j >= 0; --j) {
 
-                if( j>=0 )
-                switch (RenderMessages[j].State) {
-                    case 0:
-                        if (y >= 0) {
-                            CreateVisual(RenderMessages[j]);
-                        } else {
-                            RenderMessages[j].State = 2;
-                        }
-                        break;
-                    case 1:
-                        y -= RenderMessages[j].Height;
-                        RenderMessages[j].DestHeight = y;
-                        if (y < -200)
-                            RenderMessages[j].State = 2;
-                        //    needScroll = true;
-                        break;
-                    case 2:
-                        //RenderMessages[j].DestHeight = -RenderMessages[j].Height - 20.0;
-                        //if (Math.Abs(Canvas.GetTop(RenderMessages[j].Text) - RenderMessages[j].DestHeight) < 0.1) {
-                        if( RenderMessages[j].Name != null )
-                            AnimCanvas.Children.Remove(RenderMessages[j].Name);
-                        if (RenderMessages[j].Text != null)
-                            AnimCanvas.Children.Remove(RenderMessages[j].Text);
+                if (j >= 0)
+                    switch (RenderMessages[j].State) {
+                        case 0:
+                            if (y >= 0) {
+                                CreateVisual(RenderMessages[j]);
+                            } else {
+                                RenderMessages[j].State = 2;
+                            }
+                            break;
+                        case 1:
+                            y -= RenderMessages[j].Height;
+                            RenderMessages[j].DestHeight = y;
+                            if (y < -200)
+                                RenderMessages[j].State = 2;
+                            break;
+                        case 2:
+                            if (RenderMessages[j].Name != null) {
+                                AnimCanvas.Children.Remove(RenderMessages[j].Name);
+                                RenderMessages[j].Name = null;
+                            }
+                            if (RenderMessages[j].Text != null) {
+                                AnimCanvas.Children.Remove(RenderMessages[j].Text);
+                                RenderMessages[j].Text = null;
+                            }
                             RenderMessages[j].State = 3;
-                        //}
-                        break;
+                            break;
 
-                    case 3:
-                        RenderMessages[j].Live--;
-                        break;
-                }
+                        case 3:
+                            RenderMessages[j].Live--;
+                            break;
+                    }
             }
-
-            //if (needScroll && RenderMessages.Count > 0) {
-            //    for (int j = 0; j < RenderMessages.Count; ++j)
-            //        if (RenderMessages[j].State == 1) {
-            //            RenderMessages[j].State = 2;
-            //            break;
-            //        }
-            //}
 
             int i = 0;
             while (i < RenderMessages.Count) {
@@ -244,64 +259,62 @@ namespace Sc2tvChat {
 
                         double dy = (RenderMessages[j].DestHeight - oy) / 10.0;
 
-                        if (Convert.ToInt32(dy) != 0) {
+                        //if (Convert.ToInt32(dy) != 0) {
 
                             Canvas.SetTop(RenderMessages[j].Text, oy + dy);
                             Canvas.SetTop(RenderMessages[j].Name, oy + dy);
-                        }
+                       // }
                     }
                 }
             }
-
-
         }
 
-        Regex UriDetector = new Regex(@"((http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?)" );
+        private double MaximumMessageWidth {
+            get { return AnimCanvas.ActualWidth - NameWidth - 10.0; }
+        }
 
         private void CreateVisual( RenderMessage renderMessage ) {
-            const double NameWidth = 115.0;
-            const string LinkReplacer = "%LINKLINK%";
-
-            renderMessage.Name = new TextBlock() { Text = renderMessage.Owner.Name };
-            renderMessage.Name.Style = (Style)this.Resources["NameStyle"];
-            renderMessage.Name.Measure(new Size(200.0, double.PositiveInfinity));
-            renderMessage.Name.Arrange(new Rect(0, 0, renderMessage.Name.DesiredSize.Width, renderMessage.Name.DesiredSize.Height));
-
-            Canvas.SetLeft(renderMessage.Name, NameWidth - renderMessage.Name.ActualWidth);
-            Canvas.SetTop(renderMessage.Name, 200.0);
-
-
-            Style textStyle = (Style)this.Resources["TextStyle"];
-            Style nameTextStyle = (Style)this.Resources["NameTextStyle"];
-            
-            // parse text
-            WrapPanel wp = new WrapPanel() { 
-                MaxWidth = this.ActualWidth - NameWidth - 10, 
-                Orientation = System.Windows.Controls.Orientation.Horizontal };
-            List<string> ttt = new List<string>();
-            renderMessage.Owner.Text =
-                renderMessage.Owner.Text.Replace("&quot;", "\"").Replace(":s:", " :s:").Replace("  ", " ");
-
             List<Uri> Urls = new List<Uri>();
-         
 
-            renderMessage.Owner.Text = UriDetector.Replace(renderMessage.Owner.Text, new MatchEvaluator(( m ) => {
+            string UserText = renderMessage.Data.Text.Replace("&quot;", "\"").Replace(":s:", " :s:").Replace("  ", " ");
+            UserText = UriDetector.Replace(UserText, new MatchEvaluator(( m ) => {
                 Urls.Add(new Uri(m.Value, UriKind.RelativeOrAbsolute));
                 return LinkReplacer;
             }));
 
+            renderMessage.Name = new TextBlock() { Text = renderMessage.Data.Name };
+            renderMessage.Name.Style = (Style)this.Resources["NameStyle"];
+            renderMessage.Name.Measure(new Size(NameWidth, double.PositiveInfinity));
+            renderMessage.Name.Arrange(new Rect(0, 0, renderMessage.Name.DesiredSize.Width, renderMessage.Name.DesiredSize.Height));
+
+            Canvas.SetLeft(renderMessage.Name, NameWidth - renderMessage.Name.ActualWidth);
+            Canvas.SetTop(renderMessage.Name, AnimCanvas.ActualHeight);
+
+
+            Style textStyle = (Style)this.Resources["TextStyle"];
+            Style nameTextStyle = (Style)this.Resources["NameTextStyle"];
+
+            // parse text
+            WrapPanel wp = new WrapPanel() {
+                MaxWidth = MaximumMessageWidth,
+                Orientation = System.Windows.Controls.Orientation.Horizontal,
+                Style = (Style)this.Resources["NormalText"]
+            };
+            List<string> ttt = new List<string>();
+         
+
             if (CurrentPoling != null) {
-                CurrentPoling.RegisterVote(renderMessage.Owner.Name, renderMessage.Owner.Text);
+                CurrentPoling.RegisterVote(renderMessage.Data);
                 UpdateVisualGraphs(CurrentPoling);
             }
 
-            int nxd = renderMessage.Owner.Text.IndexOf("<b>");
+            int nxd = UserText.IndexOf("<b>");
             if (nxd >= 0) {
-                int nxd2 = renderMessage.Owner.Text.IndexOf("</b>");
-                renderMessage.TalkTo = renderMessage.Owner.Text.Substring(nxd + 3, nxd2 - nxd - 3);
-                renderMessage.Owner.Text = renderMessage.Owner.Text.Substring(nxd2 + 6);
-               
-                if (renderMessage.TalkTo== Properties.Settings.Default.streamerNick) {
+                int nxd2 = UserText.IndexOf("</b>");
+                renderMessage.TalkTo = UserText.Substring(nxd + 3, nxd2 - nxd - 3);
+                UserText = UserText.Substring(nxd2 + 6);
+
+                if (renderMessage.TalkTo == Properties.Settings.Default.streamerNick) {
                     wp.Style = (Style)this.Resources["StreamerText"];
                 }
 
@@ -311,52 +324,55 @@ namespace Sc2tvChat {
             } else {
                 renderMessage.TalkTo = "";
             }
-                        
-            ttt.AddRange(from b in renderMessage.Owner.Text.Split(' ')
-                         select b + " ");
+
+            ttt.AddRange(UserText.Split(' '));
 
             // check smiles inside
             int linkIndex = 0;
 
             for (int j = 0; j < ttt.Count; ++j) {
+
+             
                 Style s;
                 if (j == 0 && !string.IsNullOrEmpty(renderMessage.TalkTo))
                     s = nameTextStyle;
                 else
                     s = textStyle;
 
-                if (ttt[j] == LinkReplacer+" ") {
-                    TextBlock link = new TextBlock() { 
-                        Text = "link ", 
+                if (ttt[j] == LinkReplacer) {
+                    TextBlock link = new TextBlock() {
+                        Text = "link ",
                         Cursor = Cursors.Hand,
-                        Style = (Style)this.Resources["LinkStyle"], 
-                        ToolTip = Urls[linkIndex] ,
+                        Style = (Style)this.Resources["LinkStyle"],
+                        ToolTip = Urls[linkIndex],
                         Tag = Urls[linkIndex]
                     };
                     link.MouseLeftButtonUp += link_MouseLeftButtonUp;
                     wp.Children.Add(link);
                     linkIndex++;
-                }else
-                if (ttt[j].StartsWith(":s:")) {
-                    CreateSmile(renderMessage.Owner.Name, ttt[j], wp);
                 } else {
-                    wp.Children.Add(new TextBlock() { Text = ttt[j], Style = s });
+                    if (j != (ttt.Count - 1))
+                        ttt[j] += ' ';
+
+
+                    if (ttt[j].StartsWith(":s:")) {
+                        CreateSmile(renderMessage.Data.Name, ttt[j], wp);
+                    } else {
+                        wp.Children.Add(new TextBlock() { Text = ttt[j], Style = s });
+                    }
                 }
             }
 
-            //string t  = ;
-
-            renderMessage.Text = wp;// new ;
-           // renderMessage.Text.Style = ;
-            renderMessage.Text.Measure(new Size((this.ActualWidth-NameWidth-5), double.PositiveInfinity));
+            renderMessage.Text = wp;
+            renderMessage.Text.Measure(new Size(wp.MaxWidth, double.PositiveInfinity));
             renderMessage.Text.Arrange(new Rect(0, 0, renderMessage.Text.DesiredSize.Width, renderMessage.Text.DesiredSize.Height));
-            Canvas.SetLeft(renderMessage.Text, NameWidth+10);
-            Canvas.SetTop(renderMessage.Text, 200.0);
+            Canvas.SetLeft(renderMessage.Text, NameWidth + 10);
+            Canvas.SetTop(renderMessage.Text, AnimCanvas.ActualHeight);
 
-            renderMessage.Height = renderMessage.Text.ActualHeight + 2.0;
+            renderMessage.Height = renderMessage.Text.ActualHeight;
             renderMessage.State = 1;
 
-            renderMessage.DestHeight = 200.0;
+            renderMessage.DestHeight = AnimCanvas.ActualHeight;
 
             AnimCanvas.Children.Add(renderMessage.Name);
             AnimCanvas.Children.Add(renderMessage.Text);
@@ -376,36 +392,47 @@ namespace Sc2tvChat {
             }
         }
 
-        Dictionary<string, Uri> SmilesUri = new Dictionary<string, Uri>();
-        Dictionary<string, BitmapImage> SmilesBmp = new Dictionary<string, BitmapImage>();
-
         private void CreateSmile( string UserName, string SmileId, WrapPanel TextPanel ) {
+
             Image img = new Image() { Height = 24.0 };
             BitmapImage bi;
 
             int nn = SmileId.LastIndexOf(':');
             SmileId = SmileId.Substring(2, nn + 1 - 2) + " ";
 
-            
             if (SmilesBmp.TryGetValue(SmileId, out bi)) {
                 img.Source = bi;
             } else {
                 bi = new BitmapImage(SmilesUri[SmileId]);
+                bi.DownloadCompleted += bi_DownloadCompleted;
                 img.Source = bi;
+
                 SmilesBmp[SmileId] = bi;
             }
 
-           
             UpdateAchivments(UserName, SmileId);
+
+            //Border img = new Border() {
+            //    Width = 24.0,
+            //    Height = 24.0,
+            //    Background = new SolidColorBrush(Colors.Red)
+            //};
 
             TextPanel.Children.Add(img);
         }
 
+        void bi_DownloadCompleted( object sender, EventArgs e ) {
+            /// эй, детка, а если картинка не смогла загрузиться, или ваще капец какой, размеры сменили по ширине?
+            /// надо бы заапдатить WrapPanel, в которой он сидит, и переместить все группы в чате
+            /// 
+            
+        }
+
         private void UpdateAchivments( string UserName, string SmileId ) {
-            Achivment a;
+            Achievement a;
             if (Achivments.TryGetValue(UserName, out a)) {
             } else {
-                a = new Achivment();
+                a = new Achievement();
                 Achivments[UserName] = a;
             }
 
@@ -418,41 +445,29 @@ namespace Sc2tvChat {
             a.Update(SmileId);
         }
 
-        public class Message {
-            [JsonProperty(PropertyName = "channelId")]
-            public int ChannelId { get; set; }
 
-            [JsonProperty(PropertyName = "date")]
-            public DateTime Date { get; set; }
-
-            [JsonProperty(PropertyName = "id")]
-            public int Id { get; set; }
-
-            [JsonProperty(PropertyName = "uid")]
-            public int Uid { get; set; }
-
-            [JsonProperty(PropertyName = "rid")]
-            public int Rid { get; set; }
-
-            [JsonProperty(PropertyName = "message")]
-            public string Text { get; set; }
-
-            [JsonProperty(PropertyName = "name")]
-            public string Name { get; set; }
-        }
-
-        public class Messages {
-            [JsonProperty(PropertyName = "messages")]
-            public Message[] Content { get; set; }
-        }
 
         public class RenderMessage {
-            public Message Owner { get; set; }
+            public Message Data { get; set; }
 
             public FrameworkElement Name { get; set; }
             public FrameworkElement Text { get; set; }
 
-            public double Height { get; set; }
+
+
+            double _calcedH;
+            public double Height 
+            {
+                get {
+                    if (Text == null)
+                        return _calcedH;
+                    if( double.IsNaN( Text.ActualHeight ) || double.IsInfinity( Text.ActualHeight ) )
+                        return _calcedH;
+                    return Text.ActualHeight;
+                }
+                set { _calcedH = value; }
+            }
+
             public int State { get; set; }
 
             public double DestHeight { get; set; }
@@ -462,20 +477,11 @@ namespace Sc2tvChat {
             public string TalkTo { get; set; }
         }
 
-        public class Achivment {
-            public int PekaCount { get; set; }
-            public void Update( string SmileId ) {
-                if( SmileId == ":peka:" )
-                    PekaCount++;
-            }
-        }
 
-        Dictionary<string, Achivment> Achivments = new Dictionary<string, Achivment>();
-        List<RenderMessage> RenderMessages;
 
         public RenderMessage GetVisual( Message newOwner ) {
             for (int j = 0; j < RenderMessages.Count; ++j)
-                if (RenderMessages[j].Owner.Id == newOwner.Id)
+                if (RenderMessages[j].Data.Id == newOwner.Id)
                     return RenderMessages[j];
             return null;
         }
@@ -504,7 +510,7 @@ namespace Sc2tvChat {
             for (int j = 0; j < msgs.Length; ++j) {
                 RenderMessage rm = GetVisual(msgs[j]);
                 if (rm == null) {
-                    rm = new RenderMessage() { Owner = msgs[j], State = 0 };
+                    rm = new RenderMessage() { Data = msgs[j], State = 0 };
                     RenderMessages.Add(rm);
                 }
                 rm.Live = 100;
@@ -637,24 +643,24 @@ namespace Sc2tvChat {
                 VisualGraphs = Graphs;
             }
 
-            public void RegisterVote( string User, string Text ) {
+            public void RegisterVote( Message Data ) {
                 int vote = 0;
-                if (Text.Contains("1."))
+                if (Data.Text.Contains("1."))
                     vote = 1;
                 else
-                if (Text.Contains("2."))
-                    vote = 2;
-                else
-                if (Text.Contains("3."))
-                    vote = 3;
-                else
-                if (Text.Contains("4."))
-                    vote = 4;
+                    if (Data.Text.Contains("2."))
+                        vote = 2;
+                    else
+                        if (Data.Text.Contains("3."))
+                            vote = 3;
+                        else
+                            if (Data.Text.Contains("4."))
+                                vote = 4;
 
                 if (vote > Variants.Count || vote == 0)
                     return;
 
-                Selections[User] = vote-1;
+                Selections[Data.Name] = vote - 1;
 
                 UpdateGraphs();
             }
@@ -681,5 +687,33 @@ namespace Sc2tvChat {
             }
         }
 
+        private void Window_SizeChanged_1( object sender, SizeChangedEventArgs e ) {
+          
+
+           // if (e.WidthChanged) {
+                
+
+                for (int j = 0; j < AnimCanvas.Children.Count; ++j) {
+                    WrapPanel wp = AnimCanvas.Children[j] as WrapPanel;
+                    if (wp != null) {
+                        wp.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                        wp.Arrange(new Rect(0, 0, wp.DesiredSize.Width, wp.DesiredSize.Height));
+
+                        wp.MaxWidth = MaximumMessageWidth;
+                    }
+                }
+            //}
+
+
+            for (int j = 0; j < RenderMessages.Count; ++j) {
+                if (RenderMessages[j].Text != null) {
+                    RenderMessages[j].State = 1;
+                    RenderMessages[j].Height = RenderMessages[j].Text.ActualHeight;
+
+                } else {
+                    RenderMessages[j].State = 0;
+                }
+            }
+        }
     }
 }
