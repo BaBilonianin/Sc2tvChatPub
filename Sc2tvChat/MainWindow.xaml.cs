@@ -38,12 +38,23 @@ namespace Sc2tvChat {
         }
 
         void Default_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e ) {
-            if (e.PropertyName == "useLayered") {
-               
+            if (e.PropertyName == "streamerID") {
+                PekaCount = 0;
+                TempCount = 0;
+                RenderMessages.Clear();
+                Achivments.Clear();
+                AnimCanvas.Children.Clear();
+
+                CurrentPoling = null;
+                PollGrid.Children.Clear();
+                PollGrid.RowDefinitions.Clear();
+                PollBorder.Visibility = System.Windows.Visibility.Hidden;
+
             }
         }
 
-        bool ClassicView;
+        bool ClassicView; // Так сделано потому что новые коменты не должны добавляться в измененном виде
+
 
         const double NameWidth = 95.0;
         const string LinkReplacer = "%LINKLINK%";
@@ -286,12 +297,16 @@ namespace Sc2tvChat {
 
         private void CreateVisual( RenderMessage renderMessage ) {
             List<Uri> Urls = new List<Uri>();
+            string UserText = UriDetector.Replace(
+                renderMessage.Data.Text.Replace("&quot;", "\"").Replace(":s:", " :s:").Replace("  ", " "), 
+                
+                
+                new MatchEvaluator(( m ) => {
+                    Urls.Add(new Uri(m.Value, UriKind.RelativeOrAbsolute));
+                    return LinkReplacer + " ";
+                })
+            );
 
-            string UserText = renderMessage.Data.Text.Replace("&quot;", "\"").Replace(":s:", " :s:").Replace("  ", " ");
-            UserText = UriDetector.Replace(UserText, new MatchEvaluator(( m ) => {
-                Urls.Add(new Uri(m.Value, UriKind.RelativeOrAbsolute));
-                return LinkReplacer;
-            }));
 
             if (ClassicView) {
             } else {
@@ -553,24 +568,10 @@ namespace Sc2tvChat {
         }
 
         private void Button_Click_1( object sender, RoutedEventArgs e ) {
-            this.Topmost = false;
             FindIDForm fid = new FindIDForm();
             var r = fid.ShowDialog();
-            this.Topmost = true;
-            if (r.HasValue && r.Value) {
-                PekaCount = 0;
-                TempCount = 0;
-                RenderMessages.Clear();
-                Achivments.Clear();
-                AnimCanvas.Children.Clear();
+            Properties.Settings.Default.Save();
 
-                CurrentPoling = null;
-                PollGrid.Children.Clear();
-                PollGrid.RowDefinitions.Clear();
-                PollBorder.Visibility = System.Windows.Visibility.Hidden;
-
-                Properties.Settings.Default.Save();
-            }
         }
 
         private void Button_Click_2( object sender, RoutedEventArgs e ) {
