@@ -1,0 +1,18 @@
+﻿<Window x:Class="Sc2tvChat.FindIDForm" WindowStyle="SingleBorderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" WindowStartupLocation="CenterScreen"
+        Title="" Height="147" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <TextBlock Text="Адрес страницы стримера sc2tv.ru" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        
+        <TextBox x:Name="streamerNick" Grid.Row="1" Text="" Margin="3,8" />
+        
+        <Button x:Name="start" Grid.Row="2" Content="Подключиться к чату..." Margin="1" Click="start_Click_1" />
+    </Grid>
+</Window>

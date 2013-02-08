@@ -1,0 +1,122 @@
+﻿<Window x:Class="Sc2tvChat.MainWindow" WindowStyle="None" AllowsTransparency="True"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" WindowStartupLocation="CenterScreen"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"  Topmost="True"
+        SnapsToDevicePixels="True"
+               MouseEnter="Thumb_MouseEnter_1" MouseLeave="Thumb_MouseLeave_1" 
+        Title="MainWindow" Height="155" Width="400" Loaded="Window_Loaded_1">
+    <Window.Resources>
+        <Style x:Key="NameStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="Yellow" />
+        </Style>
+
+        <Style x:Key="PollHeaderStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="Yellow" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="20" />
+        </Style>
+
+        <Style x:Key="PollGraphStyle" TargetType="{x:Type Border}">
+            <Setter Property="Background" Value="Bisque" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="MinWidth" Value="10.0" />
+            <Setter Property="Margin" Value="2" />
+        </Style>
+
+
+        <Style x:Key="PollResultStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="Orange" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="30" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+
+        <Style x:Key="PollVariantStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="Orange" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+
+        <Style x:Key="ClockStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="LightCoral" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Margin" Value="2,0" />
+            <Setter Property="FontFamily" Value="Courier New" />
+        </Style>
+
+        <Style x:Key="TextStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,-2" />
+        </Style>
+
+        <Style x:Key="LinkStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="GreenYellow" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="-1" />
+        </Style>
+
+        <Style x:Key="NameTextStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0" />
+        </Style>
+
+        <Style x:Key="StreamerText" TargetType="{x:Type WrapPanel}">
+            <Setter Property="Background" Value="#3000ff00" />
+        </Style>
+
+        <Style x:Key="{x:Type Thumb}" TargetType="{x:Type Thumb}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border Background="#01000000" BorderBrush="Gold" BorderThickness="1" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Background="#ff222222">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <Canvas x:Name="AnimCanvas" Grid.Row="1" Background="Black">
+            <Canvas.Clip>
+                <RectangleGeometry Rect="0,0,400,135" />
+            </Canvas.Clip>          
+        </Canvas>
+
+        <Rectangle Stroke="#88ff00ff" Margin="120,0,0,0" HorizontalAlignment="Left" Grid.Row="1"
+                  StrokeThickness="1" Height="150" Width="1" />
+
+        <TextBlock x:Name="ClockTB" Text="13:41" Style="{StaticResource ClockStyle}" />
+        
+        <Border x:Name="PollBorder" Background="#aa000000" Grid.Row="1" BorderBrush="Orange" BorderThickness="1">
+            <Grid x:Name="PollGrid" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+            </Grid>
+        </Border>
+        
+        <Thumb DragDelta="Thumb_DragDelta_1" />
+
+        <Button x:Name="b0" Visibility="Hidden" Width="18" ToolTip="Голосовалка"
+                HorizontalAlignment="Right" Content="P" Margin="1,1,40,1" Click="b0_Click_1" />
+        <Button x:Name="b1" Visibility="Hidden" Width="18" ToolTip="Сменить стримера"
+                HorizontalAlignment="Right" Content="S" Margin="1,1,20,1" Click="Button_Click_1" />
+        <Button x:Name="b2" Visibility="Hidden" Width="18" ToolTip="Закрыть"
+                HorizontalAlignment="Right" Content="X" Margin="1" Click="Button_Click_2" />
+    </Grid>
+</Window>
