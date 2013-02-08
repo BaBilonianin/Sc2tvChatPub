@@ -82,5 +82,17 @@ namespace Sc2tvChat.Properties {
                 this["height"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool classicView {
+            get {
+                return ((bool)(this["classicView"]));
+            }
+            set {
+                this["classicView"] = value;
+            }
+        }
     }
 }

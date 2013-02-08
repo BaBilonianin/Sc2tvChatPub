@@ -30,7 +30,7 @@ namespace Sc2tvChat {
             render = new DispatcherTimer();
             next = new DispatcherTimer();
 
-
+            ClassicView = Properties.Settings.Default.classicView;
 
             PollBorder.Visibility = System.Windows.Visibility.Hidden;
 
@@ -43,7 +43,9 @@ namespace Sc2tvChat {
             }
         }
 
-        const double NameWidth = 115.0;
+        bool ClassicView;
+
+        const double NameWidth = 95.0;
         const string LinkReplacer = "%LINKLINK%";
 
         int PekaCount = 0;
@@ -172,6 +174,9 @@ namespace Sc2tvChat {
             //    s += string.Format("SmilesUri[\"{1} \"] = new Uri(\"http://chat.sc2tv.ru{0}\");\r\n", m.Groups[1].Value, m.Groups[2].Value);
             //}
 
+            if (ClassicView) {
+                divider.Visibility = System.Windows.Visibility.Hidden;
+            }
             
             render.Interval = TimeSpan.FromMilliseconds(50);
             render.Tick += render_Tick;
@@ -262,6 +267,8 @@ namespace Sc2tvChat {
                         //if (Convert.ToInt32(dy) != 0) {
 
                             Canvas.SetTop(RenderMessages[j].Text, oy + dy);
+
+                        if( RenderMessages[j].Name != null )
                             Canvas.SetTop(RenderMessages[j].Name, oy + dy);
                        // }
                     }
@@ -270,7 +277,11 @@ namespace Sc2tvChat {
         }
 
         private double MaximumMessageWidth {
-            get { return AnimCanvas.ActualWidth - NameWidth - 10.0; }
+            get { 
+                if( ClassicView )
+                    return AnimCanvas.ActualWidth - 10.0;
+                return AnimCanvas.ActualWidth - NameWidth - 10.0;
+            }
         }
 
         private void CreateVisual( RenderMessage renderMessage ) {
@@ -282,14 +293,18 @@ namespace Sc2tvChat {
                 return LinkReplacer;
             }));
 
-            renderMessage.Name = new TextBlock() { Text = renderMessage.Data.Name };
-            renderMessage.Name.Style = (Style)this.Resources["NameStyle"];
-            renderMessage.Name.Measure(new Size(NameWidth, double.PositiveInfinity));
-            renderMessage.Name.Arrange(new Rect(0, 0, renderMessage.Name.DesiredSize.Width, renderMessage.Name.DesiredSize.Height));
+            if (ClassicView) {
+            } else {
 
-            Canvas.SetLeft(renderMessage.Name, NameWidth - renderMessage.Name.ActualWidth);
-            Canvas.SetTop(renderMessage.Name, AnimCanvas.ActualHeight);
+                renderMessage.Name = new TextBlock() { Text = renderMessage.Data.Name };
+                renderMessage.Name.Style = (Style)this.Resources["NameStyle"];
+                renderMessage.Name.Measure(new Size(NameWidth, double.PositiveInfinity));
+                renderMessage.Name.Arrange(new Rect(0, 0, renderMessage.Name.DesiredSize.Width, renderMessage.Name.DesiredSize.Height));
 
+                Canvas.SetLeft(renderMessage.Name, NameWidth - renderMessage.Name.ActualWidth);
+                Canvas.SetTop(renderMessage.Name, AnimCanvas.ActualHeight);
+
+            }
 
             Style textStyle = (Style)this.Resources["TextStyle"];
             Style nameTextStyle = (Style)this.Resources["NameTextStyle"];
@@ -326,6 +341,14 @@ namespace Sc2tvChat {
             }
 
             ttt.AddRange(UserText.Split(' '));
+
+
+
+            if (ClassicView) {
+                TextBlock name = new TextBlock() { Text = renderMessage.Data.Name + ": " };
+                name.Style = (Style)this.Resources["NameStyle"];
+                wp.Children.Add(name);
+            }
 
             // check smiles inside
             int linkIndex = 0;
@@ -366,7 +389,12 @@ namespace Sc2tvChat {
             renderMessage.Text = wp;
             renderMessage.Text.Measure(new Size(wp.MaxWidth, double.PositiveInfinity));
             renderMessage.Text.Arrange(new Rect(0, 0, renderMessage.Text.DesiredSize.Width, renderMessage.Text.DesiredSize.Height));
-            Canvas.SetLeft(renderMessage.Text, NameWidth + 10);
+
+            if (ClassicView) {
+                Canvas.SetLeft(renderMessage.Text, 5);
+            } else {
+                Canvas.SetLeft(renderMessage.Text, NameWidth + 10);
+            }
             Canvas.SetTop(renderMessage.Text, AnimCanvas.ActualHeight);
 
             renderMessage.Height = renderMessage.Text.ActualHeight;
@@ -374,7 +402,9 @@ namespace Sc2tvChat {
 
             renderMessage.DestHeight = AnimCanvas.ActualHeight;
 
-            AnimCanvas.Children.Add(renderMessage.Name);
+            if( renderMessage.Name != null )
+                AnimCanvas.Children.Add(renderMessage.Name);
+
             AnimCanvas.Children.Add(renderMessage.Text);
         }
 

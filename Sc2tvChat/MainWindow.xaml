@@ -5,7 +5,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"  Topmost="True"
         SnapsToDevicePixels="True"
         MouseEnter="Thumb_MouseEnter_1" MouseLeave="Thumb_MouseLeave_1" 
-        MinWidth="400" MinHeight="155"
+        MinWidth="300" MinHeight="155"
         Title="MainWindow" 
         
         Height="{Binding Source={x:Static p:Settings.Default}, Path=height, Mode=TwoWay}" 
@@ -61,14 +61,14 @@
         <Style x:Key="TextStyle" TargetType="{x:Type TextBlock}">
             <Setter Property="Foreground" Value="White" />
             <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Top" />
             <!--<Setter Property="Margin" Value="0,-2" />-->
         </Style>
 
         <Style x:Key="LinkStyle" TargetType="{x:Type TextBlock}">
             <Setter Property="Foreground" Value="GreenYellow" />
             <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Top" />
             <!--<Setter Property="Margin" Value="-1" />-->
         </Style>
 
@@ -76,7 +76,7 @@
             <Setter Property="Foreground" Value="White" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Top" />
             <Setter Property="Margin" Value="0" />
         </Style>
 
@@ -107,7 +107,7 @@
         
         <Canvas x:Name="AnimCanvas" Grid.Row="1" Background="Black" ClipToBounds="True" />
 
-        <Rectangle Stroke="#88ff00ff" Margin="120,0,0,0" HorizontalAlignment="Left" Grid.Row="1"
+        <Rectangle x:Name="divider" Stroke="#88ff00ff" Margin="100,0,0,0" HorizontalAlignment="Left" Grid.Row="1"
                   StrokeThickness="1" Width="1" />
 
         <TextBlock x:Name="ClockTB" Text="13:41" Style="{StaticResource ClockStyle}" />

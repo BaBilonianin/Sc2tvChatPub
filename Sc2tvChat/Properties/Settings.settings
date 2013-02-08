@@ -17,5 +17,8 @@
     <Setting Name="height" Type="System.Double" Scope="User">
       <Value Profile="(Default)">155</Value>
     </Setting>
+    <Setting Name="classicView" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

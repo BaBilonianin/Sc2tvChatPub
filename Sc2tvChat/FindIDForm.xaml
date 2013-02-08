@@ -53,5 +53,17 @@
                   Content="(эта настройка применится только после перезагрузки)"
                   IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=useLayered, Mode=TwoWay}"
                    HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+
+
+
+        <TextBlock Text="Классический чат: "
+                   Grid.Row="4" Margin="2"
+                   HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" />
+
+        <CheckBox x:Name="classikView" Grid.Row="4" Margin="2" Grid.Column="1"
+                  Content="(эта настройка применится только после перезагрузки)"
+                  IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=classicView, Mode=TwoWay}"
+                   HorizontalAlignment="Left" VerticalAlignment="Center" />
     </Grid>
 </Window>
