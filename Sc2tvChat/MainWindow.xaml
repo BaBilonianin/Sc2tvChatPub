@@ -1,138 +1,51 @@
-﻿<Window x:Class="Sc2tvChat.MainWindow" WindowStyle="None" 
-        xmlns:p="clr-namespace:Sc2tvChat.Properties" ResizeMode="CanResizeWithGrip"
+﻿<Window x:Class="Sc2tvChat.MainWindow"  
+        xmlns:p="clr-namespace:Sc2tvChat.Properties" 
         AllowsTransparency="{Binding Source={x:Static p:Settings.Default}, Path=useLayered, Mode=OneTime}"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" WindowStartupLocation="CenterScreen"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"  Topmost="True"
-        SnapsToDevicePixels="True"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Topmost="True"
+        SnapsToDevicePixels="True" Background="Transparent"
         MouseEnter="Thumb_MouseEnter_1" MouseLeave="Thumb_MouseLeave_1" 
-        MinWidth="300" MinHeight="155"
-        Title="MainWindow" 
+        MinWidth="200" MinHeight="155"
+        xmlns:ctrl="clr-namespace:Sc2tvChat.Controls"
         
         Height="{Binding Source={x:Static p:Settings.Default}, Path=height, Mode=TwoWay}" 
         Width="{Binding Source={x:Static p:Settings.Default}, Path=width, Mode=TwoWay}" 
         
+        WindowStyle="None"
+        ResizeMode="CanResizeWithGrip"
+        WindowStartupLocation="CenterScreen"
+        
         SizeChanged="Window_SizeChanged_1"
         
-        Loaded="Window_Loaded_1">
-    <Window.Resources>
-        <Style x:Key="NameStyle" TargetType="{x:Type TextBlock}">
-            <Setter Property="Foreground" Value="Yellow" />
-        </Style>
-
-        <Style x:Key="PollHeaderStyle" TargetType="{x:Type TextBlock}">
-            <Setter Property="Foreground" Value="Yellow" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="FontSize" Value="20" />
-        </Style>
-
-        <Style x:Key="PollGraphStyle" TargetType="{x:Type Border}">
-            <Setter Property="Background" Value="Bisque" />
-            <Setter Property="HorizontalAlignment" Value="Left" />
-            <Setter Property="MinWidth" Value="10.0" />
-            <Setter Property="Margin" Value="2" />
-        </Style>
-
-
-        <Style x:Key="PollResultStyle" TargetType="{x:Type TextBlock}">
-            <Setter Property="Foreground" Value="Orange" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="FontSize" Value="30" />
-            <Setter Property="TextAlignment" Value="Center" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-        </Style>
-
-        <Style x:Key="PollVariantStyle" TargetType="{x:Type TextBlock}">
-            <Setter Property="Foreground" Value="Orange" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="HorizontalAlignment" Value="Right" />
-            <Setter Property="FontSize" Value="12" />
-        </Style>
-
-        <Style x:Key="ClockStyle" TargetType="{x:Type TextBlock}">
-            <Setter Property="Foreground" Value="LightCoral" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="FontSize" Value="12" />
-            <Setter Property="Margin" Value="2,0" />
-            <Setter Property="FontFamily" Value="Courier New" />
-        </Style>
-
-        <Style x:Key="TextStyle" TargetType="{x:Type TextBlock}">
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="VerticalAlignment" Value="Top" />
-            <!--<Setter Property="Margin" Value="0,-2" />-->
-        </Style>
-
-        <Style x:Key="LinkStyle" TargetType="{x:Type TextBlock}">
-            <Setter Property="Foreground" Value="GreenYellow" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="VerticalAlignment" Value="Top" />
-            <!--<Setter Property="Margin" Value="-1" />-->
-        </Style>
-
-        <Style x:Key="NameTextStyle" TargetType="{x:Type TextBlock}">
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="VerticalAlignment" Value="Top" />
-            <Setter Property="Margin" Value="0" />
-        </Style>
-
-        <Style x:Key="StreamerText" TargetType="{x:Type WrapPanel}">
-            <Setter Property="Background" Value="#3000ff00" />
-        </Style>
-
-        <Style x:Key="NormalText" TargetType="{x:Type WrapPanel}">
-          
-        </Style>
-
-        <Style x:Key="{x:Type Thumb}" TargetType="{x:Type Thumb}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Thumb}">
-                        <Border Background="#01000000" BorderBrush="Gold" BorderThickness="1" />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
+        Loaded="Window_Loaded_1" Icon="Junior Icon 85.ico">
     
-    <Grid Background="#ff222222">
+    <Grid Background="{StaticResource WindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="20" />
             <RowDefinition />
         </Grid.RowDefinitions>
+
+        <Thumb DragDelta="Thumb_DragDelta_1" Grid.RowSpan="2" /> <!-- Таскалка для окна -->
+
+        <!-- Milestone #2 -->
+        <Canvas x:Name="AnimCanvas" Style="{StaticResource AnimatedCanvas}" 
+                Grid.Row="1" ClipToBounds="True" />
+
+        <!-- Красивость. Убрать - milestone #2 -->
+        <Rectangle x:Name="divider" Style="{StaticResource ChatDividerStroke}" 
+                   Margin="100,0,0,0" HorizontalAlignment="Left" Grid.Row="1"
+                   Width="1" />
         
-        <Canvas x:Name="AnimCanvas" Grid.Row="1" Background="Black" ClipToBounds="True" />
-
-        <Rectangle x:Name="divider" Stroke="#88ff00ff" Margin="100,0,0,0" HorizontalAlignment="Left" Grid.Row="1"
-                  StrokeThickness="1" Width="1" />
-
-        <TextBlock x:Name="ClockTB" Text="13:41" Style="{StaticResource ClockStyle}" />
+        <!-- Вот тут, вместо банального, скучного текста, можно добавить бегущий текст, анимации
+         (рекламу и прочее для канала) -->
+        <TextBlock x:Name="ClockTB" Style="{StaticResource HeaderStyle}" /> <!-- Milestone #4 -->
         
-        <Border x:Name="PollBorder" Background="#aa000000" Grid.Row="1" MaxHeight="130"
-                BorderBrush="Orange" BorderThickness="1" VerticalAlignment="Top">
-            <Grid x:Name="PollGrid" Margin="5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="1*" />
-                </Grid.ColumnDefinitions>
-            </Grid>
-        </Border>
-        
-        <Thumb DragDelta="Thumb_DragDelta_1" />
+        <ctrl:PollingControl x:Name="pollCtrl" /> <!-- Milestone #3 -->
 
-        <Button x:Name="b0" Visibility="Hidden" Width="18" ToolTip="Голосовалка"
-                HorizontalAlignment="Right" Content="P" Margin="1,1,40,1" Click="b0_Click_1" />
-        <Button x:Name="b1" Visibility="Hidden" Width="18" ToolTip="Сменить стримера"
-                HorizontalAlignment="Right" Content="S" Margin="1,1,20,1" Click="Button_Click_1" />
-        <Button x:Name="b2" Visibility="Hidden" Width="18" ToolTip="Закрыть"
-                HorizontalAlignment="Right" Content="X" Margin="1" Click="Button_Click_2" />
-
-        <!--<Border x:Name="resizeBorder" Grid.RowSpan="2" Background="Black" Visibility="Collapsed">
-            <TextBlock Text="Resizing..." Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
-        </Border>-->
+        <StackPanel x:Name="headerButtons" Orientation="Horizontal" HorizontalAlignment="Right" Height="18">
+            <!--<Button Width="18" ToolTip="Голосовалка" Content=")" Margin="1,0" Click="b0_Click_1" />-->
+            <Button x:Name="b1" Width="18" Margin="1,0" ToolTip="Сменить стримера" Content="~" Click="Button_Click_1" />
+            <Button x:Name="b2" Width="18" Margin="1,0" ToolTip="Закрыть" Content="r" Click="Button_Click_2" />
+        </StackPanel>
     </Grid>
 </Window>

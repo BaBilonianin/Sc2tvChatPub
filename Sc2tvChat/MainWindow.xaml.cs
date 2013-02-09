@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -25,159 +26,92 @@ namespace Sc2tvChat {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
+            headerButtons.Visibility = System.Windows.Visibility.Hidden;
+
+            ReloadChatStyles(); // На данном этапе сохраненка уже загружена, и глупо менят скин в реалтайме,
 
             RenderMessages = new List<RenderMessage>();
             render = new DispatcherTimer();
             next = new DispatcherTimer();
 
             ClassicView = Properties.Settings.Default.classicView;
+            HideSmiles = Properties.Settings.Default.hideSmiles;
 
-            PollBorder.Visibility = System.Windows.Visibility.Hidden;
+            pollCtrl.Visibility = System.Windows.Visibility.Hidden;
 
             Properties.Settings.Default.PropertyChanged += Default_PropertyChanged;
+
+            ClockTB.Text = "SC2TV.ru chat"; // Заголовок уродский, некрасивый, мало анимаций. фигня в общем.
         }
+
+        /// Отказ от смены скина в реальном времени, лень апдатить чата размеры.
+        /// 
+        //string _currentSkin = "DefaultSkin";
+        //public string CurrentSkin {
+        //    get { return _currentSkin; }
+        //    set {
+        //        if (_currentSkin != value) {
+        //            ResourceDictionary skin = new ResourceDictionary();
+        //            skin.Source = new Uri("Skins/" + _currentSkin + ".xaml", UriKind.Relative);
+        //            Application.Current.Resources.MergedDictionaries.Remove(skin);
+
+        //            _currentSkin = value;
+
+        /// ------------------------------------------------------------------ >8
+        //            skin.Source = new Uri("Skins/" + _currentSkin + ".xaml", UriKind.Relative);
+        //            Application.Current.Resources.MergedDictionaries.Add(skin);
+        /// ------------------------------------------------------------------ >8
+
+        //            // Skin есть, обновить часть волшебного мира счастья и улыбок (упоролся?)
+        //            ReloadChatStyles(); 
+        //        }
+        //    }
+        //}
+
+        private void ReloadChatStyles() {
+            NameStyle = (Style)App.Current.Resources["NameStyle"];
+            TextStyle = (Style)App.Current.Resources["TextStyle"];
+            LinkStyle = (Style)App.Current.Resources["LinkStyle"];
+            NameTextStyle = (Style)App.Current.Resources["NameTextStyle"];
+            StreamerContainer = (Style)App.Current.Resources["StreamerContainer"];
+            NormalTextContainer = (Style)App.Current.Resources["NormalTextContainer"];
+            TextSmileStyle = (Style)App.Current.Resources["TextSmileStyle"];
+        }
+
+
 
         void Default_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e ) {
             if (e.PropertyName == "streamerID") {
                 PekaCount = 0;
-                TempCount = 0;
                 RenderMessages.Clear();
-                Achivments.Clear();
                 AnimCanvas.Children.Clear();
 
-                CurrentPoling = null;
-                PollGrid.Children.Clear();
-                PollGrid.RowDefinitions.Clear();
-                PollBorder.Visibility = System.Windows.Visibility.Hidden;
+                pollCtrl.CancelPoll();
+                pollCtrl.Visibility = System.Windows.Visibility.Hidden;
 
             }
         }
+        #region Dirty кусок для ТОЛЬКО загрузки
+        bool ClassicView; // Так сделано потому, что новые коменты не должны добавляться в измененном виде
+        bool HideSmiles;  // Так сделано потому, что новые коменты не должны добавляться со смайлами
+        #endregion
 
-        bool ClassicView; // Так сделано потому что новые коменты не должны добавляться в измененном виде
-
-
-        const double NameWidth = 95.0;
+        const double NameWidth = 95.0; // TODO: Бред, надо сделать зависимость от скина. :D
         const string LinkReplacer = "%LINKLINK%";
 
         int PekaCount = 0;
-        double TempCount = 0.0;
         Regex UriDetector = new Regex(@"((http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?)");
         DispatcherTimer render, next;
-        Dictionary<string, Uri> SmilesUri = new Dictionary<string, Uri>();
-        Dictionary<string, BitmapImage> SmilesBmp = new Dictionary<string, BitmapImage>();
-        Dictionary<string, Achievement> Achivments = new Dictionary<string, Achievement>();
         List<RenderMessage> RenderMessages;
+        SmilesDataDase SmilesDataDase;
+
+
+        Style NameStyle, TextStyle, LinkStyle, TextSmileStyle, NameTextStyle, StreamerContainer, NormalTextContainer; 
 
 
         private void Window_Loaded_1( object sender, RoutedEventArgs e ) {
-          
-          //  ;
-            //<img src="/img/a.png?1" title=":happy:" width="30" height="30" class="chat-smile" alt=":happy:">
-            SmilesUri[":happy: "] = new Uri("http://chat.sc2tv.ru/img/a.png?1");
-            SmilesUri[":aws: "] = new Uri("http://chat.sc2tv.ru/img/awesome.png?1");
-            SmilesUri[":nc: "] = new Uri("http://chat.sc2tv.ru/img/nocomments.png?1");
-            SmilesUri[":manul: "] = new Uri("http://chat.sc2tv.ru/img/manul.png?1");
-            SmilesUri[":crazy: "] = new Uri("http://chat.sc2tv.ru/img/crazy.png?1");
-            SmilesUri[":cry: "] = new Uri("http://chat.sc2tv.ru/img/cry.png?1");
-            SmilesUri[":glory: "] = new Uri("http://chat.sc2tv.ru/img/glory.png?1");
-            SmilesUri[":kawai: "] = new Uri("http://chat.sc2tv.ru/img/kawai.png?1");
-            SmilesUri[":mee: "] = new Uri("http://chat.sc2tv.ru/img/mee.png?1");
-            SmilesUri[":omg: "] = new Uri("http://chat.sc2tv.ru/img/omg.png?1");
-            SmilesUri[":whut: "] = new Uri("http://chat.sc2tv.ru/img/mhu.png?1");
-            SmilesUri[":sad: "] = new Uri("http://chat.sc2tv.ru/img/sad.png?1");
-            SmilesUri[":spk: "] = new Uri("http://chat.sc2tv.ru/img/slowpoke.png?1");
-            SmilesUri[":hmhm: "] = new Uri("http://chat.sc2tv.ru/img/2.png?1");
-            SmilesUri[":mad: "] = new Uri("http://chat.sc2tv.ru/img/mad.png?1");
-            SmilesUri[":angry: "] = new Uri("http://chat.sc2tv.ru/img/aangry.png?1");
-            SmilesUri[":xd: "] = new Uri("http://chat.sc2tv.ru/img/ii.png?1");
-            SmilesUri[":huh: "] = new Uri("http://chat.sc2tv.ru/img/huh.png?1");
-            SmilesUri[":tears: "] = new Uri("http://chat.sc2tv.ru/img/happycry.png?1");
-            SmilesUri[":notch: "] = new Uri("http://chat.sc2tv.ru/img/notch.png?1");
-            SmilesUri[":vaga: "] = new Uri("http://chat.sc2tv.ru/img/vaganych.png?1");
-            SmilesUri[":ra: "] = new Uri("http://chat.sc2tv.ru/img/ra.png?1");
-            SmilesUri[":fp: "] = new Uri("http://chat.sc2tv.ru/img/facepalm.png?1");
-            SmilesUri[":neo: "] = new Uri("http://chat.sc2tv.ru/img/smith.png?1");
-            SmilesUri[":peka: "] = new Uri("http://chat.sc2tv.ru/img/mini-happy.png?3");
-            SmilesUri[":trf: "] = new Uri("http://chat.sc2tv.ru/img/trollface.png?2");
-            SmilesUri[":fu: "] = new Uri("http://chat.sc2tv.ru/img/fuuuu.png?3");
-            SmilesUri[":why: "] = new Uri("http://chat.sc2tv.ru/img/why.png?1");
-            SmilesUri[":yao: "] = new Uri("http://chat.sc2tv.ru/img/yao.png?1");
-            SmilesUri[":fyeah: "] = new Uri("http://chat.sc2tv.ru/img/fyeah.png?1");
-            SmilesUri[":lucky: "] = new Uri("http://chat.sc2tv.ru/img/lol.png?3");
-            SmilesUri[":okay: "] = new Uri("http://chat.sc2tv.ru/img/okay.png?2");
-            SmilesUri[":alone: "] = new Uri("http://chat.sc2tv.ru/img/alone.png?2");
-            SmilesUri[":joyful: "] = new Uri("http://chat.sc2tv.ru/img/ewbte.png?3");
-            SmilesUri[":wtf: "] = new Uri("http://chat.sc2tv.ru/img/wtf.png?1");
-            SmilesUri[":danu: "] = new Uri("http://chat.sc2tv.ru/img/daladno.png?1");
-            SmilesUri[":gusta: "] = new Uri("http://chat.sc2tv.ru/img/megusta.png?1");
-            SmilesUri[":bm: "] = new Uri("http://chat.sc2tv.ru/img/bm.png?4");
-            SmilesUri[":lol: "] = new Uri("http://chat.sc2tv.ru/img/loool.png?1");
-            SmilesUri[":notbad: "] = new Uri("http://chat.sc2tv.ru/img/notbad.png?1");
-            SmilesUri[":rly: "] = new Uri("http://chat.sc2tv.ru/img/really.png?1");
-            SmilesUri[":ban: "] = new Uri("http://chat.sc2tv.ru/img/banan.png?1");
-            SmilesUri[":cap: "] = new Uri("http://chat.sc2tv.ru/img/cap.png?1");
-            SmilesUri[":br: "] = new Uri("http://chat.sc2tv.ru/img/br.png?1");
-            SmilesUri[":fpl: "] = new Uri("http://chat.sc2tv.ru/img/leefacepalm.png?1");
-            SmilesUri[":ht: "] = new Uri("http://chat.sc2tv.ru/img/heart.png?1");
-            SmilesUri[":adolf: "] = new Uri("http://chat.sc2tv.ru/img/adolf.png?2");
-            SmilesUri[":bratok: "] = new Uri("http://chat.sc2tv.ru/img/bratok.png?1");
-            SmilesUri[":strelok: "] = new Uri("http://chat.sc2tv.ru/img/strelok.png?1");
-            SmilesUri[":white-ra: "] = new Uri("http://chat.sc2tv.ru/img/white-ra.png?1");
-            SmilesUri[":dimaga: "] = new Uri("http://chat.sc2tv.ru/img/dimaga.png?1");
-            SmilesUri[":bruce: "] = new Uri("http://chat.sc2tv.ru/img/bruce.png?1");
-            SmilesUri[":jae: "] = new Uri("http://chat.sc2tv.ru/img/jaedong.png?1");
-            SmilesUri[":flash: "] = new Uri("http://chat.sc2tv.ru/img/flash1.png?1");
-            SmilesUri[":bisu: "] = new Uri("http://chat.sc2tv.ru/img/bisu.png?1");
-            SmilesUri[":jangbi: "] = new Uri("http://chat.sc2tv.ru/img/jangbi.png?1");
-            SmilesUri[":idra: "] = new Uri("http://chat.sc2tv.ru/img/idra.png?1");
-            SmilesUri[":vdv: "] = new Uri("http://chat.sc2tv.ru/img/vitya.png?1");
-            SmilesUri[":imba: "] = new Uri("http://chat.sc2tv.ru/img/djigurda.png?1");
-            SmilesUri[":chuck: "] = new Uri("http://chat.sc2tv.ru/img/chan.png?1");
-            SmilesUri[":tgirl: "] = new Uri("http://chat.sc2tv.ru/img/brucelove.png?1");
-            SmilesUri[":top1sng: "] = new Uri("http://chat.sc2tv.ru/img/happy.png?1");
-            SmilesUri[":slavik: "] = new Uri("http://chat.sc2tv.ru/img/slavik.png?1");
-            SmilesUri[":olsilove: "] = new Uri("http://chat.sc2tv.ru/img/olsilove.png?1");
-            SmilesUri[":kas: "] = new Uri("http://chat.sc2tv.ru/img/kas.png?1");
-            SmilesUri[":pool: "] = new Uri("http://chat.sc2tv.ru/img/pool.png?1");
-            SmilesUri[":ej: "] = new Uri("http://chat.sc2tv.ru/img/ejik.png?1");
-            SmilesUri[":mario: "] = new Uri("http://chat.sc2tv.ru/img/mario.png?1");
-            SmilesUri[":tort: "] = new Uri("http://chat.sc2tv.ru/img/tort.png?1");
-            SmilesUri[":arni: "] = new Uri("http://chat.sc2tv.ru/img/terminator.png?1");
-            SmilesUri[":crab: "] = new Uri("http://chat.sc2tv.ru/img/crab.png?1");
-            SmilesUri[":hero: "] = new Uri("http://chat.sc2tv.ru/img/heroes3.png?1");
-            SmilesUri[":mc: "] = new Uri("http://chat.sc2tv.ru/img/mine.png?1");
-            SmilesUri[":osu: "] = new Uri("http://chat.sc2tv.ru/img/osu.png?1");
-            SmilesUri[":q3: "] = new Uri("http://chat.sc2tv.ru/img/q3.png?1");
-            SmilesUri[":tigra: "] = new Uri("http://chat.sc2tv.ru/img/tigrica.png?1");
-            SmilesUri[":volck: "] = new Uri("http://chat.sc2tv.ru/img/voOlchik1.png?1");
-            SmilesUri[":hpeka: "] = new Uri("http://chat.sc2tv.ru/img/harupeka.png?1");
-            SmilesUri[":slow: "] = new Uri("http://chat.sc2tv.ru/img/spok.png?1");
-            SmilesUri[":alex: "] = new Uri("http://chat.sc2tv.ru/img/alfi.png?1");
-            SmilesUri[":panda: "] = new Uri("http://chat.sc2tv.ru/img/panda.png?1");
-            SmilesUri[":sun: "] = new Uri("http://chat.sc2tv.ru/img/sunl.png?1");
-            SmilesUri[":cou: "] = new Uri("http://chat.sc2tv.ru/img/cougar.png?2");
-            SmilesUri[":wb: "] = new Uri("http://chat.sc2tv.ru/img/wormban.png?1");
-            SmilesUri[":dobro: "] = new Uri("http://chat.sc2tv.ru/img/dobre.png?1");
-            SmilesUri[":theweedle: "] = new Uri("http://chat.sc2tv.ru/img/weedle.png?1");
-            SmilesUri[":apc: "] = new Uri("http://chat.sc2tv.ru/img/apochai.png?1");
-            SmilesUri[":globus: "] = new Uri("http://chat.sc2tv.ru/img/globus.png?1");
-            SmilesUri[":cow: "] = new Uri("http://chat.sc2tv.ru/img/cow.png?1");
-            SmilesUri[":nook: "] = new Uri("http://chat.sc2tv.ru/img/no-okay.png?1");
-            SmilesUri[":noj: "] = new Uri("http://chat.sc2tv.ru/img/knife.png?1");
-            SmilesUri[":fpd: "] = new Uri("http://chat.sc2tv.ru/img/fp.png?1");
-            SmilesUri[":hg: "] = new Uri("http://chat.sc2tv.ru/img/hg.png?1");
-            SmilesUri[":yoko: "] = new Uri("http://chat.sc2tv.ru/img/yoko.png?1");
-            SmilesUri[":miku: "] = new Uri("http://chat.sc2tv.ru/img/miku.png?1");
-            SmilesUri[":winry: "] = new Uri("http://chat.sc2tv.ru/img/winry.png?1");
-            SmilesUri[":asuka: "] = new Uri("http://chat.sc2tv.ru/img/asuka.png?1");
-            SmilesUri[":konata: "] = new Uri("http://chat.sc2tv.ru/img/konata.png?1");
-            SmilesUri[":reimu: "] = new Uri("http://chat.sc2tv.ru/img/reimu.png?1");
-            SmilesUri[":sex: "] = new Uri("http://chat.sc2tv.ru/img/sex.png?1");
-            SmilesUri[":mimo: "] = new Uri("http://chat.sc2tv.ru/img/mimo.png?1");
-            SmilesUri[":fire: "] = new Uri("http://chat.sc2tv.ru/img/fire.png?1");
-            SmilesUri[":mandarin: "] = new Uri("http://chat.sc2tv.ru/img/mandarin.png?1");
-
-
+            SmilesDataDase = new SmilesDataDase();
+         
             //string s = "";
             //string ssss = File.ReadAllText( "x:\\smiles.txt" );
             //Regex rx = new Regex("\\<img.*?src.*?\\\"(.*?)\\\".*?title.*?\\\"(.*?)\\\".*?\\>");
@@ -212,17 +146,12 @@ namespace Sc2tvChat {
 
         void render_Tick( object sender, EventArgs e ) {
 
-            ClockTB.Text = string.Format("Time: {0:HH:mm:ss}, Peka's: {1}, Temp: {2:0.0}°C", DateTime.Now, PekaCount, TempCount);
+            ClockTB.Text = string.Format("Peka's count: {0}", PekaCount);
 
-            //if (TempCount > 50)
-            //    TempCount -= 0.004;
-            //else
-                TempCount -= 0.001;
 
             double y = AnimCanvas.ActualHeight;
-          //  bool needScroll = false;
+            
             for (int j = RenderMessages.Count - 1; j >= 0; --j) {
-
                 if (j >= 0)
                     switch (RenderMessages[j].State) {
                         case 0:
@@ -265,7 +194,7 @@ namespace Sc2tvChat {
                 }
             }
 
-
+            /// Анимация.
             for (int j = 0; j < RenderMessages.Count; ++j) {
                 if (RenderMessages[j].State < 3) {
                     if (RenderMessages[j].Text == null) {
@@ -273,7 +202,7 @@ namespace Sc2tvChat {
                     } else {
                         double oy = Canvas.GetTop(RenderMessages[j].Text);
 
-                        double dy = (RenderMessages[j].DestHeight - oy) / 10.0;
+                        double dy = (RenderMessages[j].DestHeight - oy) / 5.0;
 
                         //if (Convert.ToInt32(dy) != 0) {
 
@@ -295,12 +224,18 @@ namespace Sc2tvChat {
             }
         }
 
+        // Функция более 20 строк, АААААААААААААААААААААААААААААААААААААААААААА, да пох
+
         private void CreateVisual( RenderMessage renderMessage ) {
             List<Uri> Urls = new List<Uri>();
-            string UserText = UriDetector.Replace(
-                renderMessage.Data.Text.Replace("&quot;", "\"").Replace(":s:", " :s:").Replace("  ", " "), 
-                
-                
+
+            string UserText = HttpUtility.HtmlDecode(renderMessage.Data.Text.Replace(":s:", " :s:").Replace("  ", " "));
+            
+            UserText = UriDetector.Replace(
+
+                UserText, 
+              
+                // Урлы, выделяем, чистим, заменяем на прелести.
                 new MatchEvaluator(( m ) => {
                     Urls.Add(new Uri(m.Value, UriKind.RelativeOrAbsolute));
                     return LinkReplacer + " ";
@@ -309,35 +244,29 @@ namespace Sc2tvChat {
 
 
             if (ClassicView) {
+                // Отдельного имени нету в Classic View
             } else {
-
+                // Oxlamon View mode
                 renderMessage.Name = new TextBlock() { Text = renderMessage.Data.Name };
-                renderMessage.Name.Style = (Style)this.Resources["NameStyle"];
+                renderMessage.Name.Style = NameStyle;
                 renderMessage.Name.Measure(new Size(NameWidth, double.PositiveInfinity));
                 renderMessage.Name.Arrange(new Rect(0, 0, renderMessage.Name.DesiredSize.Width, renderMessage.Name.DesiredSize.Height));
-
                 Canvas.SetLeft(renderMessage.Name, NameWidth - renderMessage.Name.ActualWidth);
                 Canvas.SetTop(renderMessage.Name, AnimCanvas.ActualHeight);
-
             }
-
-            Style textStyle = (Style)this.Resources["TextStyle"];
-            Style nameTextStyle = (Style)this.Resources["NameTextStyle"];
 
             // parse text
             WrapPanel wp = new WrapPanel() {
                 MaxWidth = MaximumMessageWidth,
                 Orientation = System.Windows.Controls.Orientation.Horizontal,
-                Style = (Style)this.Resources["NormalText"]
+                Style = NormalTextContainer
             };
             List<string> ttt = new List<string>();
-         
 
-            if (CurrentPoling != null) {
-                CurrentPoling.RegisterVote(renderMessage.Data);
-                UpdateVisualGraphs(CurrentPoling);
-            }
+            pollCtrl.RegisterVote(renderMessage.Data);
 
+
+            // Тоже странный кусок:
             int nxd = UserText.IndexOf("<b>");
             if (nxd >= 0) {
                 int nxd2 = UserText.IndexOf("</b>");
@@ -345,7 +274,7 @@ namespace Sc2tvChat {
                 UserText = UserText.Substring(nxd2 + 6);
 
                 if (renderMessage.TalkTo == Properties.Settings.Default.streamerNick) {
-                    wp.Style = (Style)this.Resources["StreamerText"];
+                    wp.Style = StreamerContainer;
                 }
 
                 renderMessage.TalkTo = renderMessage.TalkTo + ", ";
@@ -357,11 +286,9 @@ namespace Sc2tvChat {
 
             ttt.AddRange(UserText.Split(' '));
 
-
-
             if (ClassicView) {
                 TextBlock name = new TextBlock() { Text = renderMessage.Data.Name + ": " };
-                name.Style = (Style)this.Resources["NameStyle"];
+                name.Style = NameStyle;
                 wp.Children.Add(name);
             }
 
@@ -369,23 +296,24 @@ namespace Sc2tvChat {
             int linkIndex = 0;
 
             for (int j = 0; j < ttt.Count; ++j) {
-
-             
                 Style s;
                 if (j == 0 && !string.IsNullOrEmpty(renderMessage.TalkTo))
-                    s = nameTextStyle;
+                    s = NameTextStyle;
                 else
-                    s = textStyle;
+                    s = TextStyle;
 
                 if (ttt[j] == LinkReplacer) {
                     TextBlock link = new TextBlock() {
                         Text = "link ",
                         Cursor = Cursors.Hand,
-                        Style = (Style)this.Resources["LinkStyle"],
+                        Style = LinkStyle,
                         ToolTip = Urls[linkIndex],
                         Tag = Urls[linkIndex]
                     };
-                    link.MouseLeftButtonUp += link_MouseLeftButtonUp;
+                    link.MouseLeftButtonUp += ( sender, b ) => {
+                        Uri u = ((TextBlock)sender).Tag as Uri;
+                        System.Diagnostics.Process.Start(u.ToString());
+                    };
                     wp.Children.Add(link);
                     linkIndex++;
                 } else {
@@ -423,75 +351,26 @@ namespace Sc2tvChat {
             AnimCanvas.Children.Add(renderMessage.Text);
         }
 
-        void link_MouseLeftButtonUp( object sender, MouseButtonEventArgs e ) {
-            Uri u = ((TextBlock)sender).Tag as Uri;
-            System.Diagnostics.Process.Start(u.ToString());
-        }
-
-        private void UpdateVisualGraphs( Polling CurrentPoling ) {
-            if (PollGrid.ColumnDefinitions[1].ActualWidth > 0.0) {
-                for (int j = 0; j < CurrentPoling.Variants.Count; ++j) {
-                    CurrentPoling.VisualGraphs[j].Width =
-                        CurrentPoling.Graphs[j] * PollGrid.ColumnDefinitions[1].ActualWidth;
-                }
-            }
-        }
-
         private void CreateSmile( string UserName, string SmileId, WrapPanel TextPanel ) {
-
-            Image img = new Image() { Height = 24.0 };
-            BitmapImage bi;
-
             int nn = SmileId.LastIndexOf(':');
             SmileId = SmileId.Substring(2, nn + 1 - 2) + " ";
 
-            if (SmilesBmp.TryGetValue(SmileId, out bi)) {
-                img.Source = bi;
-            } else {
-                bi = new BitmapImage(SmilesUri[SmileId]);
-                bi.DownloadCompleted += bi_DownloadCompleted;
-                img.Source = bi;
 
-                SmilesBmp[SmileId] = bi;
-            }
-
-            UpdateAchivments(UserName, SmileId);
-
-            //Border img = new Border() {
-            //    Width = 24.0,
-            //    Height = 24.0,
-            //    Background = new SolidColorBrush(Colors.Red)
-            //};
-
-            TextPanel.Children.Add(img);
-        }
-
-        void bi_DownloadCompleted( object sender, EventArgs e ) {
-            /// эй, детка, а если картинка не смогла загрузиться, или ваще капец какой, размеры сменили по ширине?
-            /// надо бы заапдатить WrapPanel, в которой он сидит, и переместить все группы в чате
-            /// 
-            
-        }
-
-        private void UpdateAchivments( string UserName, string SmileId ) {
-            Achievement a;
-            if (Achivments.TryGetValue(UserName, out a)) {
-            } else {
-                a = new Achievement();
-                Achivments[UserName] = a;
-            }
-
-            if (SmileId == ":peka: ")
+            if (SmileId == ":peka: ") // use SPACE at last LUKE!
                 PekaCount++;
 
-            if (SmileId == ":fire: ")
-                TempCount+= 5.0;
 
-            a.Update(SmileId);
+
+
+
+            if (!HideSmiles) {
+                TextPanel.Children.Add(SmilesDataDase.GetSmile(SmileId));
+            } else {
+                TextBlock smile = new TextBlock() { Text = SmileId.Substring(0, SmileId.Length-1), Style = TextSmileStyle };
+                TextPanel.Children.Add(smile);
+            }
         }
-
-
-
+    
         public class RenderMessage {
             public Message Data { get; set; }
 
@@ -522,8 +401,6 @@ namespace Sc2tvChat {
             public string TalkTo { get; set; }
         }
 
-
-
         public RenderMessage GetVisual( Message newOwner ) {
             for (int j = 0; j < RenderMessages.Count; ++j)
                 if (RenderMessages[j].Data.Id == newOwner.Id)
@@ -542,23 +419,17 @@ namespace Sc2tvChat {
 
                 next.Start();
             });
-            //wc.Headers.Add("Cookie", "chat_channel_id=50463; chat-img=1;");
             wc.DownloadStringAsync(new Uri("http://chat.sc2tv.ru/memfs/channel-" + ChannelId + ".json"));
         }
 
-        private void UpdateMessages( Messages messages ) {
-
-            var msgs = (from b in messages.Content
-                        orderby b.Date
-                        select b).ToArray();
-
-            for (int j = 0; j < msgs.Length; ++j) {
-                RenderMessage rm = GetVisual(msgs[j]);
+        private void UpdateMessages( Messages msgs ) {
+            for (int j = 0; j < msgs.Content.Length; ++j) {
+                RenderMessage rm = GetVisual(msgs.Content[j]);
                 if (rm == null) {
-                    rm = new RenderMessage() { Data = msgs[j], State = 0 };
+                    rm = new RenderMessage() { Data = msgs.Content[j], State = 0 };
                     RenderMessages.Add(rm);
                 }
-                rm.Live = 100;
+                rm.Live = 100; // Фантазии извращенца.
             }
         }
 
@@ -568,154 +439,54 @@ namespace Sc2tvChat {
         }
 
         private void Button_Click_1( object sender, RoutedEventArgs e ) {
-            FindIDForm fid = new FindIDForm();
-            var r = fid.ShowDialog();
-            Properties.Settings.Default.Save();
-
+            OptionsForm fid = new OptionsForm();
+            fid.ShowDialog();
         }
 
         private void Button_Click_2( object sender, RoutedEventArgs e ) {
-            Properties.Settings.Default.Save();
             Close();
         }
 
         private void Thumb_MouseEnter_1( object sender, MouseEventArgs e ) {
-            b0.Visibility = b1.Visibility = b2.Visibility = System.Windows.Visibility.Visible;
+            headerButtons.Visibility = System.Windows.Visibility.Visible;
         }
 
         private void Thumb_MouseLeave_1( object sender, MouseEventArgs e ) {
-            b0.Visibility = b1.Visibility = b2.Visibility = System.Windows.Visibility.Hidden;
+            headerButtons.Visibility = System.Windows.Visibility.Hidden;
         }
 
         private void b0_Click_1( object sender, RoutedEventArgs e ) {
-            if (CurrentPoling != null) {
-                PollGrid.Children.Clear();
-                PollGrid.RowDefinitions.Clear();
+            //if (CurrentPoling != null) {
+            //    PollGrid.Children.Clear();
+            //    PollGrid.RowDefinitions.Clear();
 
-                TextBlock header = new TextBlock() {
-                    Text = "Выиграл вариант: " + CurrentPoling.Win, 
-                    Style = (Style)this.Resources["PollResultStyle"] };
-                PollGrid.Children.Add(header);
-                Grid.SetColumnSpan(header, 2);
-                CurrentPoling = null;
-                return;
-            }
+            //    TextBlock header = new TextBlock() {
+            //        Text = "Выиграл вариант: " + CurrentPoling.Win, 
+            //        Style = (Style)this.Resources["PollResultStyle"] };
+            //    PollGrid.Children.Add(header);
+            //    Grid.SetColumnSpan(header, 2);
+            //    CurrentPoling = null;
+            //    return;
+            //}
 
-            if (PollBorder.Visibility == System.Windows.Visibility.Visible) {
-                PollBorder.Visibility = System.Windows.Visibility.Hidden;
-                return;
-            }
+            //if (PollBorder.Visibility == System.Windows.Visibility.Visible) {
+            //    PollBorder.Visibility = System.Windows.Visibility.Hidden;
+            //    return;
+            //}
             
 
-            PollingForm pf = new PollingForm();
-            var r = pf.ShowDialog();
+            //PollingForm pf = new PollingForm();
+            //var r = pf.ShowDialog();
 
-            if (r.HasValue && r.Value) {
-                PollBorder.Visibility = System.Windows.Visibility.Visible;
-                PollGrid.Children.Clear();
-                PollGrid.RowDefinitions.Clear();
-                // Add header
-                PollGrid.RowDefinitions.Add(new RowDefinition());
-                TextBlock header = new TextBlock() { Text = "Идет голосование!", Style = (Style)this.Resources["PollHeaderStyle"] };
-                PollGrid.Children.Add(header);
-                Grid.SetColumnSpan(header, 2);
+            //if (r.HasValue && r.Value) {
+            //    PollBorder.Visibility = System.Windows.Visibility.Visible;
+ 
 
-                List<Border> Graphs = new List<Border>();
-
-                for (int j = 0; j < pf.Variants.Count; ++j) {
-                    PollGrid.RowDefinitions.Add(new RowDefinition());
-
-                    TextBlock line = new TextBlock() { Text = (j+1) + ". " + pf.Variants[j], Style = (Style)this.Resources["PollVariantStyle"] };
-                    PollGrid.Children.Add(line);
-                    Grid.SetRow(line, j + 1);
-
-                    Border graph = new Border() { Style = (Style)this.Resources["PollGraphStyle"] };
-                    PollGrid.Children.Add(graph);
-                    Grid.SetRow(graph, j + 1);
-                    Grid.SetColumn(graph, 1);
-                    Graphs.Add(graph);
-                }
-
-                CurrentPoling = new Polling(pf, Graphs);
-            } else {
-                CurrentPoling = null;
-                PollBorder.Visibility = System.Windows.Visibility.Hidden;
-            }
-        }
-
-        Polling CurrentPoling;
-
-        class Polling {
-            Dictionary<string, int> Selections = new Dictionary<string, int>();
-
-            public List<string> Variants { get; set; }
-            public List<Double> Graphs { get; set; }
-            public List<Border> VisualGraphs { get; set; }
-
-            public string Win {
-                get {
-                    double max = -1000;
-                    int i = -1;
-                    for (int j = 0; j < Graphs.Count; ++j)
-                        if (max < Graphs[j]) {
-                            max = Graphs[j];
-                            i = j;
-                        }
-
-                    return Variants[i];
-                }
-            }
-
-            public Polling( PollingForm pf, List<Border> Graphs ) {
-                Variants = pf.Variants;
-                this.Graphs = new List<double>();
-                foreach (var v in Variants)
-                    this.Graphs.Add(0.0);
-                VisualGraphs = Graphs;
-            }
-
-            public void RegisterVote( Message Data ) {
-                int vote = 0;
-                if (Data.Text.Contains("1."))
-                    vote = 1;
-                else
-                    if (Data.Text.Contains("2."))
-                        vote = 2;
-                    else
-                        if (Data.Text.Contains("3."))
-                            vote = 3;
-                        else
-                            if (Data.Text.Contains("4."))
-                                vote = 4;
-
-                if (vote > Variants.Count || vote == 0)
-                    return;
-
-                Selections[Data.Name] = vote - 1;
-
-                UpdateGraphs();
-            }
-
-            private void UpdateGraphs() {
-                List<Double> sels = new List<double>();
-                foreach( var v in Variants )
-                    sels.Add( 0.0 );
-
-                if (Selections.Count == 0)
-                    return;
-
-                foreach (var v in Selections)
-                    sels[v.Value] = sels[v.Value] + 1;
-
-                double max = 0.0;
-
-                for (int j = 0; j < sels.Count; ++j)
-                    if (max < sels[j])
-                        max = sels[j];
-
-                for (int j = 0; j < sels.Count; ++j)
-                    Graphs[j] = sels[j] / max;
-            }
+            //    CurrentPoling = new Polling(pf, Graphs);
+            //} else {
+            //    CurrentPoling = null;
+            //    PollBorder.Visibility = System.Windows.Visibility.Hidden;
+            //}
         }
 
         private void Window_SizeChanged_1( object sender, SizeChangedEventArgs e ) {

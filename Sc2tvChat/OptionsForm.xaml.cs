@@ -16,10 +16,10 @@ using System.Windows.Shapes;
 
 namespace Sc2tvChat {
     /// <summary>
-    /// Interaction logic for FindIDForm.xaml
+    /// Interaction logic for OptionsForm.xaml
     /// </summary>
-    public partial class FindIDForm : Window {
-        public FindIDForm() {
+    public partial class OptionsForm : Window {
+        public OptionsForm() {
             InitializeComponent();
         }
 

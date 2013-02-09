@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" WindowStartupLocation="CenterScreen"
         Title="" Height="227" Width="389">
-    <Grid>
+    <Grid Background="{StaticResource WindowBackground}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="3*" />
@@ -29,9 +29,14 @@
         <TextBox x:Name="var2" Grid.Row="2" Grid.Column="1" Margin="3" />
         <TextBox x:Name="var3" Grid.Row="3" Grid.Column="1" Margin="3" />
         <TextBox x:Name="var4" Grid.Row="4" Grid.Column="1" Margin="3" />
-        
-        <Button Content="Начать голосование" Grid.Column="1"
-                Click="Button_Click_1"
-                Grid.Row="5" Grid.RowSpan="2" Margin="10" />
+
+
+        <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.RowSpan="2" Grid.Column="1" HorizontalAlignment="Right">
+            <TextBlock Text="Начать голосование: " HorizontalAlignment="Right" VerticalAlignment="Center" />
+
+            <Button Content="4"
+                    Click="Button_Click_1" Width="30" Height="30" Margin="10" />
+        </StackPanel>
+                
     </Grid>
 </Window>

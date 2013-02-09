@@ -94,5 +94,29 @@ namespace Sc2tvChat.Properties {
                 this["classicView"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string smilesCode {
+            get {
+                return ((string)(this["smilesCode"]));
+            }
+            set {
+                this["smilesCode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hideSmiles {
+            get {
+                return ((bool)(this["hideSmiles"]));
+            }
+            set {
+                this["hideSmiles"] = value;
+            }
+        }
     }
 }
