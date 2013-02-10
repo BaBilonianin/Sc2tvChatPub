@@ -41,7 +41,7 @@ namespace Sc2tvChat.Controls {
             if ((ExtentHeight - ViewportHeight - MyOffset) > 0) {
                 DoubleAnimation goDown = new DoubleAnimation(
                    ExtentHeight - ViewportHeight,
-                   new Duration(TimeSpan.FromMilliseconds((ExtentHeight - ViewportHeight - MyOffset) * 2.0)));
+                   new Duration(TimeSpan.FromMilliseconds(200)));
 
                 scrDown = new Storyboard();
                 scrDown.Children.Add(goDown);

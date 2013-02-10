@@ -78,6 +78,10 @@ namespace Sc2tvChat {
                 pollCtrl.CancelPoll();
                 pollCtrl.Visibility = System.Windows.Visibility.Hidden;
             }
+
+            if (e.PropertyName == "currentSkin") {
+                CurrentSkin = Properties.Settings.Default.currentSkin;
+            }
         }
         
         #region Download SC2TV.ru chat messages
@@ -177,6 +181,7 @@ namespace Sc2tvChat {
 
         #region Startup
         private void Window_Loaded_1( object sender, RoutedEventArgs e ) {
+            CurrentSkin = Properties.Settings.Default.currentSkin;
             next.Start();
             halfSecondTimer.Start();
             if (Properties.Settings.Default.streamerID == 0) {

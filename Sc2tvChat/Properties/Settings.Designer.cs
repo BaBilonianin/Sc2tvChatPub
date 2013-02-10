@@ -106,5 +106,17 @@ namespace Sc2tvChat.Properties {
                 this["hideSmiles"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DefaultSkin")]
+        public string currentSkin {
+            get {
+                return ((string)(this["currentSkin"]));
+            }
+            set {
+                this["currentSkin"] = value;
+            }
+        }
     }
 }

@@ -77,7 +77,8 @@
                                       StrokeThickness="2" Data="M 0 0 L 7 7 M 0 7 L 7 0" />
                             </Border>
                         </BulletDecorator.Bullet>
-                        <ContentPresenter Margin="4,0,0,0" VerticalAlignment="Center" TextBlock.Foreground="White" 
+                        <ContentPresenter Margin="4,0,0,0" VerticalAlignment="Center" 
+                                          TextBlock.Foreground="Black" 
                                           HorizontalAlignment="Left" RecognizesAccessKey="True"/>
                     </BulletDecorator>
                     <ControlTemplate.Triggers>
@@ -111,21 +112,15 @@
         <Setter Property="MinWidth" Value="200" />
         <Setter Property="MinHeight" Value="155" />
         <Setter Property="MinWidth" Value="200" />
-       
     </Style>
     
-    <SolidColorBrush x:Key="WindowBackground" Color="#ee000000" />
-    <SolidColorBrush x:Key="FontForeground" Color="White" />
-    <SolidColorBrush x:Key="BorderBackground" Color="Orange" />
-
-    <Style x:Key="ChatDividerStroke" TargetType="{x:Type Rectangle}">
-        <Setter Property="Stroke" Value="Magenta" />
-        <Setter Property="StrokeThickness" Value="1" />
-    </Style>
+    <SolidColorBrush x:Key="WindowBackground" Color="#aaffffff" />
+    <SolidColorBrush x:Key="FontForeground" Color="Black" />
+    <SolidColorBrush x:Key="BorderBackground" Color="DarkBlue" />
 
     
     <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
-        <Setter Property="TextBlock.Foreground" Value="White" />
+        <Setter Property="TextBlock.Foreground" Value="Black" />
         <Setter Property="OverridesDefaultStyle" Value="true"/>
         <Setter Property="HasDropShadow" Value="True"/>
         <Setter Property="FontFamily" Value="Arial" />
@@ -169,7 +164,7 @@
     
     <!-- Chat style -->
     <Style x:Key="HeaderStyle" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="LightCoral" />
+        <Setter Property="Foreground" Value="DarkGoldenrod" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="Margin" Value="2,0" />
@@ -181,31 +176,19 @@
     <!-- Chat fiiiiilll -->
     
     <Style x:Key="NameStyle" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="Yellow" />
+        <Setter Property="Foreground" Value="Red" />
         <Setter Property="IsHitTestVisible" Value="False" />
-        
-        <Setter Property="Visibility" Value="Collapsed" />
     </Style>
     
     <DataTemplate x:Key="ChatItem">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            
-            <TextBlock VerticalAlignment="Top" Foreground="Aquamarine" HorizontalAlignment="Right"
-                       Text="{Binding Path=Data.Name}" Margin="3,0" />
-            
-            <ContentPresenter Grid.Column="1" Content="{Binding Text}" />
-        </Grid>
+        <ContentPresenter Grid.Column="1" Content="{Binding Text}" />
     </DataTemplate>
 
 
 
 
     <Style x:Key="TextStyle" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Foreground" Value="Black" />
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="IsHitTestVisible" Value="False" />
@@ -221,7 +204,7 @@
     </Style>
 
     <Style x:Key="LinkStyle" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="GreenYellow" />
+        <Setter Property="Foreground" Value="DarkGreen" />
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <!--<Setter Property="Margin" Value="-1" />-->
@@ -229,7 +212,7 @@
 
     <!-- выделение в сообщении адресата (его стиль) -->
     <Style x:Key="NameTextStyle" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Foreground" Value="Black" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="VerticalAlignment" Value="Top" />
@@ -239,7 +222,7 @@
 
     <!-- Контейнер содержащий текст, в котором было обращение к стримеру -->
     <Style x:Key="StreamerContainer" TargetType="{x:Type WrapPanel}">
-        <Setter Property="Background" Value="#ff003300" />
+        <Setter Property="Background" Value="#ffffeeee" />
     </Style>
     
     <!-- Контейнер содержащий текст, в котором не было обращения к стримеру -->
@@ -261,7 +244,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border Background="Orange" Width="6" CornerRadius="3" />
+                    <Border Background="Black" Width="6" CornerRadius="3" >
+                       
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -269,7 +254,8 @@
 
     <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
         <Grid>
-            <Border Grid.RowSpan="3" CornerRadius="2" Width="2" Background="Orange" HorizontalAlignment="Center" />
+            <Border Grid.RowSpan="3" CornerRadius="2" Width="2" Background="Black" 
+                    HorizontalAlignment="Center" />
             <Track Name="PART_Track" Grid.Row="1" IsDirectionReversed="true">
                 <Track.Thumb>
                     <Thumb Style="{StaticResource ScrollBarThumb}" />
@@ -353,17 +339,17 @@
     
     <!-- Шаблон заголовка в чата -->
     <DataTemplate x:Key="HeaderTemplate">
-        <Border Background="#ff222222" BorderBrush="Orange" BorderThickness="1">
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="1">
-            <TextBlock Foreground="DarkGray" Text="Peka's count: " FontWeight="Bold" />
-            <TextBlock Foreground="White" Text="{Binding PekaCount}" Margin="1,0"/>
+        <Border Background="White" BorderBrush="Black" BorderThickness="1">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="1">
+                <TextBlock Foreground="DarkGray" Text="Peka's count: " FontWeight="Bold" />
+                <TextBlock Foreground="Black" Text="{Binding PekaCount}" Margin="1,0"/>
 
-            <TextBlock Foreground="DarkGray" Text=", Temp: " FontWeight="Bold" />
-            <TextBlock Foreground="White" Text="{Binding Path=Temperature, StringFormat={}{0:0.0}°C}" Margin="1,0"/>
+                <TextBlock Foreground="DarkGray" Text=", Temp: " FontWeight="Bold" />
+                    <TextBlock Foreground="Black" Text="{Binding Path=Temperature, StringFormat={}{0:0.0}°C}" Margin="1,0"/>
             
-            <TextBlock Foreground="DarkGray" Text=", Днометр: " FontWeight="Bold" />
-            <TextBlock Foreground="White" Text="{Binding Path=Depth, StringFormat={}{0:0}m}" Margin="1,0"/>
-        </StackPanel>
+                <TextBlock Foreground="DarkGray" Text=", Днометр: " FontWeight="Bold" />
+                    <TextBlock Foreground="Black" Text="{Binding Path=Depth, StringFormat={}{0:0}m}" Margin="1,0"/>
+            </StackPanel>
         </Border>
     </DataTemplate>
     

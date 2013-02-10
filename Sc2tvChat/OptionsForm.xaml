@@ -1,4 +1,4 @@
-﻿<Window x:Class="Sc2tvChat.OptionsForm" WindowStyle="SingleBorderWindow"
+﻿<Window x:Class="Sc2tvChat.OptionsForm" x:Name="OptForm" WindowStyle="SingleBorderWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" WindowStartupLocation="CenterScreen"
         xmlns:p="clr-namespace:Sc2tvChat.Properties" Closed="Window_Closed_1"
@@ -68,6 +68,15 @@
                   Content="(эта настройка применится только после перезагрузки)"
                   IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=hideSmiles, Mode=TwoWay}"
                    HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+
+                <TextBlock Text="Внешний вид чата: "
+                   Grid.Row="5" Margin="2"
+                   HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" />
+
+                <ComboBox Grid.Row="5" Grid.Column="1" Margin="2" 
+                          ItemsSource="{Binding ElementName=OptForm, Path=Skins, Mode=OneWay}"
+                          SelectedValue="{Binding Source={x:Static p:Settings.Default}, Path=currentSkin, Mode=TwoWay}" />
             </Grid>
         </TabItem>
         

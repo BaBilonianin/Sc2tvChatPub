@@ -89,7 +89,11 @@ namespace Sc2tvChat {
                         CreateSmile(Db, Data.Name, ttt[j], wp);
                     } else {
                         TextBlock txt = new TextBlock() { Text = ttt[j] };
-                        txt.SetResourceReference(TextBlock.StyleProperty, "TextStyle");
+                        if (TalkTo + ",  " == ttt[j]) {
+                            txt.SetResourceReference(TextBlock.StyleProperty, "NameTextStyle");
+                        } else {
+                            txt.SetResourceReference(TextBlock.StyleProperty, "TextStyle");
+                        }
                         wp.Children.Add(txt);
                     }
                 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -21,6 +22,14 @@ namespace Sc2tvChat {
     public partial class OptionsForm : Window {
         public OptionsForm() {
             InitializeComponent();
+        }
+
+        public string[] Skins {
+            get {
+                return (from b in Directory.GetFiles(App.RootFolder + "/Skins/", "*.xaml")
+                        orderby b
+                        select System.IO.Path.GetFileNameWithoutExtension(b)).ToArray();
+            }
         }
 
         private void start_Click_1( object sender, RoutedEventArgs e ) {
