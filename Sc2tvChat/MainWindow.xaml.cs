@@ -155,8 +155,8 @@ namespace Sc2tvChat {
 
             // TODO: Phil9l: Охламон, может стоит проверять, вдруг фейспалм ставят кому-то из зрителей?
             if (string.IsNullOrEmpty(Msg.TalkTo) || Msg.TalkTo == Properties.Settings.Default.streamerNick) {
-            double div = Math.Exp(CasterAchievment.Temperature);
-               CasterAchievment.Temperature += Msg.Data.Text.CountSubstring(":s:fire:") / div * 10.0;
+            //double div = Math.Exp(CasterAchievment.Temperature);
+               CasterAchievment.Temperature += Msg.Data.Text.CountSubstring(":s:fire:") * 10.0;
 
                 CasterAchievment.Depth = CasterAchievment.Depth
                     + Msg.Data.Text.CountSubstring(":s:fyeah:") * 10
