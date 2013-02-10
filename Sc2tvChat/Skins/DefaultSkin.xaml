@@ -63,17 +63,59 @@
     </Style>
 
     <Style x:Key="{x:Type CheckBox}" TargetType="{x:Type CheckBox}">
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <BulletDecorator Background="Transparent">
+                        <BulletDecorator.Bullet>
+                            <Border x:Name="Border" Width="15" Height="15"
+                                    Background="White" >
+                                <Path HorizontalAlignment="Center" VerticalAlignment="Center"
+                                      Stretch="Fill" Margin="2"
+                                      x:Name="CheckMark" SnapsToDevicePixels="False"  Stroke="OrangeRed" 
+                                      StrokeThickness="2" Data="M 0 0 L 7 7 M 0 7 L 7 0" />
+                            </Border>
+                        </BulletDecorator.Bullet>
+                        <ContentPresenter Margin="4,0,0,0" VerticalAlignment="Center" TextBlock.Foreground="White" 
+                                          HorizontalAlignment="Left" RecognizesAccessKey="True"/>
+                    </BulletDecorator>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="false">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter TargetName="CheckMark" Property="Data" Value="M 0 7 L 7 0" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="Border" Property="Background" Value="#dddddd" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="Border" Property="Background" Value="#E0E0E0" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter TargetName="Border" Property="Background" Value="#EEEEEE" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="#AAAAAA" />
+                            <Setter Property="Foreground" Value="#888888"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
-           
-        
-    
-    
-    <Style x:Key="{x:Type TextBlock}" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="White" />
+
+
+    <Style x:Key="MainWindow" TargetType="{x:Type Window}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="MinWidth" Value="200" />
+        <Setter Property="MinHeight" Value="155" />
+        <Setter Property="MinWidth" Value="200" />
+       
     </Style>
     
-    <SolidColorBrush x:Key="WindowBackground" Color="#ff000000" />
+    <SolidColorBrush x:Key="WindowBackground" Color="#ee000000" />
+    <SolidColorBrush x:Key="FontForeground" Color="White" />
     <SolidColorBrush x:Key="BorderBackground" Color="Orange" />
 
     <Style x:Key="ChatDividerStroke" TargetType="{x:Type Rectangle}">
@@ -83,6 +125,7 @@
 
     
     <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
+        <Setter Property="TextBlock.Foreground" Value="White" />
         <Setter Property="OverridesDefaultStyle" Value="true"/>
         <Setter Property="HasDropShadow" Value="True"/>
         <Setter Property="FontFamily" Value="Arial" />
@@ -177,6 +220,7 @@
 
     <!-- Контейнер содержащий текст, в котором было обращение к стримеру -->
     <Style x:Key="StreamerContainer" TargetType="{x:Type WrapPanel}">
+        <Setter Property="Background" Value="#ff003300" />
     </Style>
     
     <!-- Контейнер содержащий текст, в котором не было обращения к стримеру -->
@@ -187,4 +231,188 @@
         <Setter Property="Margin" Value="1" />
     </Style>
 
+
+
+
+    <Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="IsTabStop" Value="false"/>
+        <Setter Property="Focusable" Value="false"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Border Background="Orange" Width="6" CornerRadius="3" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
+        <Grid>
+            <Border Grid.RowSpan="3" CornerRadius="2" Width="2" Background="Orange" HorizontalAlignment="Center" />
+            <Track Name="PART_Track" Grid.Row="1" IsDirectionReversed="true">
+                <Track.Thumb>
+                    <Thumb Style="{StaticResource ScrollBarThumb}" />
+                </Track.Thumb>
+            </Track>
+        </Grid>
+    </ControlTemplate>
+
+    <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="Width" Value="Auto"/>
+                <Setter Property="Height" Value="18" />
+                <!-- Да зачем нам дизайнерить то что никто никогда не увидит? -->
+                <!--<Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />-->
+            </Trigger>
+            <Trigger Property="Orientation" Value="Vertical">
+                <Setter Property="Width" Value="18"/>
+                <Setter Property="Height" Value="Auto" />
+                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
+    
+    
+    <!-- Элементы чата -->
+    <Style TargetType="{x:Type ListBoxItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <ContentPresenter />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <EventTrigger RoutedEvent="Loaded">
+                <EventTrigger.Actions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="Opacity" 
+                                                         From="0" To="1"
+                                                         Duration="0:0:3">
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger.Actions>
+            </EventTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <DataTemplate x:Key="ChatItem">
+        
+            <ContentPresenter Content="{Binding Text}" />
+        
+    </DataTemplate>
+
+    <!-- Область прокрутки чата -->
+    <Style TargetType="{x:Type ScrollViewer}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ScrollContentPresenter Grid.Column="0"/>
+
+                        <ScrollBar Name="PART_VerticalScrollBar" Grid.Column="1"
+                                        Value="{TemplateBinding VerticalOffset}"
+                                        Maximum="{TemplateBinding ScrollableHeight}"
+                                        ViewportSize="{TemplateBinding ViewportHeight}"
+                                        Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    
+    <!-- Шаблон заголовка в чата -->
+    <DataTemplate x:Key="HeaderTemplate">
+        <Border Background="#ff222222" BorderBrush="Orange" BorderThickness="1">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="1">
+            <TextBlock Foreground="DarkGray" Text="Peka's count: " FontWeight="Bold" />
+            <TextBlock Foreground="White" Text="{Binding PekaCount}" Margin="1,0"/>
+
+            <TextBlock Foreground="DarkGray" Text=", Temp: " FontWeight="Bold" />
+            <TextBlock Foreground="White" Text="{Binding Path=Temperature, StringFormat={}{0:0.0}°C}" Margin="1,0"/>
+            
+            <TextBlock Foreground="DarkGray" Text=", Днометр: " FontWeight="Bold" />
+            <TextBlock Foreground="White" Text="{Binding Path=Depth, StringFormat={}{0:0}m}" Margin="1,0"/>
+        </StackPanel>
+        </Border>
+    </DataTemplate>
+    
+    
+    <!-- Настройки -->
+    <Style TargetType="{x:Type TabControl}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabControl}">
+                    <Grid KeyboardNavigation.TabNavigation="Local">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TabPanel Name="HeaderPanel" Grid.Row="0" Panel.ZIndex="1" Margin="0,0,0,-1"
+                                  IsItemsHost="True"
+                                      KeyboardNavigation.TabIndex="1" Background="Black" />
+                        <Border Name="Border" Grid.Row="1" BorderBrush="Black" BorderThickness="1" 
+                                    KeyboardNavigation.TabNavigation="Local"
+                                    KeyboardNavigation.DirectionalNavigation="Contained"
+                                    KeyboardNavigation.TabIndex="2" >
+                            <ContentPresenter Name="PART_SelectedContentHost"             
+                                              ContentSource="SelectedContent" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="#888888" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="#AAAAAA" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type TabItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+                    <Grid>
+                        <Border Name="Border" Margin="0,0,-4,0" 
+                                Background="Black" BorderBrush="White" 
+                                BorderThickness="1,0,1,0" >
+                            <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" 
+                                              HorizontalAlignment="Center" ContentSource="Header" 
+                                              Margin="12,2,12,2" TextBlock.Foreground="White" 
+                                              RecognizesAccessKey="True"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Panel.ZIndex" Value="100" />
+                            <Setter TargetName="Border" Property="Background" Value="#FFFFFF" />
+                            <Setter TargetName="Border" Property="BorderThickness" Value="1,1,1,0" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="Black" />
+                            <Setter TargetName="ContentSite" Property="TextBlock.Foreground" Value="Black" />
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

@@ -27,7 +27,7 @@
     <InstallUrl>http://oxlamon.com/pubarea/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>sc2chat.htm</WebPage>
-    <ApplicationRevision>6</ApplicationRevision>
+    <ApplicationRevision>7</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -91,6 +91,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="StringEx.cs" />
     <Page Include="Controls\PollingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -111,14 +112,17 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\AnimatedScrollViewer .cs" />
     <Compile Include="Controls\PollingControl.xaml.cs">
       <DependentUpon>PollingControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\VisualChatControl.xaml.cs">
       <DependentUpon>VisualChatControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Data\Achievment.cs" />
     <Compile Include="Data\Message.cs" />
     <Compile Include="Data\Messages.cs" />
+    <Compile Include="Data\VisualMessage.cs" />
     <Compile Include="Data\SmilesDataDase.cs" />
     <Compile Include="OptionsForm.xaml.cs">
       <DependentUpon>OptionsForm.xaml</DependentUpon>
