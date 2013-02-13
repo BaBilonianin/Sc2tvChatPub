@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sc2tvChat {
-    public class Messages {
+namespace RatChat.Sc2tv {
+    internal class Messages {
         [JsonProperty(PropertyName = "messages")]
-        public Message[] Content { get; set; }
+        internal Message[] Content { get; set; }
     }
 }

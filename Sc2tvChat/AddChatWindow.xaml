@@ -1,0 +1,40 @@
+﻿<Window x:Class="RatChat.AddChatWindow" x:Name="AddForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Topmost="True"
+        xmlns:p="clr-namespace:RatChat.Properties" WindowStartupLocation="CenterScreen"
+        Title="AddChatWindow" Height="150" Width="400" Background="{DynamicResource WindowBackground}">
+
+        <Grid TextBlock.Foreground="{DynamicResource FontForeground}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Добавить чат:"
+                Grid.Row="0" Grid.ColumnSpan="2" FontWeight="Bold"
+                HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+
+            <TextBlock Text="Источник чата: "
+                Grid.Row="1" Margin="2"
+                HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" />
+
+            <ComboBox Grid.Row="1" Grid.Column="1" Margin="2" 
+                        ItemsSource="{Binding ElementName=AddForm, Path=ChatSources, Mode=OneWay}"
+                        SelectedValue="{Binding ElementName=AddForm, Path=ChatSource, Mode=TwoWay}" />
+
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" Grid.RowSpan="2" Grid.Row="2" Height="40">
+            <Button x:Name="Cancel" Width="38" Height="38" Margin="8,1" Content="r" FontSize="26" ToolTip="Отмена" Click="Cansel_Click_1" />
+            <Button x:Name="Commit" Width="38" Height="38" Margin="8,1" Content="a" FontSize="30" ToolTip="Применить" Click="Commit_Click_1" />
+        </StackPanel>
+    </Grid>
+        
+</Window>

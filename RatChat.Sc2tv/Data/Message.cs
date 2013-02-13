@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sc2tvChat {
-    public class Message {
+namespace RatChat.Sc2tv {
+    internal class Message {
         [JsonProperty(PropertyName = "channelId")]
         public int ChannelId { get; set; }
 
@@ -27,6 +27,8 @@ namespace Sc2tvChat {
 
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
+
+        public int NeedToDelete { get; set; }
     }
 
    

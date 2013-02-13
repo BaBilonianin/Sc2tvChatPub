@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sc2tvChat {
+namespace RatChat {
     public class Achievment: INotifyPropertyChanged {
         public Achievment() {
             Clear();

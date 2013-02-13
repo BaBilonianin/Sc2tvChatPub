@@ -15,7 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Sc2tvChat {
+namespace RatChat {
     /// <summary>
     /// Interaction logic for OptionsForm.xaml
     /// </summary>
@@ -33,33 +33,7 @@ namespace Sc2tvChat {
         }
 
         private void start_Click_1( object sender, RoutedEventArgs e ) {
-            streamerNick.IsEnabled = false;
-            start.IsEnabled = false;
-
-            WebClient wc = new WebClient();
-            wc.DownloadStringCompleted += new DownloadStringCompletedEventHandler(( a, b ) => {
-                start.IsEnabled = true;
-                streamerNick.IsEnabled = true;
-
-                if (b.Error == null) {
-                    Regex rx = new Regex("\\<link.*?\\\"canonical\\\".*?href=\\\"http://sc2tv.ru/node/(.*?)\\\"");
-                    Match m = rx.Match(b.Result);
-                    if (m.Success) {
-                        rx= new Regex(".*?author\\\".*?title.*?\\>(.*?)\\<" );
-
-
-                        Properties.Settings.Default.streamerID = int.Parse(m.Groups[1].Value);
-                        Properties.Settings.Default.streamerNick = rx.Match(b.Result).Groups[1].Value;
-                      //  this.DialogResult = true;
-                    } else {
-                        MessageBox.Show("Чат стримера не найден.");
-                    }
-                } else {
-                    MessageBox.Show("Сетевая ошибка.");
-                }
-            });
-
-            wc.DownloadStringAsync(new Uri(streamerNick.Text, UriKind.RelativeOrAbsolute));
+          
         }
 
        

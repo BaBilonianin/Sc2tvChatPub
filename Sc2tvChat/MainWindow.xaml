@@ -1,10 +1,10 @@
-﻿<Window x:Class="Sc2tvChat.MainWindow"  
-        xmlns:p="clr-namespace:Sc2tvChat.Properties" 
+﻿<Window x:Class="RatChat.MainWindow"  
+        xmlns:p="clr-namespace:RatChat.Properties" 
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
        
-        xmlns:ctrl="clr-namespace:Sc2tvChat.Controls"
-        
+        xmlns:ctrl="clr-namespace:RatChat.Controls"
+        xmlns:conv="clr-namespace:RatChat.Converters"
         AllowsTransparency="{Binding Source={x:Static p:Settings.Default}, Path=useLayered, Mode=OneTime}"
         Height="{Binding Source={x:Static p:Settings.Default}, Path=height, Mode=TwoWay}" 
         Width="{Binding Source={x:Static p:Settings.Default}, Path=width, Mode=TwoWay}" 
@@ -14,9 +14,11 @@
         ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen"
         
-        Loaded="Window_Loaded_1"
-         Icon="Junior Icon 85.ico" 
-        Style="{DynamicResource MainWindow}">
+        Loaded="Window_Loaded_1" Closing="Window_Closing_1"
+        Icon="Junior Icon 85.ico">
+    <Window.Resources>
+        <conv:RowConverter x:Key="RowConverter" />
+    </Window.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="MouseEnter">
             <BeginStoryboard>
@@ -38,35 +40,16 @@
             <RowDefinition Height="20" />
             <RowDefinition />
         </Grid.RowDefinitions>
-
-        <Thumb DragDelta="Thumb_DragDelta_1" Grid.RowSpan="2" /> <!-- Таскалка для окна -->
-
-        <ListBox x:Name="Chat" ItemsSource="{Binding}" Margin="1" ItemTemplate="{DynamicResource ChatItem}"
-                 Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 Background="Transparent" ScrollViewer.CanContentScroll="False">
-            <ListBox.Template>
-                <ControlTemplate TargetType="{x:Type ListBox}">
-                    <Grid>
-                        <ctrl:AnimatedScrollViewer Background="Transparent" Focusable="false" 
-                                                   Padding="{TemplateBinding Padding}" >
-                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                        </ctrl:AnimatedScrollViewer>
-                    </Grid>
-                </ControlTemplate>
-            </ListBox.Template>
-        </ListBox>
-
-        <!-- Вот тут, вместо банального, скучного текста, можно добавить бегущий текст, анимации
-         (рекламу и прочее для канала) -->
-        <!--<TextBlock x:Name="ClockTB" /> -->
-
-        <ContentPresenter x:Name="HeaderCP" ContentTemplate="{DynamicResource HeaderTemplate}" IsHitTestVisible="False"/> 
         
-        <ctrl:PollingControl x:Name="pollCtrl" /> <!-- Milestone #3 -->
+        <TextBlock Text="RatChat v2.0" Style="{DynamicResource ChatHeader}" />
+
+        <Thumb DragDelta="Thumb_DragDelta_1" Grid.RowSpan="2" /> 
+        <ctrl:ChatsControl x:Name="Chats" Grid.Row="1" />
 
         <StackPanel x:Name="headerButtons" Orientation="Horizontal" HorizontalAlignment="Right" Height="18">
-            <!--<Button Width="18" ToolTip="Голосовалка" Content=")" Margin="1,0" Click="b0_Click_1" />-->
-            <Button x:Name="b1" Width="18" Margin="1,0" ToolTip="Сменить стримера" Content="~" Click="Button_Click_1" />
+            <Button x:Name="AddChat" Width="18" Margin="1,0" FontFamily="Arial" 
+                    ToolTip="Добавить чат" Content="+" Click="AddChat_Click" />
+            <Button x:Name="b1" Width="18" Margin="1,0" ToolTip="Настройки" Content="~" Click="Button_Click_1" />
             <Button x:Name="b2" Width="18" Margin="1,0" ToolTip="Закрыть" Content="r" Click="Button_Click_2" />
         </StackPanel>
     </Grid>

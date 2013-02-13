@@ -7,8 +7,8 @@
     <ProjectGuid>{4FF33813-2BF7-4A85-A182-720C47D0D896}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sc2tvChat</RootNamespace>
-    <AssemblyName>Sc2tvChat</AssemblyName>
+    <RootNamespace>RatChat</RootNamespace>
+    <AssemblyName>RatChat</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -27,8 +27,8 @@
     <InstallUrl>http://oxlamon.com/pubarea/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>sc2chat.htm</WebPage>
-    <ApplicationRevision>9</ApplicationRevision>
-    <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
+    <ApplicationRevision>10</ApplicationRevision>
+    <ApplicationVersion>2.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -69,9 +69,6 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\SDK\Json45r11\Bin\Net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
@@ -92,12 +89,43 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="StringEx.cs" />
+    <Compile Include="AddChatWindow.xaml.cs">
+      <DependentUpon>AddChatWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ChatOptionsWindow.xaml.cs">
+      <DependentUpon>ChatOptionsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ChatSourceManager.cs" />
+    <Compile Include="Controls\ChatsControl.xaml.cs">
+      <DependentUpon>ChatsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GridHelper.cs" />
+    <Compile Include="Controls\VisualChatDELETE.xaml.cs">
+      <DependentUpon>VisualChatDELETE.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\VisualChatCtrl.cs" />
+    <Compile Include="Converters\RowConverter.cs" />
+    <Page Include="AddChatWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ChatOptionsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ChatsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\PollingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\VisualChatControl.xaml">
+    <Page Include="Controls\VisualChatDELETE.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DefaultLook.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -117,14 +145,7 @@
     <Compile Include="Controls\PollingControl.xaml.cs">
       <DependentUpon>PollingControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\VisualChatControl.xaml.cs">
-      <DependentUpon>VisualChatControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Achievment.cs" />
-    <Compile Include="Data\Message.cs" />
-    <Compile Include="Data\Messages.cs" />
     <Compile Include="Data\VisualMessage.cs" />
-    <Compile Include="Data\SmilesDataDase.cs" />
     <Compile Include="OptionsForm.xaml.cs">
       <DependentUpon>OptionsForm.xaml</DependentUpon>
     </Compile>
@@ -132,10 +153,8 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="PollingForm.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Content Include="Chats\Newtonsoft.Json.dll" />
+    <Content Include="Chats\RatChat.Sc2tv.dll" />
     <Content Include="Skins\DefaultSkin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -148,9 +167,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PollingForm.xaml.cs">
-      <DependentUpon>PollingForm.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -198,6 +214,13 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sc2tvChat.Core\RatChat.Core.csproj">
+      <Project>{70ebadc5-d03f-4c59-bb44-896a0d023025}</Project>
+      <Name>RatChat.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

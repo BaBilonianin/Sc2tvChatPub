@@ -1,0 +1,33 @@
+﻿<Window x:Class="RatChat.ChatOptionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ChatOptionsWindow" Height="300" Width="500" 
+        Background="{DynamicResource WindowBackground}">
+    
+    <Grid TextBlock.Foreground="{DynamicResource FontForeground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
+            <RowDefinition />
+            <RowDefinition Height="48" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Настройки чата"
+                   Grid.Row="0" Grid.ColumnSpan="2" FontWeight="Bold"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+            <Grid x:Name="OptionsGrid" VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+            </Grid>
+        </ScrollViewer>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2" Height="40">
+            <Button x:Name="Cancel" Width="38" Height="38" Margin="8,1" Content="r" FontSize="26" ToolTip="Отмена" Click="Cansel_Click_1" />
+            <Button x:Name="Commit" Width="38" Height="38" Margin="8,1" Content="a" FontSize="30" ToolTip="Применить" Click="Commit_Click_1" />
+        </StackPanel>
+    </Grid>
+     
+</Window>

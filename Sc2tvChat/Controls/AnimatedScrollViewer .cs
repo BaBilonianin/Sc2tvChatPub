@@ -7,14 +7,15 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
-namespace Sc2tvChat.Controls {
+namespace RatChat.Controls {
     public class AnimatedScrollViewer: ScrollViewer {
         public AnimatedScrollViewer(): base() {
             this.ScrollChanged += AnimatedScrollViewer_ScrollChanged;
         }
 
         void AnimatedScrollViewer_ScrollChanged( object sender, ScrollChangedEventArgs e ) {
-            AnimatedScrollDown();
+            if( e.ExtentHeightChange > 0.0 || e.ViewportHeightChange > 0.0 )
+                AnimatedScrollDown();
         }
 
         public static readonly DependencyProperty MyOffsetProperty = DependencyProperty.Register(

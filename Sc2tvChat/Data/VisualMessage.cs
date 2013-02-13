@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RatChat.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,18 +10,18 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Sc2tvChat {
+namespace RatChat {
     public class VisualMessage {
         const string LinkReplacer = "%LINKLINK%";
         static Regex UriDetector = new Regex(@"((http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?)");
 
         public FrameworkElement Text { get; private set; }
 
-        public Message Data { get; private set; }
+        public ChatMessage Data { get; private set; }
         public bool NeedDelete { get; set; }
         public string TalkTo { get; set; }
 
-        public VisualMessage( SmilesDataDase Db, Message Data ) {
+        public VisualMessage( RatChat.Core.IChatSource Db, ChatMessage Data ) {
             this.Data = Data;
 
             List<Uri> Urls = new List<Uri>();
@@ -48,13 +49,13 @@ namespace Sc2tvChat {
                 TalkTo = UserText.Substring(nxd + 3, nxd2 - nxd - 3);
                 UserText = UserText.Substring(nxd2 + 6);
 
-                if (TalkTo == Properties.Settings.Default.streamerNick) {
+                if (TalkTo == Db.StreamerNick) {
                     wp.SetResourceReference(WrapPanel.StyleProperty, "StreamerContainer");
                 } else {
                     wp.SetResourceReference(WrapPanel.StyleProperty, "NormalTextContainer");
                 }
 
-                ttt.Add(TalkTo + ", ");
+                ttt.Add(TalkTo + ",");
             } else {
                 TalkTo = "";
             }
@@ -89,7 +90,7 @@ namespace Sc2tvChat {
                         CreateSmile(Db, Data.Name, ttt[j], wp);
                     } else {
                         TextBlock txt = new TextBlock() { Text = ttt[j] };
-                        if (TalkTo + ",  " == ttt[j]) {
+                        if (TalkTo + ", " == ttt[j]) {
                             txt.SetResourceReference(TextBlock.StyleProperty, "NameTextStyle");
                         } else {
                             txt.SetResourceReference(TextBlock.StyleProperty, "TextStyle");
@@ -102,7 +103,7 @@ namespace Sc2tvChat {
             Text = wp;
         }
 
-        private void CreateSmile( SmilesDataDase Db, string UserName, string SmileId, WrapPanel TextPanel ) {
+        private void CreateSmile( RatChat.Core.IChatSource Db, string UserName, string SmileId, WrapPanel TextPanel ) {
             int nn = SmileId.LastIndexOf(':');
             SmileId = SmileId.Substring(2, nn + 1 - 2) + " ";
 
@@ -113,7 +114,7 @@ namespace Sc2tvChat {
                 smile.SetResourceReference(TextBlock.StyleProperty, "TextSmileStyle");
                 TextPanel.Children.Add(smile);
             } else {
-                TextPanel.Children.Add(Db.GetSmile(SmileId));
+                TextPanel.Children.Add(Db.CreateSmile(SmileId));
             }
         }
     }

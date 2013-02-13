@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
-namespace Sc2tvChat {
+namespace RatChat.Sc2tv {
     public class SmilesDataDase {
         public const string UpdateSmilesUri = "http://chat.sc2tv.ru/js/smiles.js";
 

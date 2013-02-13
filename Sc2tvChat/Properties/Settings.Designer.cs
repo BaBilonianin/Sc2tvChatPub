@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sc2tvChat.Properties {
+namespace RatChat.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -116,6 +116,42 @@ namespace Sc2tvChat.Properties {
             }
             set {
                 this["currentSkin"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://sc2tv.ru/content/oxlamonschannel")]
+        public string streamerUri {
+            get {
+                return ((string)(this["streamerUri"]));
+            }
+            set {
+                this["streamerUri"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string chatConfigs {
+            get {
+                return ((string)(this["chatConfigs"]));
+            }
+            set {
+                this["chatConfigs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string usedChats {
+            get {
+                return ((string)(this["usedChats"]));
+            }
+            set {
+                this["usedChats"] = value;
             }
         }
     }

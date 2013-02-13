@@ -1,5 +1,7 @@
-﻿<UserControl x:Class="Sc2tvChat.Controls.VisualChatControl"
+﻿<UserControl x:Class="RatChat.Controls.ChatsControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Canvas x:Name="AnimCanvas" ClipToBounds="True" />
+    <Grid x:Name="root">
+            
+    </Grid>
 </UserControl>
