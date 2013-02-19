@@ -122,7 +122,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
-                                    <Rectangle Fill="White">
+                                    <Rectangle Fill="Black">
                                     </Rectangle>
                             </ControlTemplate>
                         </Setter.Value>
@@ -133,26 +133,26 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type GridSplitter}">
-                    <Border Background="#8800ff00" />
+                    <Border Background="#88000000" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
     
-   
-    
-    <SolidColorBrush x:Key="WindowBackground" Color="#ee000000" />
-    <SolidColorBrush x:Key="FontForeground" Color="White" />
-    <SolidColorBrush x:Key="BorderBackground" Color="Orange" />
-
-    <Style x:Key="ChatDividerStroke" TargetType="{x:Type Rectangle}">
-        <Setter Property="Stroke" Value="Magenta" />
-        <Setter Property="StrokeThickness" Value="1" />
+    <Style x:Key="MainWindow" TargetType="{x:Type Window}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="MinWidth" Value="200" />
+        <Setter Property="MinHeight" Value="155" />
+        <Setter Property="MinWidth" Value="200" />
     </Style>
 
-    
+    <SolidColorBrush x:Key="WindowBackground" Color="Pink" />
+    <SolidColorBrush x:Key="FontForeground" Color="Black" />
+    <SolidColorBrush x:Key="BorderBackground" Color="Magenta" />
+
     <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
-        <Setter Property="TextBlock.Foreground" Value="White" />
+        <Setter Property="TextBlock.Foreground" Value="Black" />
         <Setter Property="OverridesDefaultStyle" Value="true"/>
         <Setter Property="HasDropShadow" Value="True"/>
         <Setter Property="FontFamily" Value="Arial" />
@@ -195,14 +195,14 @@
 
 
     <Style x:Key="ChatHeader" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="LightCoral" />
+        <Setter Property="Foreground" Value="Black" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="Margin" Value="2,0" />
     </Style>
     
     <Style x:Key="ConfigText" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="LightCoral" />
+        <Setter Property="Foreground" Value="Black" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="Margin" Value="2,0" />
@@ -210,7 +210,7 @@
 
     <!-- Chat style -->
     <Style x:Key="HeaderStyle" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="LightCoral" />
+        <Setter Property="Foreground" Value="Black" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="Margin" Value="2,0" />
@@ -222,25 +222,13 @@
     <!-- Chat fiiiiilll -->
     
     <Style x:Key="NameStyle" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="Yellow" />
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="IsHitTestVisible" Value="False" />
-        
-        <Setter Property="Visibility" Value="Collapsed" />
     </Style>
     
     <DataTemplate x:Key="ChatItem">
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-
-            <Viewbox VerticalAlignment="Top" HorizontalAlignment="Right" Stretch="Uniform" MaxHeight="17">
-            <TextBlock x:Name="nick" Foreground="Aquamarine"
-                       Text="{Binding Path=Data.Name}" 
-                       ToolTip="{Binding Path=Data.Date}"
-                       Margin="3,0" />
-            </Viewbox>
             <ContentPresenter x:Name="presenter" Grid.Column="1" Content="{Binding Text}" Margin="2,0" />
 
             <Border Grid.Column="1" BorderThickness="1,0,0,0" BorderBrush="Magenta" Opacity="0.3"/>
@@ -251,11 +239,6 @@
                 <EventTrigger.Actions>
                     <BeginStoryboard>
                         <Storyboard>
-                            <ThicknessAnimation Storyboard.TargetProperty="Margin"
-                                                Storyboard.TargetName="nick"
-                                                From="-100,0,94,0" To="3,0,3,0"
-                                                Duration="00:00:00.4" />
-
                             <ThicknessAnimation Storyboard.TargetProperty="Margin"
                                                 Storyboard.TargetName="presenter"
                                                 From="100,0,-96,0" To="2,0,2,0"
@@ -274,23 +257,10 @@
     </DataTemplate>
 
 
-    <DataTemplate x:Key="AchievmentStyle">
-        <Border Height="20" Background="#ff000000" BorderBrush="{StaticResource BorderBackground}" BorderThickness="1">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="1">
-                <TextBlock Foreground="DarkGray" Text="Peka's count: " FontWeight="Bold" />
-                <TextBlock Foreground="White" Text="{Binding Path=PekaCount}" Margin="1,0"/>
 
-                <TextBlock Foreground="DarkGray" Text=", Temp: " FontWeight="Bold" />
-                <TextBlock Foreground="White" Text="{Binding Path=Temperature, StringFormat={}{0:0.0}°C}" Margin="1,0"/>
-
-                <TextBlock Foreground="DarkGray" Text=", Днометр: " FontWeight="Bold" />
-                <TextBlock Foreground="White" Text="{Binding Path=Depth, StringFormat={}{0:0}m}" Margin="1,0"/>
-            </StackPanel>
-        </Border>
-    </DataTemplate>
 
     <Style x:Key="TextStyle" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Foreground" Value="Black" />
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="IsHitTestVisible" Value="False" />
@@ -306,7 +276,7 @@
     </Style>
 
     <Style x:Key="LinkStyle" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="GreenYellow" />
+        <Setter Property="Foreground" Value="Green" />
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <!--<Setter Property="Margin" Value="-1" />-->
@@ -314,7 +284,7 @@
 
     <!-- выделение в сообщении адресата (его стиль) -->
     <Style x:Key="NameTextStyle" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Foreground" Value="Black" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="VerticalAlignment" Value="Top" />
@@ -324,20 +294,14 @@
 
     <!-- Контейнер содержащий текст, в котором было обращение к стримеру -->
     <Style x:Key="StreamerContainer" TargetType="{x:Type WrapPanel}">
-        <Setter Property="Background" Value="#ff002200" />
+        <Setter Property="Background" Value="#22ffffff" />
     </Style>
     
     <!-- Контейнер содержащий текст, в котором не было обращения к стримеру -->
     <Style x:Key="NormalTextContainer" TargetType="{x:Type WrapPanel}">
     </Style>
 
-    <Style x:Key="AnimatedCanvas" TargetType="{x:Type Canvas}">
-        <Setter Property="Margin" Value="1" />
-    </Style>
-
-
-
-
+   
     <Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -346,7 +310,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border Background="Orange" Width="6" CornerRadius="3" />
+                    <Border Background="#3A0782" Width="6" CornerRadius="3" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -354,7 +318,7 @@
 
     <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
         <Grid>
-            <Border Grid.RowSpan="3" CornerRadius="2" Width="2" Background="Orange" HorizontalAlignment="Center" />
+            <Border Grid.RowSpan="3" CornerRadius="2" Width="2" Background="#3A0782" HorizontalAlignment="Center" />
             <Track Name="PART_Track" Grid.Row="1" IsDirectionReversed="true">
                 <Track.Thumb>
                     <Thumb Style="{StaticResource ScrollBarThumb}" />
@@ -423,6 +387,23 @@
     </Style>
     
     
+    <!-- Шаблон заголовка в чата -->
+    <DataTemplate x:Key="AchievmentStyle">
+        <Border Background="#88ffffFF" BorderBrush="Magenta" BorderThickness="1">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="1">
+                <TextBlock Foreground="DarkGray" Text="Peka's count: " FontWeight="Bold" />
+                    <TextBlock Foreground="Black" Text="{Binding Path=PekaCount}" Margin="1,0"/>
+
+                <TextBlock Foreground="DarkGray" Text=", Temp: " FontWeight="Bold" />
+                <TextBlock Foreground="Black" Text="{Binding Path=Temperature, StringFormat={}{0:0.0}°C}" Margin="1,0"/>
+            
+                <TextBlock Foreground="DarkGray" Text=", Днометр: " FontWeight="Bold" />
+                <TextBlock Foreground="Black" Text="{Binding Path=Depth, StringFormat={}{0:0}m}" Margin="1,0"/>
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+    
+    
     <!-- Настройки -->
     <Style TargetType="{x:Type TabControl}">
         <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -488,7 +469,9 @@
 
 
 
-
+    <Style x:Key="SmileStyle" TargetType="{x:Type Image}">
+        <Setter Property="MaxHeight" Value="40" />
+    </Style>
 
 
 
@@ -500,16 +483,16 @@
                 <ControlTemplate TargetType="UserControl">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="20"/>
+                          <RowDefinition Height="20" />
                             <RowDefinition />
                         </Grid.RowDefinitions>
 
-                        <Border Grid.Row="0" IsHitTestVisible="False" Background="#11ffffff">
+                        <Border Grid.Row="0" IsHitTestVisible="False" Background="#44ffffff">
                             <TextBlock x:Name="PART_Header" Text="{Binding Header}" 
                                        Style="{DynamicResource HeaderStyle}"
                                        />
                         </Border>
-                        
+
                         <ListBox x:Name="PART_Messages" Grid.Row="1" 
                                 ItemsSource="{Binding}" Margin="1" 
                                 ItemTemplate="{DynamicResource ChatItem}"
@@ -518,7 +501,7 @@
                                 Template="{DynamicResource SystemChatContent}">
                         </ListBox>
 
-                        <StackPanel x:Name="headerButtons" Opacity="0.0" Grid.Row="0" Orientation="Horizontal" 
+                        <StackPanel x:Name="headerButtons" Grid.Row="0" VerticalAlignment="Top" Orientation="Horizontal" 
                                     Height="18" HorizontalAlignment="Right">
                             <Button x:Name="PART_OptionsButton" Width="18" Margin="1,0" 
                                     ToolTip="Настройки" Content="~" HorizontalAlignment="Left" />
@@ -552,15 +535,4 @@
         </Setter>
     </Style>
 
-    <Style x:Key="SmileStyle" TargetType="{x:Type Image}">
-        <Setter Property="MaxHeight" Value="20" />
-    </Style>
-
-    <Style x:Key="MainWindow" TargetType="Window">
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="MinWidth" Value="200" />
-        <Setter Property="MinHeight" Value="155" />
-        <Setter Property="MinWidth" Value="200" />
-    </Style>
 </ResourceDictionary>

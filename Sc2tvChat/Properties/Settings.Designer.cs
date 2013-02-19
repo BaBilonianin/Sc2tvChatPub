@@ -109,7 +109,7 @@ namespace RatChat.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("DefaultSkin")]
+        [global::System.Configuration.DefaultSettingValueAttribute("По умолчанию (встроенный)")]
         public string currentSkin {
             get {
                 return ((string)(this["currentSkin"]));
@@ -152,6 +152,30 @@ namespace RatChat.Properties {
             }
             set {
                 this["usedChats"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool topmost {
+            get {
+                return ((bool)(this["topmost"]));
+            }
+            set {
+                this["topmost"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool showWindowHeader {
+            get {
+                return ((bool)(this["showWindowHeader"]));
+            }
+            set {
+                this["showWindowHeader"] = value;
             }
         }
     }

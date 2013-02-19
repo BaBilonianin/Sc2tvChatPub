@@ -21,7 +21,7 @@ namespace RatChat {
         public bool NeedDelete { get; set; }
         public string TalkTo { get; set; }
 
-        public VisualMessage( RatChat.Core.IChatSource Db, ChatMessage Data ) {
+        public VisualMessage( string StreamerNick, SmilesDataDase Db, ChatMessage Data ) {
             this.Data = Data;
 
             List<Uri> Urls = new List<Uri>();
@@ -49,7 +49,7 @@ namespace RatChat {
                 TalkTo = UserText.Substring(nxd + 3, nxd2 - nxd - 3);
                 UserText = UserText.Substring(nxd2 + 6);
 
-                if (TalkTo == Db.StreamerNick) {
+                if (TalkTo == StreamerNick) {
                     wp.SetResourceReference(WrapPanel.StyleProperty, "StreamerContainer");
                 } else {
                     wp.SetResourceReference(WrapPanel.StyleProperty, "NormalTextContainer");
@@ -83,11 +83,11 @@ namespace RatChat {
                     wp.Children.Add(link);
                     linkIndex++;
                 } else {
-                    if (j != (ttt.Count - 1))
+                    //if (j != (ttt.Count - 1))
                         ttt[j] += ' ';
 
-                    if (ttt[j].StartsWith(":s:")) {
-                        CreateSmile(Db, Data.Name, ttt[j], wp);
+                    if (CreateSmile(Db, ttt[j], wp)) {
+                        // Ура смайл ебать есть
                     } else {
                         TextBlock txt = new TextBlock() { Text = ttt[j] };
                         if (TalkTo + ", " == ttt[j]) {
@@ -103,19 +103,23 @@ namespace RatChat {
             Text = wp;
         }
 
-        private void CreateSmile( RatChat.Core.IChatSource Db, string UserName, string SmileId, WrapPanel TextPanel ) {
-            int nn = SmileId.LastIndexOf(':');
-            SmileId = SmileId.Substring(2, nn + 1 - 2) + " ";
-
-            // 
+        private bool CreateSmile( SmilesDataDase Db, string SmileId, WrapPanel TextPanel ) {
 
             if (Properties.Settings.Default.hideSmiles) {
-                TextBlock smile = new TextBlock() { Text = SmileId.Substring(0, SmileId.Length - 1) };
-                smile.SetResourceReference(TextBlock.StyleProperty, "TextSmileStyle");
-                TextPanel.Children.Add(smile);
+                return false;
             } else {
-                TextPanel.Children.Add(Db.CreateSmile(SmileId));
+                //int nn = SmileId.LastIndexOf(':');
+                //SmileId = SmileId.Substring(2, nn + 1 - 2) + " ";
+
+                
+                FrameworkElement s = Db.GetSmile(SmileId);
+                if (s != null) {
+                    TextPanel.Children.Add(s);
+                    return true;
+                }
             }
+
+            return false;
         }
     }
 }

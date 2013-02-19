@@ -27,8 +27,8 @@
     <InstallUrl>http://oxlamon.com/pubarea/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>sc2chat.htm</WebPage>
-    <ApplicationRevision>10</ApplicationRevision>
-    <ApplicationVersion>2.1.0.%2a</ApplicationVersion>
+    <ApplicationRevision>15</ApplicationRevision>
+    <ApplicationVersion>2.2.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -71,6 +71,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -89,6 +90,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Achievment.cs" />
     <Compile Include="AddChatWindow.xaml.cs">
       <DependentUpon>AddChatWindow.xaml</DependentUpon>
     </Compile>
@@ -100,10 +102,8 @@
       <DependentUpon>ChatsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\GridHelper.cs" />
-    <Compile Include="Controls\VisualChatDELETE.xaml.cs">
-      <DependentUpon>VisualChatDELETE.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\VisualChatCtrl.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\RowConverter.cs" />
     <Page Include="AddChatWindow.xaml">
       <SubType>Designer</SubType>
@@ -118,10 +118,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\PollingControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\VisualChatDELETE.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -153,14 +149,23 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Content Include="bin\Debug\Chats\Newtonsoft.Json.dll" />
+    <Content Include="bin\Debug\Chats\RatChat.Sc2tv.dll" />
+    <Content Include="Chats\dotIRC.dll" />
     <Content Include="Chats\Newtonsoft.Json.dll" />
     <Content Include="Chats\RatChat.Sc2tv.dll" />
-    <Content Include="Skins\DefaultSkin.xaml">
+    <Content Include="Chats\RatChat.Twitch.dll" />
+    <Content Include="Skins\WhiteSkin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Page Include="Skins\DefaultSkin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Skins\LightSkin.xaml">
+    </Page>
+    <Content Include="Skins\PinkSkin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -189,6 +194,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="readme.md" />
     <None Include="Sc2tvChat_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -219,6 +225,28 @@
       <Project>{70ebadc5-d03f-4c59-bb44-896a0d023025}</Project>
       <Name>RatChat.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PublishFile Include="bin\Debug\Chats\Newtonsoft.Json.dll">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="bin\Debug\Chats\RatChat.Sc2tv.dll">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

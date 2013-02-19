@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0A8AE7B7-9409-4AFB-878A-55077180F8AD}</ProjectGuid>
+    <ProjectGuid>{6545BE8B-6FAE-4AC5-88D0-1C4EC39DB36E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RatChat.Sc2tv</RootNamespace>
-    <AssemblyName>RatChat.Sc2tv</AssemblyName>
+    <RootNamespace>RatChat.Twitch</RootNamespace>
+    <AssemblyName>RatChat.Twitch</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,8 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\SDK\Json45r11\Bin\Net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="dotIRC, Version=0.4.1.35989, Culture=neutral, PublicKeyToken=1f67a0ba34110caa, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Ubiquitous\dotIRC\bin\Debug\net40\dotIRC.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -46,10 +47,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\Message.cs" />
-    <Compile Include="Data\Messages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sc2tvChatSource.cs" />
+    <Compile Include="TwitchChatSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sc2tvChat.Core\RatChat.Core.csproj">

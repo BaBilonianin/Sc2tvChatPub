@@ -6,13 +6,12 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!--<ResourceDictionary Source="Skins/DefaultSkin.xaml" />-->
                 <ResourceDictionary Source="DefaultLook.xaml" />
+                
+                <!-- Далее грязные скины юзеров идут, фу-фу -->
+
+                <!--<ResourceDictionary Source="Skins/DefaultSkin.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-
-
-
-     
     </Application.Resources>
 </Application>

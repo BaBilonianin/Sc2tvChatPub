@@ -14,8 +14,12 @@ namespace RatChat {
         public Dictionary<string, Type> Sources { get; private set; }
         public ObservableCollection<RatChat.Controls.VisualChatCtrl> Chats { get; private set; }
         public RatChat.Core.ConfigStorage ChatConfigStorage { get; private set; }
+        public SmilesDataDase SmilesDataDase { get; private set; }
+        public Achievment Achievment { get; private set; }
 
         public ChatSourceManager() {
+            SmilesDataDase = new Core.SmilesDataDase();
+            Achievment = new RatChat.Achievment();
             Sources = new Dictionary<string, Type>();
             Chats = new ObservableCollection<Controls.VisualChatCtrl>();
             ChatConfigStorage = new Core.ConfigStorage();
@@ -30,7 +34,6 @@ namespace RatChat {
                     foreach (Type t in a.GetTypes()) {
                         Type iface = t.GetInterface("RatChat.Core.IChatSource");
                         if (iface != null) {
-
                             var v = RatChat.Core.ChatNameAttribute.GetAttribute(t);
                             if (v != null) {
                                 Sources[v.Name] = t;
@@ -39,7 +42,7 @@ namespace RatChat {
                             }
                         }
                     }
-                } catch (Exception e) {
+                } catch {
                     //////
                 }
             }
@@ -56,13 +59,21 @@ namespace RatChat {
 
             RatChat.Core.IChatSource ichat = Activator.CreateInstance(Sources[SourceChatId]) as RatChat.Core.IChatSource;
             ichat.OnLoad(VisualChatId, ChatConfigStorage);
-
+            foreach (var smile in ichat.SmilesUri)
+                SmilesDataDase.AddSmileTuple(smile.Key, smile.Value);
             vchat.ConnectToChatSource(ichat);
+            ichat.OnNewMessagesArrived += ichat_OnNewMessagesArrived;
             Chats.Add(vchat);
             return vchat;
         }
 
+        void ichat_OnNewMessagesArrived( List<ChatMessage> NewMessages ) {
+            foreach (ChatMessage cm in NewMessages)
+                Achievment.OnChatMessate(cm);
+        }
+
         public void OnChatClosed( RatChat.Controls.VisualChatCtrl vChat ) {
+            vChat.Source.OnNewMessagesArrived -= ichat_OnNewMessagesArrived;
             Chats.Remove(vChat);
             // remove options
             ChatConfigStorage.RemoveWithPrefix(vChat.VisualId);

@@ -60,7 +60,8 @@ namespace RatChat.Controls {
                 if (root.RowDefinitions.Count < Count) {
                     for (int j = 0; j < (Count - root.RowDefinitions.Count); ++j)
                         root.RowDefinitions.Add(new RowDefinition() {
-                            Height = new GridLength(1, GridUnitType.Star)
+                            Height = new GridLength(1, GridUnitType.Star),
+                            MinHeight = 20.0
                         });
                 }
 
@@ -129,8 +130,10 @@ namespace RatChat.Controls {
         }
 
         public void SetChatHeightByIndex( int Index, double Height ) {
-            root.RowDefinitions[Index].Height = 
-                new GridLength(Height, GridUnitType.Star);
+            if (Height < 20.0) Height = 20.0;
+
+            if( root.RowDefinitions.Count > Index )
+                root.RowDefinitions[Index].Height = new GridLength(Height, GridUnitType.Star);
         }
 
         public double GetChatHeightByIndex( int Index ) {

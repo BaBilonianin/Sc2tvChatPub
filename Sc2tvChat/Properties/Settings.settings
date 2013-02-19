@@ -24,7 +24,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="currentSkin" Type="System.String" Scope="User">
-      <Value Profile="(Default)">DefaultSkin</Value>
+      <Value Profile="(Default)">По умолчанию (встроенный)</Value>
     </Setting>
     <Setting Name="streamerUri" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://sc2tv.ru/content/oxlamonschannel</Value>
@@ -34,6 +34,12 @@
     </Setting>
     <Setting Name="usedChats" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="topmost" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="showWindowHeader" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RatChat {
+namespace RatChat.Core {
     public static class StringEx {
         public static int CountSubstring( this string s, string Subs ) {
             int c = 0;

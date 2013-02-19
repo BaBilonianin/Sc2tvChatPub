@@ -16,13 +16,7 @@ namespace RatChat {
     public partial class App : Application {
 
         public App(): base() {
-            AppDomain.CurrentDomain.TypeResolve += CurrentDomain_TypeResolve;
-
             this.DispatcherUnhandledException += App_DispatcherUnhandledException;
-        }
-
-        System.Reflection.Assembly CurrentDomain_TypeResolve( object sender, ResolveEventArgs args ) {
-            return Assembly.GetExecutingAssembly();
         }
 
         void App_DispatcherUnhandledException( object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e ) {

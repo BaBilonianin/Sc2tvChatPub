@@ -81,7 +81,7 @@
                                       StrokeThickness="2" Data="M 0 0 L 7 7 M 0 7 L 7 0" />
                             </Border>
                         </BulletDecorator.Bullet>
-                        <ContentPresenter Margin="4,0,0,0" VerticalAlignment="Center" TextBlock.Foreground="White" 
+                        <ContentPresenter Margin="4,0,0,0" VerticalAlignment="Center" TextBlock.Foreground="Black" 
                                           HorizontalAlignment="Left" RecognizesAccessKey="True"/>
                     </BulletDecorator>
                     <ControlTemplate.Triggers>
@@ -122,7 +122,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
-                                    <Rectangle Fill="Black">
+                                    <Rectangle Fill="White">
                                     </Rectangle>
                             </ControlTemplate>
                         </Setter.Value>
@@ -139,18 +139,13 @@
         </Setter>
     </Style>
     
-    <Style x:Key="MainWindow" TargetType="{x:Type Window}">
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="MinWidth" Value="200" />
-        <Setter Property="MinHeight" Value="155" />
-        <Setter Property="MinWidth" Value="200" />
-    </Style>
+   
     
-    <SolidColorBrush x:Key="WindowBackground" Color="Pink" />
+    <SolidColorBrush x:Key="WindowBackground" Color="#ddffffff" />
     <SolidColorBrush x:Key="FontForeground" Color="Black" />
-    <SolidColorBrush x:Key="BorderBackground" Color="Magenta" />
+    <SolidColorBrush x:Key="BorderBackground" Color="Black" />
 
+   
     <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
         <Setter Property="TextBlock.Foreground" Value="Black" />
         <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -195,14 +190,14 @@
 
 
     <Style x:Key="ChatHeader" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Foreground" Value="DarkBlue" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="Margin" Value="2,0" />
     </Style>
     
     <Style x:Key="ConfigText" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Foreground" Value="DarkBlue" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="Margin" Value="2,0" />
@@ -211,6 +206,7 @@
     <!-- Chat style -->
     <Style x:Key="HeaderStyle" TargetType="{x:Type TextBlock}">
         <Setter Property="Foreground" Value="Black" />
+        <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="Margin" Value="2,0" />
@@ -222,16 +218,28 @@
     <!-- Chat fiiiiilll -->
     
     <Style x:Key="NameStyle" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="Black" />
-        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="DarkBlue" />
         <Setter Property="IsHitTestVisible" Value="False" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <!--<Setter Property="Visibility" Value="Collapsed" />-->
     </Style>
     
     <DataTemplate x:Key="ChatItem">
         <Grid>
+            <!--<Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>-->
+
+            <!--<Viewbox VerticalAlignment="Top" HorizontalAlignment="Right" Stretch="Uniform" MaxHeight="17">
+            <TextBlock x:Name="nick" Foreground="DarkCyan"
+                       Text="{Binding Path=Data.Name}" 
+                       ToolTip="{Binding Path=Data.Date}"
+                       Margin="3,0" />
+            </Viewbox>-->
             <ContentPresenter x:Name="presenter" Grid.Column="1" Content="{Binding Text}" Margin="2,0" />
 
-            <Border Grid.Column="1" BorderThickness="1,0,0,0" BorderBrush="Magenta" Opacity="0.3"/>
+            <!--<Border Grid.Column="1" BorderThickness="1,0,0,0" BorderBrush="Magenta" Opacity="0.3"/>-->
         </Grid>
 
         <DataTemplate.Triggers>
@@ -239,10 +247,15 @@
                 <EventTrigger.Actions>
                     <BeginStoryboard>
                         <Storyboard>
-                            <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                            <!--<ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                                Storyboard.TargetName="nick"
+                                                From="-100,0,94,0" To="3,0,3,0"
+                                                Duration="00:00:00.4" />-->
+
+                            <!--<ThicknessAnimation Storyboard.TargetProperty="Margin"
                                                 Storyboard.TargetName="presenter"
                                                 From="100,0,-96,0" To="2,0,2,0"
-                                                Duration="00:00:00.4" />
+                                                Duration="00:00:00.4" />-->
                             
                             <DoubleAnimation Storyboard.TargetProperty="Opacity" 
                                              Storyboard.TargetName="presenter"
@@ -257,7 +270,20 @@
     </DataTemplate>
 
 
+    <DataTemplate x:Key="AchievmentStyle">
+        <Border Height="20" Background="White" BorderBrush="{StaticResource BorderBackground}" BorderThickness="1">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="1">
+                <TextBlock Foreground="DarkGray" Text="Peka's count: " FontWeight="Bold" />
+                <TextBlock Foreground="Black" Text="{Binding Path=PekaCount}" Margin="1,0"/>
 
+                <TextBlock Foreground="DarkGray" Text=", Temp: " FontWeight="Bold" />
+                <TextBlock Foreground="Black" Text="{Binding Path=Temperature, StringFormat={}{0:0.0}°C}" Margin="1,0"/>
+
+                <TextBlock Foreground="DarkGray" Text=", Днометр: " FontWeight="Bold" />
+                <TextBlock Foreground="Black" Text="{Binding Path=Depth, StringFormat={}{0:0}m}" Margin="1,0"/>
+            </StackPanel>
+        </Border>
+    </DataTemplate>
 
     <Style x:Key="TextStyle" TargetType="{x:Type TextBlock}">
         <Setter Property="Foreground" Value="Black" />
@@ -294,14 +320,20 @@
 
     <!-- Контейнер содержащий текст, в котором было обращение к стримеру -->
     <Style x:Key="StreamerContainer" TargetType="{x:Type WrapPanel}">
-        <Setter Property="Background" Value="#22ffffff" />
+        <Setter Property="Background" Value="#ffffffff" />
     </Style>
     
     <!-- Контейнер содержащий текст, в котором не было обращения к стримеру -->
     <Style x:Key="NormalTextContainer" TargetType="{x:Type WrapPanel}">
     </Style>
 
-   
+    <Style x:Key="AnimatedCanvas" TargetType="{x:Type Canvas}">
+        <Setter Property="Margin" Value="1" />
+    </Style>
+
+
+
+
     <Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -310,7 +342,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border Background="#3A0782" Width="6" CornerRadius="3" />
+                    <Border Background="DarkMagenta" Width="6" CornerRadius="3" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -318,7 +350,7 @@
 
     <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
         <Grid>
-            <Border Grid.RowSpan="3" CornerRadius="2" Width="2" Background="#3A0782" HorizontalAlignment="Center" />
+            <Border Grid.RowSpan="3" CornerRadius="2" Width="2" Background="DarkMagenta" HorizontalAlignment="Center" />
             <Track Name="PART_Track" Grid.Row="1" IsDirectionReversed="true">
                 <Track.Thumb>
                     <Thumb Style="{StaticResource ScrollBarThumb}" />
@@ -385,23 +417,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-    
-    <!-- Шаблон заголовка в чата -->
-    <DataTemplate x:Key="SC2TvHeader">
-        <Border Background="#ffD000FF" BorderBrush="Magenta" BorderThickness="1">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="1">
-                <TextBlock Foreground="DarkGray" Text="Peka's count: " FontWeight="Bold" />
-                    <TextBlock Foreground="Black" Text="{Binding Path=PekaCount}" Margin="1,0"/>
-
-                <TextBlock Foreground="DarkGray" Text=", Temp: " FontWeight="Bold" />
-                <TextBlock Foreground="Black" Text="{Binding Path=Temperature, StringFormat={}{0:0.0}°C}" Margin="1,0"/>
-            
-                <TextBlock Foreground="DarkGray" Text=", Днометр: " FontWeight="Bold" />
-                <TextBlock Foreground="Black" Text="{Binding Path=Depth, StringFormat={}{0:0}m}" Margin="1,0"/>
-            </StackPanel>
-        </Border>
-    </DataTemplate>
     
     
     <!-- Настройки -->
@@ -481,12 +496,16 @@
                 <ControlTemplate TargetType="UserControl">
                     <Grid>
                         <Grid.RowDefinitions>
-                          <RowDefinition Height="20" />
+                            <RowDefinition Height="20"/>
                             <RowDefinition />
                         </Grid.RowDefinitions>
 
-                        <ContentPresenter x:Name="PART_Header" Grid.Row="0" IsHitTestVisible="False" />
-
+                        <Border Grid.Row="0" Margin="1,0" IsHitTestVisible="False" Background="#ffffffff">
+                            <TextBlock x:Name="PART_Header" Text="{Binding Header}" 
+                                       Style="{DynamicResource HeaderStyle}"
+                                       />
+                        </Border>
+                        
                         <ListBox x:Name="PART_Messages" Grid.Row="1" 
                                 ItemsSource="{Binding}" Margin="1" 
                                 ItemTemplate="{DynamicResource ChatItem}"
@@ -495,7 +514,7 @@
                                 Template="{DynamicResource SystemChatContent}">
                         </ListBox>
 
-                        <StackPanel x:Name="headerButtons" Grid.Row="0" VerticalAlignment="Top" Orientation="Horizontal" 
+                        <StackPanel x:Name="headerButtons" Opacity="0.0" Grid.Row="0" Orientation="Horizontal" 
                                     Height="18" HorizontalAlignment="Right">
                             <Button x:Name="PART_OptionsButton" Width="18" Margin="1,0" 
                                     ToolTip="Настройки" Content="~" HorizontalAlignment="Left" />
@@ -529,4 +548,18 @@
         </Setter>
     </Style>
 
+    <Style x:Key="SmileStyle" TargetType="{x:Type Image}">
+        <Setter Property="MaxHeight" Value="30" />
+    </Style>
+
+
+    <Style x:Key="MainWindow" TargetType="Window">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="MinWidth" Value="200" />
+        <Setter Property="MinHeight" Value="155" />
+        <Setter Property="MinWidth" Value="200" />
+        
+       
+    </Style>
 </ResourceDictionary>

@@ -39,9 +39,15 @@ namespace RatChat {
                 Grid.SetRow(text, j);
 
                 // add textbox
+                UIElement val = null;
 
-                TextBox val = new TextBox() { Tag = ChatControl.VisualId + configs[j].Name, Margin = new Thickness(2) };
-                val.Text = (string)ChatConfigStorage.GetDefault(ChatControl.VisualId + configs[j].Name, configs[j].DefaultValue);
+                if (configs[j].IsPasswordInput) {
+                    val = new PasswordBox() { Tag = ChatControl.VisualId + configs[j].Name, Margin = new Thickness(2) };
+                    ((PasswordBox)val).Password = (string)ChatConfigStorage.GetDefault(ChatControl.VisualId + configs[j].Name, configs[j].DefaultValue);
+                } else {
+                    val = new TextBox() { Tag = ChatControl.VisualId + configs[j].Name, Margin = new Thickness(2) };
+                    ((TextBox)val).Text = (string)ChatConfigStorage.GetDefault(ChatControl.VisualId + configs[j].Name, configs[j].DefaultValue);
+                }
 
                 cow.OptionsGrid.Children.Add(val);
                 Grid.SetRow(val, j);
@@ -56,6 +62,12 @@ namespace RatChat {
                     if (val != null) {
                         string name = val.Tag as string;
                         ChatConfigStorage[name] = val.Text;
+                    } else {
+                        PasswordBox pb = cow.OptionsGrid.Children[j] as PasswordBox;
+                        if (pb != null) {
+                            string name = pb.Tag as string;
+                            ChatConfigStorage[name] = pb.Password;
+                        }
                     }
                 }
 

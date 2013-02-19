@@ -11,7 +11,7 @@ namespace RatChat.Controls {
     [TemplatePart(Name = "PART_Messages", Type = typeof(ListBox))]
     [TemplatePart(Name = "PART_OptionsButton", Type = typeof(Button))]
     [TemplatePart(Name = "PART_CloseButton", Type = typeof(Button))]
-    [TemplatePart(Name = "PART_Header", Type = typeof(ContentPresenter))]
+    [TemplatePart(Name = "PART_Header", Type = typeof(TextBlock))]
     public class VisualChatCtrl: UserControl {
         static VisualChatCtrl() {
             DefaultStyleKeyProperty.OverrideMetadata(
@@ -27,7 +27,7 @@ namespace RatChat.Controls {
 
         ListBox PART_Messages;
         Button PART_OptionsButton, PART_CloseButton;
-        ContentPresenter PART_Header;
+        TextBlock PART_Header;
 
         ObservableCollection<VisualMessage> ChatDataSource;
         public RatChat.Core.IChatSource Source { get; private set; }
@@ -43,13 +43,24 @@ namespace RatChat.Controls {
         }
 
         void Source_OnNewMessagesArrived( List<Core.ChatMessage> NewMessages ) {
-            this.PART_Header.DataContext = Source.HeaderData;
 
+            if (this.Dispatcher.CheckAccess()) {
+                Safe_Source_OnNewMessagesArrived(NewMessages);
+            } else {
+                this.Dispatcher.BeginInvoke(new Action(() => {
+                    Safe_Source_OnNewMessagesArrived(NewMessages);
+                }));
+            }
+        }
+
+        void Safe_Source_OnNewMessagesArrived( List<Core.ChatMessage> NewMessages ) {
             for (int j = 0; j < NewMessages.Count; ++j)
-                ChatDataSource.Add(new VisualMessage(Source, NewMessages[j]));
+                ChatDataSource.Add(new VisualMessage(Source.StreamerNick, Manager.SmilesDataDase, NewMessages[j]));
 
-            while (ChatDataSource.Count > 40)
-                ChatDataSource.RemoveAt(0);
+            if (ChatDataSource.Count > 100) {
+                while (ChatDataSource.Count > 40)
+                    ChatDataSource.RemoveAt(0);
+            }
         }
 
         public override void OnApplyTemplate() {
@@ -58,15 +69,13 @@ namespace RatChat.Controls {
             this.PART_Messages = this.GetTemplateChild("PART_Messages") as ListBox;
             this.PART_CloseButton = this.GetTemplateChild("PART_CloseButton") as Button;
             this.PART_OptionsButton = this.GetTemplateChild("PART_OptionsButton") as Button;
-            this.PART_Header = this.GetTemplateChild("PART_Header") as ContentPresenter;
+            this.PART_Header = this.GetTemplateChild("PART_Header") as TextBlock;
 
             this.PART_CloseButton.Click += PART_CloseButton_Click;
             this.PART_OptionsButton.Click += PART_OptionsButton_Click;
 
             this.PART_Messages.DataContext = ChatDataSource;
-
-            this.PART_Header.SetResourceReference(ContentPresenter.ContentTemplateProperty, Source.HeaderDataSkin);
-            this.PART_Header.DataContext = Source.HeaderData;
+            this.PART_Header.DataContext = Source;
         }
 
         void PART_OptionsButton_Click( object sender, RoutedEventArgs e ) {

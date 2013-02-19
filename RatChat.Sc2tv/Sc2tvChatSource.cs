@@ -14,23 +14,26 @@ using System.Windows;
 
 namespace RatChat.Sc2tv {
     [ChatName("Чат для http://sc2tv.ru")]
-    [ConfigValue(".SC2TVCHAT.StreamerURI", "http://sc2tv.ru/content/oxlamonschannel", "Адрес страницы стримера sc2tv.ru:")]
-    public class Sc2tvChatSource: RatChat.Core.IChatSource {
+    [ConfigValue(".SC2TVCHAT.StreamerURI", "http://sc2tv.ru/content/oxlamonschannel", "Адрес страницы стримера sc2tv.ru:", false)]
+    public class Sc2tvChatSource : RatChat.Core.IChatSource, INotifyPropertyChanged {
+        public const string UpdateSmilesUri = "http://chat.sc2tv.ru/js/smiles.js";
+
+
         DispatcherTimer next;
         string _ChannelUri = "";
         int _StreamerID = 0;
         List<Message> LoadedMessages;
         SmilesDataDase Smiles;
-        Achievment CasterAchivment;
-
-        public INotifyPropertyChanged HeaderData { get { return CasterAchivment; } }
 
         public Sc2tvChatSource() {
             LoadedMessages = new List<Message>();
             Smiles = new SmilesDataDase();
-            CasterAchivment = new Achievment();
+            SmilesUri = new Dictionary<string, string>();
+
+            //WebClient smile = new WebClient();
+            //smile.DownloadString();
         }
-        
+
         void next_Tick( object sender, EventArgs e ) {
             if (_StreamerID != 0) {
                 next.Stop();
@@ -48,7 +51,7 @@ namespace RatChat.Sc2tv {
                 } else {
                     // Кстати, тут можно нарисовать ошибку сети.
                 }
-                if( next != null )
+                if (next != null)
                     next.Start();
             });
             wc.DownloadStringAsync(new Uri("http://chat.sc2tv.ru/memfs/channel-" + ChannelId + ".json"));
@@ -78,24 +81,24 @@ namespace RatChat.Sc2tv {
                     NewMessage.Add(msg[j]);
                     msg[j].NeedToDelete = 60 * 5;
                 } else {
-                    m.NeedToDelete = 60 * 5; 
+                    m.NeedToDelete = 60 * 5;
                 }
             }
             ///////////
 
             int i = 0;
             while (i < LoadedMessages.Count)
-                if (LoadedMessages[i].NeedToDelete<0)
+                if (LoadedMessages[i].NeedToDelete < 0)
                     LoadedMessages.RemoveAt(i);
                 else
                     ++i;
 
             ////////////
             if (NewMessage.Count > 0) {
-                CasterAchivment.Temperature -= NewMessage.Count * 0.01;
+                //CasterAchivment.Temperature -= NewMessage.Count * 0.01;
 
-                foreach( var m in NewMessage )
-                    OnNewMessage(m);
+                //foreach (var m in NewMessage)
+                //    OnNewMessage(m);
 
                 if (OnNewMessagesArrived != null) {
                     OnNewMessagesArrived((from b in NewMessage
@@ -109,21 +112,21 @@ namespace RatChat.Sc2tv {
             }
         }
 
-        private void OnNewMessage( Message NewMessage ) {
-            CasterAchivment.PekaCount += NewMessage.Text.CountSubstring(":s:peka:");
+        //private void OnNewMessage( Message NewMessage ) {
+        //    CasterAchivment.PekaCount += NewMessage.Text.CountSubstring(":s:peka:");
 
-            CasterAchivment.Temperature += NewMessage.Text.CountSubstring(":s:fire:") * 5;
+        //    CasterAchivment.Temperature += NewMessage.Text.CountSubstring(":s:fire:") * 5;
 
-            CasterAchivment.Depth = CasterAchivment.Depth
-                - NewMessage.Text.CountSubstring(":s:fp:") * 4
-                - NewMessage.Text.CountSubstring(":s:crab:") * 5
-                - NewMessage.Text.CountSubstring(":s:fpl:") * 2
-                - NewMessage.Text.CountSubstring(":s:mimo:")
+        //    CasterAchivment.Depth = CasterAchivment.Depth
+        //        - NewMessage.Text.CountSubstring(":s:fp:") * 4
+        //        - NewMessage.Text.CountSubstring(":s:crab:") * 5
+        //        - NewMessage.Text.CountSubstring(":s:fpl:") * 2
+        //        - NewMessage.Text.CountSubstring(":s:mimo:")
 
-                + NewMessage.Text.CountSubstring(":s:fyeah:") * 5
-                + NewMessage.Text.CountSubstring(":s:notbad:") * 3
-                + NewMessage.Text.CountSubstring(":s:bm:") * 2;
-        }
+        //        + NewMessage.Text.CountSubstring(":s:fyeah:") * 5
+        //        + NewMessage.Text.CountSubstring(":s:notbad:") * 3
+        //        + NewMessage.Text.CountSubstring(":s:bm:") * 2;
+        //}
 
         public string Copyright {
             get { return "Oxlamon © 2013"; }
@@ -133,18 +136,48 @@ namespace RatChat.Sc2tv {
             get { return "Чаты с http://sc2tv.ru"; }
         }
 
-        public string HeaderDataSkin {
-            get { return "SC2TvHeader"; }
+        string _Header = "http://sc2tv.ru";
+        public string Header {
+            get { return _Header; }
+            set {
+                if (string.Compare(_Header, value) != 0) {
+                    _Header = value;
+                    FireChange("Header");
+                }
+            }
         }
 
         public string StreamerNick { get; set; }
-        
+
         public void OnLoad( string ConfigPrefix, ConfigStorage Config ) {
             StreamerNick = Config.GetDefault(ConfigPrefix + ".SC2TVCHAT.StreamerNick", "");
             _StreamerID = (int)Config.GetDefault(ConfigPrefix + ".SC2TVCHAT.StreamerID", 0);
             _ChannelUri = Config.GetDefault(ConfigPrefix + ".SC2TVCHAT.StreamerURI", "http://sc2tv.ru/content/oxlamonschannel");
             LoadedMessages.Clear();
-            CasterAchivment.Clear();
+            UpdateHeader();
+            UpdateSmiles();
+        }
+
+        private void UpdateSmiles() {
+            try {
+                WebClient wc = new WebClient();
+                string js = wc.DownloadString(UpdateSmilesUri);
+
+                SmilesUri.Clear();
+                Regex smiles = new Regex("\\'(.*?)\\'.*?\\'(.*?)\\',.*?\\}", RegexOptions.Multiline);
+
+                foreach (Match m in smiles.Matches(js))
+                    SmilesUri[":s" + m.Groups[1].Value + " "] = "http://chat.sc2tv.ru/img/" + m.Groups[2].Value;
+            } catch {
+            }
+        }
+
+        private void UpdateHeader(){
+            if (string.IsNullOrEmpty(StreamerNick)) {
+                Header = "http://sc2tv.ru, Чат не подключен.";
+            } else {
+                Header = "http://sc2tv.ru, " + StreamerNick;
+            }
         }
 
         public void OnConfigApply( string ConfigPrefix, ConfigStorage Config ) {
@@ -174,7 +207,8 @@ namespace RatChat.Sc2tv {
             }
 
             LoadedMessages.Clear();
-            CasterAchivment.Clear();
+            UpdateHeader();
+            UpdateSmiles();
         }
 
         public void BeginWork() {
@@ -199,6 +233,16 @@ namespace RatChat.Sc2tv {
             return Smiles.GetSmile(id);
         }
 
+        protected void FireChange( string PropertyName ) {
+            if (PropertyChanged != null) {
+                PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
+            }
+        }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+
+        public Dictionary<string, string> SmilesUri { get; private set; }
+            
     }
 }

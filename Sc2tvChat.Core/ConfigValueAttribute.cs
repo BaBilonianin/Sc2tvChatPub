@@ -14,14 +14,16 @@ namespace RatChat.Core {
             return cva.ToArray();
         }
 
-        public ConfigValueAttribute( string Name, string DefaultValue, string Caption ) {
+        public ConfigValueAttribute( string Name, string DefaultValue, string Caption, bool IsPasswordInput ) {
             this.Name = Name;
             this.Caption = Caption;
             this.DefaultValue = DefaultValue;
+            this.IsPasswordInput = IsPasswordInput;
         }
 
         public string Name { get; set; }
         public string DefaultValue { get; set; }
         public string Caption { get; set; }
+        public bool IsPasswordInput { get; set; }
     }
 }

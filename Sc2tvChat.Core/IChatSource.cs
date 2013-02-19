@@ -38,11 +38,12 @@ namespace RatChat.Core {
         /// </summary>
         event OnNewMessagesArrivedDelegate OnNewMessagesArrived;
 
-        string HeaderDataSkin { get; }
+        string Header { get; }
+        //INotifyPropertyChanged HeaderData { get; }
 
-        INotifyPropertyChanged HeaderData { get; }
+        //FrameworkElement CreateSmile( string id );
 
-        FrameworkElement CreateSmile( string id );
+        Dictionary<string, string> SmilesUri { get; }
 
         void OnLoad( string ConfigPrefix, ConfigStorage Config );
 

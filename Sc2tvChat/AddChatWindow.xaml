@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Topmost="True"
         xmlns:p="clr-namespace:RatChat.Properties" WindowStartupLocation="CenterScreen"
-        Title="AddChatWindow" Height="150" Width="400" Background="{DynamicResource WindowBackground}">
+        Title="Добавить чат" Height="150" Width="400" ResizeMode="NoResize"
+        Background="{DynamicResource WindowBackground}">
 
         <Grid TextBlock.Foreground="{DynamicResource FontForeground}">
             <Grid.RowDefinitions>
@@ -31,7 +32,8 @@
                         SelectedValue="{Binding ElementName=AddForm, Path=ChatSource, Mode=TwoWay}" />
 
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" Grid.RowSpan="2" Grid.Row="2" Height="40">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" Grid.RowSpan="2" 
+                    Grid.Row="2" Height="40">
             <Button x:Name="Cancel" Width="38" Height="38" Margin="8,1" Content="r" FontSize="26" ToolTip="Отмена" Click="Cansel_Click_1" />
             <Button x:Name="Commit" Width="38" Height="38" Margin="8,1" Content="a" FontSize="30" ToolTip="Применить" Click="Commit_Click_1" />
         </StackPanel>

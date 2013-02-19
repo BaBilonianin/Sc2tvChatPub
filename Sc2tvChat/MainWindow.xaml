@@ -2,23 +2,35 @@
         xmlns:p="clr-namespace:RatChat.Properties" 
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-       
-        xmlns:ctrl="clr-namespace:RatChat.Controls"
         xmlns:conv="clr-namespace:RatChat.Converters"
+        xmlns:ctrl="clr-namespace:RatChat.Controls"
+       
+        
         AllowsTransparency="{Binding Source={x:Static p:Settings.Default}, Path=useLayered, Mode=OneTime}"
         Height="{Binding Source={x:Static p:Settings.Default}, Path=height, Mode=TwoWay}" 
         Width="{Binding Source={x:Static p:Settings.Default}, Path=width, Mode=TwoWay}" 
+        Topmost="{Binding Source={x:Static p:Settings.Default}, Path=topmost, Mode=OneWay}"
         
-        Topmost="True"
         WindowStyle="None"
         ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen"
+       
+        Style="{DynamicResource MainWindow}"
         
         Loaded="Window_Loaded_1" Closing="Window_Closing_1"
         Icon="Junior Icon 85.ico">
     <Window.Resources>
-        <conv:RowConverter x:Key="RowConverter" />
+        <conv:BoolToVisibilityConverter x:Key="b2vc" />
     </Window.Resources>
+    <Window.ContextMenu>
+        <ContextMenu>
+            <MenuItem x:Name="AddChatMI" Header="Добавить чат" Click="AddChat_Click" />
+            <MenuItem x:Name="OptionsMI" Header="Настройка программы" Click="Button_Click_1" />
+            <MenuItem x:Name="CloseMI" Header="Закрыть" Click="Button_Click_2" />
+        </ContextMenu>
+    </Window.ContextMenu>
+
+
     <Window.Triggers>
         <EventTrigger RoutedEvent="MouseEnter">
             <BeginStoryboard>
@@ -36,21 +48,35 @@
         </EventTrigger>
     </Window.Triggers>
     <Grid Background="{DynamicResource WindowBackground}">
+        
+        
         <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
+            <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        
-        <TextBlock Text="RatChat v2.0" Style="{DynamicResource ChatHeader}" />
+
+       
 
         <Thumb DragDelta="Thumb_DragDelta_1" Grid.RowSpan="2" /> 
         <ctrl:ChatsControl x:Name="Chats" Grid.Row="1" />
 
-        <StackPanel x:Name="headerButtons" Orientation="Horizontal" HorizontalAlignment="Right" Height="18">
-            <Button x:Name="AddChat" Width="18" Margin="1,0" FontFamily="Arial" 
-                    ToolTip="Добавить чат" Content="+" Click="AddChat_Click" />
-            <Button x:Name="b1" Width="18" Margin="1,0" ToolTip="Настройки" Content="~" Click="Button_Click_1" />
-            <Button x:Name="b2" Width="18" Margin="1,0" ToolTip="Закрыть" Content="r" Click="Button_Click_2" />
-        </StackPanel>
+        <Grid Visibility="{Binding Source={x:Static p:Settings.Default}, Path=showWindowHeader, Mode=OneWay, Converter={StaticResource b2vc}}" >
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <TextBlock IsHitTestVisible="False" x:Name="ratChatCaption" Style="{DynamicResource ChatHeader}" />
+
+            <StackPanel x:Name="headerButtons" Orientation="Horizontal" HorizontalAlignment="Right" Height="18" Opacity="0.0">
+                <Button x:Name="AddChat" Width="18" Margin="1,0" FontFamily="Arial" 
+                        ToolTip="Добавить чат" Content="+" Click="AddChat_Click" />
+                <Button x:Name="b1" Width="18" Margin="1,0" ToolTip="Настройки" Content="~" Click="Button_Click_1" />
+                <Button x:Name="b2" Width="18" Margin="1,0" ToolTip="Закрыть" Content="r" Click="Button_Click_2" />
+            </StackPanel>
+
+            <ContentPresenter x:Name="achievCP" Grid.Row="1" IsHitTestVisible="False"
+                              ContentTemplate="{DynamicResource AchievmentStyle}" />
+        </Grid>
     </Grid>
 </Window>

@@ -26,9 +26,14 @@ namespace RatChat {
 
         public string[] Skins {
             get {
-                return (from b in Directory.GetFiles(App.RootFolder + "/Skins/", "*.xaml")
+                List<string> a = new List<string>(
+                        from b in Directory.GetFiles(App.RootFolder + "/Skins/", "*.xaml")
                         orderby b
-                        select System.IO.Path.GetFileNameWithoutExtension(b)).ToArray();
+                        select System.IO.Path.GetFileNameWithoutExtension(b));
+
+                a.Insert(0, "По умолчанию (встроенный)");
+
+                return a.ToArray();
             }
         }
 
