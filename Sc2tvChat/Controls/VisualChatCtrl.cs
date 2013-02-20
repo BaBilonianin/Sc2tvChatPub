@@ -33,8 +33,8 @@ namespace RatChat.Controls {
         public RatChat.Core.IChatSource Source { get; private set; }
         public ChatSourceManager Manager { get; set; }
 
-        public string VisualId { get; set; }
-        public string SourceChatId { get; set; }
+        //public string VisualId { get; set; }
+        //public string SourceChatId { get; set; }
 
         public void ConnectToChatSource( RatChat.Core.IChatSource Source ) {
             this.Source = Source;
@@ -80,7 +80,7 @@ namespace RatChat.Controls {
 
         void PART_OptionsButton_Click( object sender, RoutedEventArgs e ) {
             ChatOptionsWindow.ShowOptionsWindow(this, Manager.ChatConfigStorage);
-            Source.OnConfigApply(VisualId, Manager.ChatConfigStorage);
+            Source.OnConfigApply(Manager.ChatConfigStorage);
             ChatDataSource.Clear();
         }
 

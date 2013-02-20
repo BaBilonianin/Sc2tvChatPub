@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace RatChat.Core {
     public delegate void OnNewMessagesArrivedDelegate( List<ChatMessage> NewMessages );
@@ -20,36 +21,48 @@ namespace RatChat.Core {
         /// Чат для http://sc2tv.ru
         /// </summary>
         string Description { get; }
-
+        /// <summary>
+        /// Ник стримера, для выделения того кому пишут
+        /// </summary>
         string StreamerNick { get; }
-
         /// <summary>
         /// Начать работу чата.
         /// </summary>
         void BeginWork();
-
         /// <summary>
         /// Закончить работу чата.
         /// </summary>
         void EndWork();
-
         /// <summary>
         /// Вызывается для подписчиков для новых сообщений
         /// </summary>
         event OnNewMessagesArrivedDelegate OnNewMessagesArrived;
-
+        /// <summary>
+        /// Текстовый заголовок, его изменения должны быть гарантировано в потоке UI
+        /// </summary>
         string Header { get; }
-        //INotifyPropertyChanged HeaderData { get; }
-
-        //FrameworkElement CreateSmile( string id );
-
+        /// <summary>
+        /// Список дополнительных смайлов
+        /// </summary>
         Dictionary<string, string> SmilesUri { get; }
-
-        void OnLoad( string ConfigPrefix, ConfigStorage Config );
-
-        void OnConfigApply( string ConfigPrefix, ConfigStorage Config );
+        /// <summary>
+        /// При загрузке плагина
+        /// </summary>
+        /// <param name="Config"></param>
+        void OnLoad( ConfigStorage Config );
+        /// <summary>
+        /// После применения настроек
+        /// </summary>
+        /// <param name="Config"></param>
+        void OnConfigApply( ConfigStorage Config );
+        /// <summary>
+        /// Создать кастомный вид, если возвращает null, то создается VisualChatCtrl
+        /// </summary>
+        /// <returns></returns>
+        UserControl CreateCustomView();
+        /// <summary>
+        /// Не исполь
+        /// </summary>
+        string ConfigPrefix { get; set; }
     }
-
-
-
 }

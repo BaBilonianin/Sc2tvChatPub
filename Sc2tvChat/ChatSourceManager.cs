@@ -8,11 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using RatChat.Core;
 using System.Globalization;
+using System.Windows.Controls;
+using System.Windows;
 
 namespace RatChat {
     public class ChatSourceManager {
         public Dictionary<string, Type> Sources { get; private set; }
-        public ObservableCollection<RatChat.Controls.VisualChatCtrl> Chats { get; private set; }
+        public ObservableCollection<FrameworkElement> Chats { get; private set; }
         public RatChat.Core.ConfigStorage ChatConfigStorage { get; private set; }
         public SmilesDataDase SmilesDataDase { get; private set; }
         public Achievment Achievment { get; private set; }
@@ -21,7 +23,7 @@ namespace RatChat {
             SmilesDataDase = new Core.SmilesDataDase();
             Achievment = new RatChat.Achievment();
             Sources = new Dictionary<string, Type>();
-            Chats = new ObservableCollection<Controls.VisualChatCtrl>();
+            Chats = new ObservableCollection<FrameworkElement>();
             ChatConfigStorage = new Core.ConfigStorage();
         }
 
@@ -50,21 +52,51 @@ namespace RatChat {
             RestoreChats(ChatsControl);
         }
 
-        public RatChat.Controls.VisualChatCtrl CreateChat( string VisualChatId, string SourceChatId ) {
-            RatChat.Controls.VisualChatCtrl vchat = new Controls.VisualChatCtrl();
-
-            vchat.VisualId = VisualChatId;
-            vchat.Manager = this;
-            vchat.SourceChatId = SourceChatId;
-
+        public void CreateChat( string ConfigPrefix, string SourceChatId ) {
             RatChat.Core.IChatSource ichat = Activator.CreateInstance(Sources[SourceChatId]) as RatChat.Core.IChatSource;
-            ichat.OnLoad(VisualChatId, ChatConfigStorage);
+            ichat.ConfigPrefix = ConfigPrefix;
+            ichat.OnLoad(ChatConfigStorage);
+            ichat.OnNewMessagesArrived += ichat_OnNewMessagesArrived;
+
+           
+
             foreach (var smile in ichat.SmilesUri)
                 SmilesDataDase.AddSmileTuple(smile.Key, smile.Value);
-            vchat.ConnectToChatSource(ichat);
-            ichat.OnNewMessagesArrived += ichat_OnNewMessagesArrived;
-            Chats.Add(vchat);
-            return vchat;
+
+            UserControl customView = ichat.CreateCustomView();
+
+            if (customView == null) {
+                RatChat.Controls.VisualChatCtrl vchat = new Controls.VisualChatCtrl();
+                vchat.Manager = this;
+                vchat.Tag = new Tuple<RatChat.Core.IChatSource, string>(ichat, SourceChatId);
+                Chats.Add(vchat);
+                vchat.ConnectToChatSource(ichat);
+            } else {
+                RatChat.Controls.CustomControlContainer vchat = new Controls.CustomControlContainer();
+                vchat.Manager = this;
+                vchat.Tag = new Tuple<RatChat.Core.IChatSource, string>(ichat, SourceChatId);
+                Chats.Add(vchat);
+                vchat.ConnectToChatSource(customView, ichat);
+            }
+
+
+            RatChat.Core.IChatListener iListener = ichat as RatChat.Core.IChatListener;
+            if (iListener != null) {
+                // При добавлении Listener, ищу ВСЕ Source и подписываюсь
+                foreach (FrameworkElement fe in Chats) {
+                    RatChat.Core.IChatSource i = ((Tuple<RatChat.Core.IChatSource, string>)fe.Tag).Item1;
+                    i.OnNewMessagesArrived += iListener.OnNewMessageReceived;
+                }
+            } else {
+                // При добавлении Source, ищу ВСЕ Listeners и подписываю
+                foreach (FrameworkElement fe in Chats) {
+                    RatChat.Core.IChatSource i = ((Tuple<RatChat.Core.IChatSource, string>)fe.Tag).Item1;
+                    RatChat.Core.IChatListener il= i as RatChat.Core.IChatListener;
+                    if (il != null)
+                        ichat.OnNewMessagesArrived += il.OnNewMessageReceived;
+                    //i.OnNewMessagesArrived += iListener.OnNewMessageReceived;
+                }
+            }
         }
 
         void ichat_OnNewMessagesArrived( List<ChatMessage> NewMessages ) {
@@ -72,11 +104,31 @@ namespace RatChat {
                 Achievment.OnChatMessate(cm);
         }
 
-        public void OnChatClosed( RatChat.Controls.VisualChatCtrl vChat ) {
-            vChat.Source.OnNewMessagesArrived -= ichat_OnNewMessagesArrived;
+        public void OnChatClosed( FrameworkElement vChat ) {
+            var data = vChat.Tag as Tuple<RatChat.Core.IChatSource, string>;
+            data.Item1.OnNewMessagesArrived -= ichat_OnNewMessagesArrived;
+            data.Item1.EndWork();
+
+
+            RatChat.Core.IChatListener iListener = data.Item1 as RatChat.Core.IChatListener;
+            if (iListener == null) {
+                foreach (FrameworkElement fe in Chats) {
+                    RatChat.Core.IChatSource i = ((Tuple<RatChat.Core.IChatSource, string>)fe.Tag).Item1;
+                    RatChat.Core.IChatListener il = i as RatChat.Core.IChatListener;
+                    if (il != null)
+                        data.Item1.OnNewMessagesArrived -= il.OnNewMessageReceived;
+                    //i.OnNewMessagesArrived += iListener.OnNewMessageReceived;
+                }
+            } else {
+                foreach (FrameworkElement fe in Chats) {
+                    RatChat.Core.IChatSource i = ((Tuple<RatChat.Core.IChatSource, string>)fe.Tag).Item1;
+                    i.OnNewMessagesArrived -= iListener.OnNewMessageReceived;
+                } 
+            }
+
             Chats.Remove(vChat);
-            // remove options
-            ChatConfigStorage.RemoveWithPrefix(vChat.VisualId);
+
+            ChatConfigStorage.RemoveWithPrefix(data.Item1.ConfigPrefix);
         }
 
         public void RestoreChats( Controls.ChatsControl ChatsControl ) {
@@ -99,11 +151,14 @@ namespace RatChat {
         public void StoreChats( Controls.ChatsControl ChatsControl ) {
             StringBuilder sb = new StringBuilder();
             for (int j = 0; j < Chats.Count; ++j) {
+
+                var data = Chats[j].Tag as Tuple<RatChat.Core.IChatSource, string>;
+            
                 sb.AppendFormat( 
                     CultureInfo.InvariantCulture,
                     "|{0}={1}={2}", 
-                    Chats[j].SourceChatId, 
-                    Chats[j].VisualId,
+                    data.Item2, 
+                    data.Item1.ConfigPrefix,
                     ChatsControl.GetChatHeightByIndex(j) );
             }
             ChatConfigStorage["ChatManager.UberChatList"] = sb.ToString();

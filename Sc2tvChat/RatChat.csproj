@@ -27,8 +27,8 @@
     <InstallUrl>http://oxlamon.com/pubarea/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>sc2chat.htm</WebPage>
-    <ApplicationRevision>15</ApplicationRevision>
-    <ApplicationVersion>2.2.0.%2a</ApplicationVersion>
+    <ApplicationRevision>19</ApplicationRevision>
+    <ApplicationVersion>2.3.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -101,6 +101,7 @@
     <Compile Include="Controls\ChatsControl.xaml.cs">
       <DependentUpon>ChatsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CustomControlContainer.cs" />
     <Compile Include="Controls\GridHelper.cs" />
     <Compile Include="Controls\VisualChatCtrl.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
@@ -153,8 +154,11 @@
     <Content Include="bin\Debug\Chats\RatChat.Sc2tv.dll" />
     <Content Include="Chats\dotIRC.dll" />
     <Content Include="Chats\Newtonsoft.Json.dll" />
+    <Content Include="Chats\RatChat.Polling.dll" />
     <Content Include="Chats\RatChat.Sc2tv.dll" />
     <Content Include="Chats\RatChat.Twitch.dll" />
+    <Content Include="Chats\system.windows.controls.datavisualization.toolkit.dll" />
+    <Content Include="Chats\WPFToolkit.dll" />
     <Content Include="Skins\WhiteSkin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

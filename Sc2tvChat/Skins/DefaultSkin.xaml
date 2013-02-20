@@ -138,9 +138,9 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
    
-    
+
     <SolidColorBrush x:Key="WindowBackground" Color="#ee000000" />
     <SolidColorBrush x:Key="FontForeground" Color="White" />
     <SolidColorBrush x:Key="BorderBackground" Color="Orange" />
@@ -192,7 +192,16 @@
         </Setter>
     </Style>
 
-
+    <LinearGradientBrush x:Key="GradientBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#ffffee" Offset="0.0" />
+        <GradientStop Color="#f0dfad" Offset="0.5" />
+        <GradientStop Color="#d8a37f" Offset="1.0" />
+    </LinearGradientBrush>
+    
+    <Style x:Key="PollBarStyle" TargetType="{x:Type Label}">
+        <Setter Property="Background" Value="{StaticResource GradientBrush}" />
+        <Setter Property="Foreground" Value="Blue" />
+    </Style>
 
     <Style x:Key="ChatHeader" TargetType="{x:Type TextBlock}">
         <Setter Property="Foreground" Value="LightCoral" />
@@ -527,6 +536,61 @@
                         </StackPanel>
                     </Grid>
                     
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation To="1.0" Duration="00:00:00.4" 
+                                                     Storyboard.TargetName="headerButtons" 
+                                                     Storyboard.TargetProperty="Opacity" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation To="0.0" Duration="00:00:00.4" 
+                                                     Storyboard.TargetName="headerButtons" 
+                                                     Storyboard.TargetProperty="Opacity" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+    <Style x:Key="CustomControlContainerStyle" TargetType="UserControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="UserControl">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" IsHitTestVisible="False" Background="#11ffffff">
+                            <TextBlock x:Name="PART_Header" Text="{Binding Source.Header}" 
+                                       Style="{DynamicResource HeaderStyle}"
+                                       />
+                        </Border>
+
+                        <ContentPresenter x:Name="PART_Content" Grid.Row="1" Margin="1"
+                                          Content="{Binding CustomContent}" />
+
+                        <StackPanel x:Name="headerButtons" Opacity="0.0" Grid.Row="0" Orientation="Horizontal" 
+                                    Height="18" HorizontalAlignment="Right">
+                            <Button x:Name="PART_OptionsButton" Width="18" Margin="1,0" 
+                                    ToolTip="Настройки" Content="~" HorizontalAlignment="Left" />
+                            <Button x:Name="PART_CloseButton" Width="18" Margin="1,0" 
+                                    ToolTip="Закрыть" Content="r" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </Grid>
+
                     <ControlTemplate.Triggers>
                         <EventTrigger RoutedEvent="MouseEnter">
                             <BeginStoryboard>

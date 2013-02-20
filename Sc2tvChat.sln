@@ -5,6 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatChat", "Sc2tvChat\RatCha
 	ProjectSection(ProjectDependencies) = postProject
 		{6545BE8B-6FAE-4AC5-88D0-1C4EC39DB36E} = {6545BE8B-6FAE-4AC5-88D0-1C4EC39DB36E}
 		{0A8AE7B7-9409-4AFB-878A-55077180F8AD} = {0A8AE7B7-9409-4AFB-878A-55077180F8AD}
+		{6B81B1ED-5CF9-406C-9CC1-9B9A619F9F59} = {6B81B1ED-5CF9-406C-9CC1-9B9A619F9F59}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatChat.Core", "Sc2tvChat.Core\RatChat.Core.csproj", "{70EBADC5-D03F-4C59-BB44-896A0D023025}"
@@ -14,6 +15,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatChat.Twitch", "RatChat.Twitch\RatChat.Twitch.csproj", "{6545BE8B-6FAE-4AC5-88D0-1C4EC39DB36E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotIRC", "..\Ubiquitous\dotIRC\dotIRC.csproj", "{47D551DA-96ED-4EF6-96BF-4832059D4700}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatChat.Polling", "RatChat.Sc2tvPolling\RatChat.Polling.csproj", "{6B81B1ED-5CF9-406C-9CC1-9B9A619F9F59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +44,10 @@ Global
 		{47D551DA-96ED-4EF6-96BF-4832059D4700}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47D551DA-96ED-4EF6-96BF-4832059D4700}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47D551DA-96ED-4EF6-96BF-4832059D4700}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B81B1ED-5CF9-406C-9CC1-9B9A619F9F59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B81B1ED-5CF9-406C-9CC1-9B9A619F9F59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B81B1ED-5CF9-406C-9CC1-9B9A619F9F59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B81B1ED-5CF9-406C-9CC1-9B9A619F9F59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

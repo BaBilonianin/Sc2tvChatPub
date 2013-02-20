@@ -23,10 +23,13 @@ namespace RatChat {
             InitializeComponent();
         }
 
-       public static void ShowOptionsWindow( VisualChatCtrl ChatControl, RatChat.Core.ConfigStorage ChatConfigStorage ) {
+       public static void ShowOptionsWindow( FrameworkElement ChatControl, RatChat.Core.ConfigStorage ChatConfigStorage ) {
             ChatOptionsWindow cow = new ChatOptionsWindow();
+            var data = ChatControl.Tag as Tuple<RatChat.Core.IChatSource, string>;
 
-            var configs = ConfigValueAttribute.GetAttribute(ChatControl.Source.GetType());
+            var configs = (from a in ConfigValueAttribute.GetAttribute(data.Item1.GetType())
+                           orderby a.Caption
+                           select a).ToArray();
 
             for (int j=0; j<configs.Length; ++j ) {
                 cow.OptionsGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(30.0) });
@@ -41,12 +44,14 @@ namespace RatChat {
                 // add textbox
                 UIElement val = null;
 
+              
+
                 if (configs[j].IsPasswordInput) {
-                    val = new PasswordBox() { Tag = ChatControl.VisualId + configs[j].Name, Margin = new Thickness(2) };
-                    ((PasswordBox)val).Password = (string)ChatConfigStorage.GetDefault(ChatControl.VisualId + configs[j].Name, configs[j].DefaultValue);
+                    val = new PasswordBox() { Tag = data.Item1.ConfigPrefix + configs[j].Name, Margin = new Thickness(2) };
+                    ((PasswordBox)val).Password = (string)ChatConfigStorage.GetDefault(data.Item1.ConfigPrefix + configs[j].Name, configs[j].DefaultValue);
                 } else {
-                    val = new TextBox() { Tag = ChatControl.VisualId + configs[j].Name, Margin = new Thickness(2) };
-                    ((TextBox)val).Text = (string)ChatConfigStorage.GetDefault(ChatControl.VisualId + configs[j].Name, configs[j].DefaultValue);
+                    val = new TextBox() { Tag = data.Item1.ConfigPrefix + configs[j].Name, Margin = new Thickness(2) };
+                    ((TextBox)val).Text = (string)ChatConfigStorage.GetDefault(data.Item1.ConfigPrefix + configs[j].Name, configs[j].DefaultValue);
                 }
 
                 cow.OptionsGrid.Children.Add(val);

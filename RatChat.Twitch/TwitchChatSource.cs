@@ -60,11 +60,11 @@ namespace RatChat.Twitch {
             return null;
         }
 
-        public void OnLoad( string ConfigPrefix, ConfigStorage Config ) {
-            OnConfigApply(ConfigPrefix, Config);
+        public void OnLoad( ConfigStorage Config ) {
+            OnConfigApply(Config);
         }
 
-        public void OnConfigApply( string ConfigPrefix, ConfigStorage Config ) {
+        public void OnConfigApply( ConfigStorage Config ) {
             StreamerNick = Config.GetDefault(ConfigPrefix + ".TWITCHTVCHAT.StreamerNick", "");
 
             if (string.IsNullOrEmpty(StreamerNick)) {
@@ -204,11 +204,22 @@ namespace RatChat.Twitch {
             IrcClient.Channels.Join("#" + StreamerNick.ToLowerInvariant());
         }
 
-        public void EndWork() { }
+        public void EndWork() {
+            if (IrcClient != null) {
+                IrcClient.Disconnect();
+                IrcClient = null;
+                Header = "http://twitch.tv, Не подключен";
+            }
+        }
 
         public event OnNewMessagesArrivedDelegate OnNewMessagesArrived;
 
-
         public Dictionary<string, string> SmilesUri { get; private set; }
+
+        public System.Windows.Controls.UserControl CreateCustomView() {
+            return null;
+        }
+
+        public string ConfigPrefix { get; set; }
     }
 }

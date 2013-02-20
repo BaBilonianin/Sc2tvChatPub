@@ -18,7 +18,6 @@ namespace RatChat.Sc2tv {
     public class Sc2tvChatSource : RatChat.Core.IChatSource, INotifyPropertyChanged {
         public const string UpdateSmilesUri = "http://chat.sc2tv.ru/js/smiles.js";
 
-
         DispatcherTimer next;
         string _ChannelUri = "";
         int _StreamerID = 0;
@@ -149,7 +148,7 @@ namespace RatChat.Sc2tv {
 
         public string StreamerNick { get; set; }
 
-        public void OnLoad( string ConfigPrefix, ConfigStorage Config ) {
+        public void OnLoad( ConfigStorage Config ) {
             StreamerNick = Config.GetDefault(ConfigPrefix + ".SC2TVCHAT.StreamerNick", "");
             _StreamerID = (int)Config.GetDefault(ConfigPrefix + ".SC2TVCHAT.StreamerID", 0);
             _ChannelUri = Config.GetDefault(ConfigPrefix + ".SC2TVCHAT.StreamerURI", "http://sc2tv.ru/content/oxlamonschannel");
@@ -180,7 +179,7 @@ namespace RatChat.Sc2tv {
             }
         }
 
-        public void OnConfigApply( string ConfigPrefix, ConfigStorage Config ) {
+        public void OnConfigApply( ConfigStorage Config ) {
             _ChannelUri = (string)Config.GetDefault(ConfigPrefix + ".SC2TVCHAT.StreamerURI", "http://sc2tv.ru/content/oxlamonschannel");
 
             ManualResetEvent mre = new ManualResetEvent(false);
@@ -240,9 +239,13 @@ namespace RatChat.Sc2tv {
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-
+        
         public Dictionary<string, string> SmilesUri { get; private set; }
-            
+
+        public System.Windows.Controls.UserControl CreateCustomView() {
+            return null;
+        }
+
+        public string ConfigPrefix { get; set; }
     }
 }
