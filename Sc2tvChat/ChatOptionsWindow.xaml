@@ -2,6 +2,9 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="ChatOptionsWindow" Height="300" Width="500" 
+        xmlns:p="clr-namespace:RatChat.Properties" 
+        Topmost="{Binding Source={x:Static p:Settings.Default}, Path=topmost, Mode=OneWay}"
+       
         Background="{DynamicResource WindowBackground}">
     
     <Grid TextBlock.Foreground="{DynamicResource FontForeground}">

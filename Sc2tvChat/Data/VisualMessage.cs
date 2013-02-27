@@ -26,7 +26,7 @@ namespace RatChat {
 
             List<Uri> Urls = new List<Uri>();
 
-            string UserText = HttpUtility.HtmlDecode(Data.Text.Replace(":s:", " :s:").Replace("  ", " "));
+            string UserText = Data.Text;// HttpUtility.HtmlDecode(Data.Text.Replace(":s:", " :s:").Replace("  ", " "));
 
             UserText = UriDetector.Replace(
                 UserText,

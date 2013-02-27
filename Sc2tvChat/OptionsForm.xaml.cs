@@ -31,6 +31,11 @@ namespace RatChat {
                         orderby b
                         select System.IO.Path.GetFileNameWithoutExtension(b));
 
+                a.AddRange(
+                     from b in Directory.GetFiles(App.UserFolder + "/Skins/", "user-*.xaml")
+                     orderby b
+                     select System.IO.Path.GetFileNameWithoutExtension(b));
+
                 a.Insert(0, "По умолчанию (встроенный)");
 
                 return a.ToArray();

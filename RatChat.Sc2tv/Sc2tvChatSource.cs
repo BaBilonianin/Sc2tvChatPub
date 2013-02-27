@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.ComponentModel;
 using System.Windows;
+using System.Web;
 
 namespace RatChat.Sc2tv {
     [ChatName("Чат для http://sc2tv.ru")]
@@ -23,6 +24,7 @@ namespace RatChat.Sc2tv {
         int _StreamerID = 0;
         List<Message> LoadedMessages;
         SmilesDataDase Smiles;
+        Regex ExtractSmile = new Regex("\\:s\\:\\w\\w.*?\\:");
 
         public Sc2tvChatSource() {
             LoadedMessages = new List<Message>();
@@ -78,6 +80,15 @@ namespace RatChat.Sc2tv {
                 Message m = GetById(msg[j].Id);
                 if (m == null) {
                     LoadedMessages.Add(msg[j]);
+
+                    //Match mmm = ExtractSmile.Match(msg[j].Text);
+                    //if (mmm.Success) {
+                    //}
+
+                    msg[j].Text = HttpUtility.HtmlDecode(ExtractSmile.Replace(msg[j].Text, new MatchEvaluator(( match ) => {
+                        return " " + match.Value + " ";
+                    })).Trim());
+
                     NewMessage.Add(msg[j]);
                     msg[j].NeedToDelete = 60 * 5;
                 } else {
@@ -249,5 +260,7 @@ namespace RatChat.Sc2tv {
         }
 
         public string ConfigPrefix { get; set; }
+
+     
     }
 }

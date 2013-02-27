@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -32,12 +33,53 @@ namespace RatChat {
 
             ratChatCaption.Text = "RatChat v" + GetRunningVersion();
 
+            //this.plugin = XSplit.Wpf.TimedBroadcasterPlugin.CreateInstance(
+            //   "9E1AB52C-6EC5-45F3-930F-1C91150C8425", this, 
+            //   (int)this.Width, (int)this.Height - 25, 50);
+
+            //if (this.plugin != null) {
+            //    this.plugin.StartTimer();
+            //    //this.Chats.PreviewMouseDown += this.chats_PreviewMouseDown;
+            //    //this.Chats.PreviewMouseMove += this.chats_PreviewMouseMove;
+            //}
+
             ChatSourceManager = new RatChat.ChatSourceManager();
             achievCP.Content = ChatSourceManager.Achievment;
             Properties.Settings.Default.SettingsSaving += PropertySettingsSavingEventHandler;
             Properties.Settings.Default.PropertyChanged += Default_PropertyChanged;
             Chats.DataContext = ChatSourceManager.Chats;
+
+            //testTimer = new DispatcherTimer();
+            //testTimer.Interval = TimeSpan.FromMilliseconds(50);
+            //testTimer.Tick += testTimer_Tick;
+            //testTimer.Start();
         }
+
+        //void testTimer_Tick( object sender, EventArgs e ) {
+        //    RenderVisual();
+        //}
+
+        //int test = 0;
+
+        //DispatcherTimer testTimer;
+
+        //void RenderVisual() {
+        //    RenderTargetBitmap targetBitmap = new RenderTargetBitmap(
+        //        (int)ActualWidth,
+        //        (int)ActualHeight,
+        //        96d, 96d,
+        //        PixelFormats.Default);
+
+        //    targetBitmap.Render(this);
+        //    BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+        //    encoder.Frames.Add(BitmapFrame.Create(targetBitmap));
+
+
+        //    using (FileStream fs = File.Open(
+        //        string.Format("x:\\test\\image_{0:0000}.bmp", test++), FileMode.OpenOrCreate)) {
+        //        encoder.Save(fs);
+        //    }
+        //}
 
         private Version GetRunningVersion() {
             if (System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed)
@@ -63,7 +105,12 @@ namespace RatChat {
                         if (_currentSkin != "По умолчанию (встроенный)") {
                             if (!string.IsNullOrEmpty(_currentSkin)) {
                                 ResourceDictionary skin = new ResourceDictionary();
-                                skin.Source = new Uri(App.RootFolder + "/Skins/" + _currentSkin + ".xaml", UriKind.RelativeOrAbsolute);
+
+                                if (_currentSkin.StartsWith("user-")) {
+                                    skin.Source = new Uri(App.UserFolder + "/Skins/" + _currentSkin + ".xaml", UriKind.RelativeOrAbsolute);
+                                } else {
+                                    skin.Source = new Uri(App.RootFolder + "/Skins/" + _currentSkin + ".xaml", UriKind.RelativeOrAbsolute);
+                                }
                                 Application.Current.Resources.MergedDictionaries.Remove(skin);
                             }
                         }
@@ -75,7 +122,11 @@ namespace RatChat {
                         } else
                             if (!string.IsNullOrEmpty(_currentSkin)) {
                                 ResourceDictionary skin = new ResourceDictionary();
-                                skin.Source = new Uri(App.RootFolder + "/Skins/" + _currentSkin + ".xaml", UriKind.RelativeOrAbsolute);
+                                if (_currentSkin.StartsWith("user-")) {
+                                    skin.Source = new Uri(App.UserFolder + "/Skins/" + _currentSkin + ".xaml", UriKind.RelativeOrAbsolute);
+                                } else {
+                                    skin.Source = new Uri(App.RootFolder + "/Skins/" + _currentSkin + ".xaml", UriKind.RelativeOrAbsolute);
+                                } 
                                 Application.Current.Resources.MergedDictionaries.Add(skin);
                             } else {
                                 SetDefaultSkin();
@@ -143,5 +194,50 @@ namespace RatChat {
             OptionsForm fid = new OptionsForm();
             fid.Show();
         }
+
+
+
+        #region XBS (XSplit) Dragging Support
+
+        private Point startPoint;
+
+        private void chats_PreviewMouseDown( object sender, MouseButtonEventArgs e ) {
+            //this.startPoint = e.GetPosition(null);
+        }
+
+        private void chats_PreviewMouseMove( object sender, MouseEventArgs e ) {
+            //var senderObj = sender as MainWindow;
+
+            //if (senderObj == null) {
+            //    // This shouldn't happen.
+            //    return;
+            //}
+
+            //// Get the current mouse position
+            //Point mousePos = e.GetPosition(null);
+            //Vector diff = this.startPoint - mousePos;
+
+            //if (e.LeftButton == MouseButtonState.Pressed &&
+            //    (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
+            //    Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance)) {
+            //    string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "XSplit", "chat.xbs");
+
+            //    if (File.Exists(path) == false) {
+            //        return;
+            //    }
+
+            //    var strCol = new StringCollection { path };
+
+            //    var o = new DataObject(DataFormats.FileDrop, strCol);
+            //    o.SetFileDropList(strCol);
+            //    DragDrop.DoDragDrop(senderObj, o, DragDropEffects.Copy);
+            //}
+        }
+
+
+        public XSplit.Wpf.TimedBroadcasterPlugin plugin { get; set; }
+
+        #endregion
+
     }
 }

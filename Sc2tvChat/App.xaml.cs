@@ -28,9 +28,17 @@ namespace RatChat {
         }
 
         public static string RootFolder { get; private set; }
+        public static string UserFolder { get; private set; }
 
         protected override void OnStartup( StartupEventArgs e ) {
             RootFolder = System.IO.Directory.GetCurrentDirectory();
+            UserFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+
+            System.IO.Directory.CreateDirectory(UserFolder + "\\RatChat");
+            System.IO.Directory.CreateDirectory(UserFolder + "\\RatChat\\Skins");
+
+            UserFolder += "\\RatChat";
+
             base.OnStartup(e);
         }
     }

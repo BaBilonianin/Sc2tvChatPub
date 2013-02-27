@@ -27,8 +27,8 @@
     <InstallUrl>http://oxlamon.com/pubarea/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>sc2chat.htm</WebPage>
-    <ApplicationRevision>23</ApplicationRevision>
-    <ApplicationVersion>2.4.0.%2a</ApplicationVersion>
+    <ApplicationRevision>26</ApplicationRevision>
+    <ApplicationVersion>2.5.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -106,6 +106,19 @@
     <Compile Include="Controls\VisualChatCtrl.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\RowConverter.cs" />
+    <Compile Include="XSplit\BroadcasterPlugin.cs" />
+    <Compile Include="XSplit\TimedBroadcasterPlugin.cs" />
+    <Content Include="Chats\dotIRC.dll" />
+    <Content Include="Chats\Newtonsoft.Json.dll" />
+    <Content Include="Chats\RatChat.GraphCount.dll" />
+    <Content Include="Chats\RatChat.Polling.dll" />
+    <Content Include="Chats\RatChat.Sc2tv.dll" />
+    <Content Include="Chats\RatChat.Twitch.dll" />
+    <Content Include="Chats\system.windows.controls.datavisualization.toolkit.dll" />
+    <Content Include="Chats\WPFToolkit.dll" />
+    <Content Include="XSplit\noconn.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Page Include="AddChatWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -154,14 +167,6 @@
     <Content Include="bin\Debug\Chats\RatChat.Sc2tv.dll" />
     <Resource Include="chan.png" />
     <Resource Include="oxlamon.png" />
-    <Content Include="Chats\dotIRC.dll" />
-    <Content Include="Chats\Newtonsoft.Json.dll" />
-    <Content Include="Chats\RatChat.GraphCount.dll" />
-    <Content Include="Chats\RatChat.Polling.dll" />
-    <Content Include="Chats\RatChat.Sc2tv.dll" />
-    <Content Include="Chats\RatChat.Twitch.dll" />
-    <Content Include="Chats\system.windows.controls.datavisualization.toolkit.dll" />
-    <Content Include="Chats\WPFToolkit.dll" />
     <Content Include="Skins\FullWhiteSkin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -178,6 +183,16 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Skins\PonySkin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Skins\FreeSpaceWhiteSkin2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Skins\XComSkin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -213,6 +228,9 @@
     <AppDesigner Include="Properties\" />
     <None Include="readme.md" />
     <None Include="Sc2tvChat_TemporaryKey.pfx" />
+    <Content Include="XSplit\chat.xbs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -265,7 +283,20 @@
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Fonts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="VHMediaCOMLib">
+      <Guid>{7F9079F6-DCBA-40C4-AD11-47D6CB553F5F}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -17,6 +17,9 @@
        
         Style="{DynamicResource MainWindow}"
         
+       PreviewMouseDown="chats_PreviewMouseDown"
+        PreviewMouseMove="chats_PreviewMouseMove"
+        
         Loaded="Window_Loaded_1" Closing="Window_Closing_1"
         Icon="Junior Icon 85.ico">
     <Window.Resources>
@@ -66,7 +69,9 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <TextBlock IsHitTestVisible="False" x:Name="ratChatCaption" Style="{DynamicResource ChatHeader}" />
+            <TextBlock IsHitTestVisible="False"
+                       x:Name="ratChatCaption" Style="{DynamicResource ChatHeader}" 
+                        />
 
             <StackPanel x:Name="headerButtons" Orientation="Horizontal" HorizontalAlignment="Right" Height="18" Opacity="0.0">
                 <Button x:Name="AddChat" Width="18" Margin="1,0" FontFamily="Arial" 

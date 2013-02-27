@@ -63,9 +63,9 @@ namespace RatChat {
             ichat.OnNewMessagesArrived += ichat_OnNewMessagesArrived;
 
            
-
-            foreach (var smile in ichat.SmilesUri)
-                SmilesDataDase.AddSmileTuple(smile.Key, smile.Value);
+            if( ichat.SmilesUri != null )
+                foreach (var smile in ichat.SmilesUri)
+                    SmilesDataDase.AddSmileTuple(smile.Key, smile.Value);
 
             UserControl customView = ichat.CreateCustomView();
 

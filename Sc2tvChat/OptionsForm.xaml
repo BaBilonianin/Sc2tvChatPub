@@ -2,7 +2,9 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" WindowStartupLocation="CenterScreen"
         xmlns:p="clr-namespace:RatChat.Properties" Closed="Window_Closed_1"
-        Title="" Height="247" Width="600" Topmost="True" ResizeMode="NoResize"
+        Title="" Height="247" Width="600" ResizeMode="NoResize"
+        Topmost="{Binding Source={x:Static p:Settings.Default}, Path=topmost, Mode=OneWay}"
+       
         Background="{DynamicResource WindowBackground}">
 
     <TabControl>
