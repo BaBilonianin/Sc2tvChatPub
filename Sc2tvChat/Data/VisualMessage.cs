@@ -47,7 +47,11 @@ namespace RatChat {
             if (nxd >= 0) {
                 int nxd2 = UserText.IndexOf("</b>");
                 TalkTo = UserText.Substring(nxd + 3, nxd2 - nxd - 3);
-                UserText = UserText.Substring(nxd2 + 6);
+                if (UserText.Length <= (nxd2 + 6)) {
+                    UserText = "";
+                } else {
+                    UserText = UserText.Substring(nxd2 + 6);
+                }
 
                 if (TalkTo == StreamerNick) {
                     wp.SetResourceReference(WrapPanel.StyleProperty, "StreamerContainer");
@@ -62,43 +66,86 @@ namespace RatChat {
 
             ttt.AddRange(UserText.Split(' '));
 
-            TextBlock name = new TextBlock() { Text = Data.Name + ": " };
-            name.SetResourceReference(TextBlock.StyleProperty, "NameStyle");
-            wp.Children.Add(name);
-            int linkIndex = 0;
+           // if (UseLabel) {
 
-            for (int j = 0; j < ttt.Count; ++j) {
-                if (ttt[j] == LinkReplacer) {
-                    TextBlock link = new TextBlock() {
-                        Text = "link ",
-                        Cursor = Cursors.Hand,
-                        ToolTip = Urls[linkIndex],
-                        Tag = Urls[linkIndex]
-                    };
-                    link.SetResourceReference(TextBlock.StyleProperty, "LinkStyle");
-                    link.MouseLeftButtonUp += ( sender, b ) => {
-                        Uri u = ((TextBlock)sender).Tag as Uri;
-                        System.Diagnostics.Process.Start(u.ToString());
-                    };
-                    wp.Children.Add(link);
-                    linkIndex++;
-                } else {
-                    //if (j != (ttt.Count - 1))
+                Label name = new Label() { Content = Data.Name + ": " };
+                name.SetResourceReference(Label.StyleProperty, "LabelNameStyle");
+                wp.Children.Add(name);
+                int linkIndex = 0;
+
+                for (int j = 0; j < ttt.Count; ++j) {
+                    if (ttt[j] == LinkReplacer) {
+                        Label link = new Label() {
+                            Content = "link ",
+                            Cursor = Cursors.Hand,
+                            ToolTip = Urls[linkIndex],
+                            Tag = Urls[linkIndex]
+                        };
+                        link.SetResourceReference(Label.StyleProperty, "LabelLinkStyle");
+                        link.MouseLeftButtonUp += ( sender, b ) => {
+                            Uri u = ((Label)sender).Tag as Uri;
+                            System.Diagnostics.Process.Start(u.ToString());
+                        };
+                        wp.Children.Add(link);
+                        linkIndex++;
+                    } else {
+                        //if (j != (ttt.Count - 1))
                         ttt[j] += ' ';
 
-                    if (CreateSmile(Db, ttt[j], wp)) {
-                        // Ура смайл ебать есть
-                    } else {
-                        TextBlock txt = new TextBlock() { Text = ttt[j] };
-                        if (TalkTo + ", " == ttt[j]) {
-                            txt.SetResourceReference(TextBlock.StyleProperty, "NameTextStyle");
+                        if (CreateSmile(Db, ttt[j], wp)) {
+                            // Ура смайл ебать есть
                         } else {
-                            txt.SetResourceReference(TextBlock.StyleProperty, "TextStyle");
+                            Label txt = new Label() { Content = ttt[j] };
+                            if (TalkTo + ", " == ttt[j]) {
+                                txt.SetResourceReference(Label.StyleProperty, "LabelNameTextStyle");
+                            } else {
+                                txt.SetResourceReference(Label.StyleProperty, "LabelTextStyle");
+                            }
+                            wp.Children.Add(txt);
                         }
-                        wp.Children.Add(txt);
                     }
                 }
-            }
+
+            //} else {
+
+            //    TextBlock name = new TextBlock() { Text = Data.Name + ": " };
+            //    name.SetResourceReference(TextBlock.StyleProperty, "NameStyle");
+            //    wp.Children.Add(name);
+            //    int linkIndex = 0;
+
+            //    for (int j = 0; j < ttt.Count; ++j) {
+            //        if (ttt[j] == LinkReplacer) {
+            //            TextBlock link = new TextBlock() {
+            //                Text = "link ",
+            //                Cursor = Cursors.Hand,
+            //                ToolTip = Urls[linkIndex],
+            //                Tag = Urls[linkIndex]
+            //            };
+            //            link.SetResourceReference(TextBlock.StyleProperty, "LinkStyle");
+            //            link.MouseLeftButtonUp += ( sender, b ) => {
+            //                Uri u = ((TextBlock)sender).Tag as Uri;
+            //                System.Diagnostics.Process.Start(u.ToString());
+            //            };
+            //            wp.Children.Add(link);
+            //            linkIndex++;
+            //        } else {
+            //            //if (j != (ttt.Count - 1))
+            //            ttt[j] += ' ';
+
+            //            if (CreateSmile(Db, ttt[j], wp)) {
+            //                // Ура смайл ебать есть
+            //            } else {
+            //                TextBlock txt = new TextBlock() { Text = ttt[j] };
+            //                if (TalkTo + ", " == ttt[j]) {
+            //                    txt.SetResourceReference(TextBlock.StyleProperty, "NameTextStyle");
+            //                } else {
+            //                    txt.SetResourceReference(TextBlock.StyleProperty, "TextStyle");
+            //                }
+            //                wp.Children.Add(txt);
+            //            }
+            //        }
+            //    }
+            //}
 
             Text = wp;
         }

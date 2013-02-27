@@ -13,8 +13,8 @@
                 <ControlTemplate TargetType="{x:Type chartingToolkit:Chart}">
                     <Grid Background="{DynamicResource WindowBackground}">
                         <chartingprimitives:EdgePanel Name="ChartArea" 
-                                                        Style="{TemplateBinding ChartAreaStyle}" 
-                                                        Margin="1">
+                                                      Style="{TemplateBinding ChartAreaStyle}" 
+                                                      Margin="1">
                            
                         </chartingprimitives:EdgePanel>
                     </Grid>

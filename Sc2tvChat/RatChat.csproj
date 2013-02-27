@@ -27,8 +27,8 @@
     <InstallUrl>http://oxlamon.com/pubarea/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>sc2chat.htm</WebPage>
-    <ApplicationRevision>19</ApplicationRevision>
-    <ApplicationVersion>2.3.0.%2a</ApplicationVersion>
+    <ApplicationRevision>23</ApplicationRevision>
+    <ApplicationVersion>2.4.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -152,14 +152,32 @@
     </Compile>
     <Content Include="bin\Debug\Chats\Newtonsoft.Json.dll" />
     <Content Include="bin\Debug\Chats\RatChat.Sc2tv.dll" />
+    <Resource Include="chan.png" />
+    <Resource Include="oxlamon.png" />
     <Content Include="Chats\dotIRC.dll" />
     <Content Include="Chats\Newtonsoft.Json.dll" />
+    <Content Include="Chats\RatChat.GraphCount.dll" />
     <Content Include="Chats\RatChat.Polling.dll" />
     <Content Include="Chats\RatChat.Sc2tv.dll" />
     <Content Include="Chats\RatChat.Twitch.dll" />
     <Content Include="Chats\system.windows.controls.datavisualization.toolkit.dll" />
     <Content Include="Chats\WPFToolkit.dll" />
-    <Content Include="Skins\WhiteSkin.xaml">
+    <Content Include="Skins\FullWhiteSkin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Skins\FreeSpaceBlackSkin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Skins\FreeSpaceWhiteSkin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Skins\PonySkin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -169,11 +187,6 @@
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
-    <Content Include="Skins\PinkSkin.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

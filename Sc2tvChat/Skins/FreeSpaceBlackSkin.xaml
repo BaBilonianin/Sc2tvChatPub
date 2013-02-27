@@ -12,14 +12,10 @@
     </LinearGradientBrush>
 
 
-    <SolidColorBrush x:Key="WindowBackground" Color="#aa000000" />
+    <SolidColorBrush x:Key="WindowBackground" Color="#00000000" />
     <SolidColorBrush x:Key="FontForeground" Color="White" />
 
-    <LinearGradientBrush x:Key="BorderBackground" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="#ffffee" Offset="0.0" />
-        <GradientStop Color="#f0dfad" Offset="0.5" />
-        <GradientStop Color="#d8a37f" Offset="1.0" />
-    </LinearGradientBrush>
+    <SolidColorBrush x:Key="BorderBackground"  Color="Transparent" />
 
 
     <!-- Системный стиль, менять НЕ рекомендуется (иначе станет невозможно перетаскивать окно) -->
@@ -270,11 +266,13 @@
         <Setter Property="Foreground" Value="White" />
     </Style>
 
+    <Style x:Key="SmileStyle" TargetType="{x:Type Image}">
+        <Setter Property="MaxHeight" Value="20" />
+    </Style>
+
     <DataTemplate x:Key="SmileStyle2">
         <Image x:Name="smile" Source="{Binding Path=Image}" MaxHeight="30" />
     </DataTemplate>
-
-
     <!-- 
         Конец стилей текста в чате.
     -->
@@ -296,7 +294,7 @@
                 <Label Content="{Binding Path=Data.Name}" Style="{StaticResource MyLabelNameStyle}" />
             </Viewbox>
             
-            <Border Width="1" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
+            <Border Width="1" Background="LightGreen" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
 
             <ContentPresenter x:Name="presenter" Grid.Column="1" Content="{Binding Text}" Margin="2,0" >
                 <ContentPresenter.RenderTransform>
@@ -402,7 +400,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border Background="White" Width="6" CornerRadius="3" />
+                    <Border Background="#88ffffff" Width="6" CornerRadius="3" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -411,7 +409,7 @@
     <!-- Полоса прокрутки -->
     <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
         <Grid>
-            <Border Grid.RowSpan="3" CornerRadius="2" Width="2" Background="White" HorizontalAlignment="Center" />
+            <Border Grid.RowSpan="3" CornerRadius="2" Width="2" Background="#33ffffff" HorizontalAlignment="Center" />
             <Track Name="PART_Track" Grid.Row="1" IsDirectionReversed="true">
                 <Track.Thumb>
                     <Thumb Style="{StaticResource ScrollBarThumb}" />

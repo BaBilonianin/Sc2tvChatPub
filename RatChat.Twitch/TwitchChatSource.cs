@@ -13,6 +13,7 @@ namespace RatChat.Twitch {
     [ChatName("Чат для http://twitch.tv")]
    // [ConfigValue(".TWITCHTVCHAT.StreamerPassword", "", "Пароль для twitch:", true)]
     [ConfigValue(".TWITCHTVCHAT.StreamerNick", "", "Ваш ник на twitch:", false)]
+    [ConfigValue(".TWITCHTVCHAT.DirectConnect", "199.9.250.229:6667", "x.x.x.x:y для коннекта:", false)]
     public class TwitchChatSource : RatChat.Core.IChatSource, INotifyPropertyChanged {
         Dispatcher Dispatcher;
 
@@ -56,6 +57,8 @@ namespace RatChat.Twitch {
 
         public string StreamerNick { get; set; }
 
+        string _directAdress = null;
+
         public System.Windows.FrameworkElement CreateSmile( string id ) {
             return null;
         }
@@ -66,8 +69,9 @@ namespace RatChat.Twitch {
 
         public void OnConfigApply( ConfigStorage Config ) {
             StreamerNick = Config.GetDefault(ConfigPrefix + ".TWITCHTVCHAT.StreamerNick", "");
+            _directAdress = Config.GetDefault(ConfigPrefix + ".TWITCHTVCHAT.DirectConnect", "");
 
-            if (string.IsNullOrEmpty(StreamerNick)) {
+            if (string.IsNullOrEmpty(StreamerNick) && string.IsNullOrEmpty(_directAdress)) {
                 Header = "http://twitch.tv, Нет подключения";
                 return;
             }
@@ -103,7 +107,18 @@ namespace RatChat.Twitch {
             };
 
             Header = "http://twitch.tv, Подключаемся к " + StreamerNick;
-            IrcClient.Connect(StreamerNick + ".jtvirc.com", 6667, false, regInfo);
+
+            if (!string.IsNullOrEmpty(_directAdress)) {
+                string[] dat = _directAdress.Split(':');
+                try {
+                    int port = int.Parse(dat[1]);
+                    IrcClient.Connect(dat[0], port, false, regInfo);
+                } catch {
+                    Header = "http://twitch.tv, Ошибка " + StreamerNick;
+                }
+            } else {
+                IrcClient.Connect(StreamerNick + ".jtvirc.com", 6667, false, regInfo);
+            }
         }
 
 

@@ -105,11 +105,15 @@ namespace RatChat {
             if (e.PropertyName == "currentSkin") {
                 CurrentSkin = Properties.Settings.Default.currentSkin;
             }
+            if (e.PropertyName == "customSmiles") {
+                ChatSourceManager.SmilesDataDase.SetCustoms(Properties.Settings.Default.customSmiles);
+            }
         }
         
         private void Window_Loaded_1( object sender, RoutedEventArgs e ) {
             CurrentSkin = Properties.Settings.Default.currentSkin;
             ChatSourceManager.Initialize( Chats, Properties.Settings.Default.chatConfigs);
+            ChatSourceManager.SmilesDataDase.SetCustoms(Properties.Settings.Default.customSmiles);
         }     
 
         private void Window_Closing_1( object sender, System.ComponentModel.CancelEventArgs e ) {

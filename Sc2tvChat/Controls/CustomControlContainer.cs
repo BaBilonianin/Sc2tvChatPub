@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,13 +11,21 @@ namespace RatChat.Controls {
     [TemplatePart(Name = "PART_Content", Type = typeof(ContentPresenter))]
     [TemplatePart(Name = "PART_OptionsButton", Type = typeof(Button))]
     [TemplatePart(Name = "PART_CloseButton", Type = typeof(Button))]
-    [TemplatePart(Name = "PART_Header", Type = typeof(TextBlock))]
-    public class CustomControlContainer : UserControl {
+   // [TemplatePart(Name = "PART_Header", Type = typeof(TextBlock))]
+    public class CustomControlContainer : UserControl, INotifyPropertyChanged {
          static CustomControlContainer() {
             DefaultStyleKeyProperty.OverrideMetadata(
                 typeof(CustomControlContainer),
                 new FrameworkPropertyMetadata(typeof(CustomControlContainer)));
         }
+
+         protected void FireChange( string PropertyName ) {
+             if (PropertyChanged != null) {
+                 PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
+             }
+         }
+
+         public event PropertyChangedEventHandler PropertyChanged;
 
          public CustomControlContainer()
             : base() {
@@ -26,9 +35,16 @@ namespace RatChat.Controls {
 
         ContentPresenter PART_Content;
         Button PART_OptionsButton, PART_CloseButton;
-        TextBlock PART_Header;
+     //   TextBlock PART_Header;
 
-        public RatChat.Core.IChatSource Source { get; private set; }
+        RatChat.Core.IChatSource _Source;
+        public RatChat.Core.IChatSource Source {
+            get { return _Source; }
+            private set {
+                _Source = value;
+                FireChange("Source");
+            }
+        }
         public ChatSourceManager Manager { get; set; }
 
         public UserControl CustomContent {
@@ -51,7 +67,7 @@ namespace RatChat.Controls {
             this.PART_Content = this.GetTemplateChild("PART_Content") as ContentPresenter;
             this.PART_CloseButton = this.GetTemplateChild("PART_CloseButton") as Button;
             this.PART_OptionsButton = this.GetTemplateChild("PART_OptionsButton") as Button;
-            this.PART_Header = this.GetTemplateChild("PART_Header") as TextBlock;
+            //this.PART_Header = this.GetTemplateChild("PART_Header") as TextBlock;
 
             this.PART_CloseButton.Click += PART_CloseButton_Click;
             this.PART_OptionsButton.Click += PART_OptionsButton_Click;
@@ -61,8 +77,8 @@ namespace RatChat.Controls {
         }
 
         void PART_OptionsButton_Click( object sender, RoutedEventArgs e ) {
-            ChatOptionsWindow.ShowOptionsWindow(this, Manager.ChatConfigStorage);
-            Source.OnConfigApply(Manager.ChatConfigStorage);
+            if( ChatOptionsWindow.ShowOptionsWindow(this, Manager.ChatConfigStorage) )
+                Source.OnConfigApply(Manager.ChatConfigStorage);
         }
 
         void PART_CloseButton_Click( object sender, RoutedEventArgs e ) {

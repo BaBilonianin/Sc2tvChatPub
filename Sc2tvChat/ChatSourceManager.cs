@@ -53,6 +53,10 @@ namespace RatChat {
         }
 
         public void CreateChat( string ConfigPrefix, string SourceChatId ) {
+
+            if (!Sources.ContainsKey(SourceChatId))
+                return;
+
             RatChat.Core.IChatSource ichat = Activator.CreateInstance(Sources[SourceChatId]) as RatChat.Core.IChatSource;
             ichat.ConfigPrefix = ConfigPrefix;
             ichat.OnLoad(ChatConfigStorage);

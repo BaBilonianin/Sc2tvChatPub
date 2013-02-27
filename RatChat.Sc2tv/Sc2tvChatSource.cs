@@ -42,6 +42,7 @@ namespace RatChat.Sc2tv {
 
         void LoadChat( int ChannelId ) {
             WebClient wc = new WebClient();
+            wc.Headers.Add("user-agent", "RatChat");
             wc.DownloadStringCompleted += new DownloadStringCompletedEventHandler(( a, b ) => {
                 if (b.Error == null) {
                     Messages messages = JsonConvert.DeserializeObject<Messages>(b.Result);
@@ -184,6 +185,7 @@ namespace RatChat.Sc2tv {
 
             ManualResetEvent mre = new ManualResetEvent(false);
             WebClient wc = new WebClient();
+            wc.Encoding = Encoding.UTF8;
             try {
                 string Result = wc.DownloadString(new Uri(_ChannelUri, UriKind.RelativeOrAbsolute));
                 Regex rx = new Regex("\\<link.*?\\\"canonical\\\".*?href=\\\"http://sc2tv.ru/node/(.*?)\\\"");

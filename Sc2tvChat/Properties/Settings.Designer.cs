@@ -178,5 +178,19 @@ namespace RatChat.Properties {
                 this["showWindowHeader"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("добропони =http://i48.beon.ru/39/61/2456139/23/89931623/0_68ee8_9f7e83db_XS.png\r\n" +
+            "злопони =http://i48.beon.ru/39/61/2456139/76/89931776/41e1127276d10d6260156dd522" +
+            "94e7a6.png")]
+        public string customSmiles {
+            get {
+                return ((string)(this["customSmiles"]));
+            }
+            set {
+                this["customSmiles"] = value;
+            }
+        }
     }
 }

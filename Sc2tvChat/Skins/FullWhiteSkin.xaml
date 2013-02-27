@@ -2,25 +2,20 @@
                     xmlns:ctrl="clr-namespace:RatChat.Controls"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    
+    
 
 
 
+
+    <SolidColorBrush x:Key="WindowBackground" Color="#88ffffff" />
+    <SolidColorBrush x:Key="FontForeground" Color="White" />
+    <SolidColorBrush x:Key="BorderBackground" Color="White" />
     <LinearGradientBrush x:Key="GradientBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Color="#ffffee" Offset="0.0" />
         <GradientStop Color="#f0dfad" Offset="0.5" />
         <GradientStop Color="#d8a37f" Offset="1.0" />
     </LinearGradientBrush>
-
-
-    <SolidColorBrush x:Key="WindowBackground" Color="#aa000000" />
-    <SolidColorBrush x:Key="FontForeground" Color="White" />
-
-    <LinearGradientBrush x:Key="BorderBackground" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="#ffffee" Offset="0.0" />
-        <GradientStop Color="#f0dfad" Offset="0.5" />
-        <GradientStop Color="#d8a37f" Offset="1.0" />
-    </LinearGradientBrush>
-
 
     <!-- Системный стиль, менять НЕ рекомендуется (иначе станет невозможно перетаскивать окно) -->
     <Style TargetType="{x:Type Thumb}">
@@ -63,9 +58,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Grid>
-                        <Ellipse x:Name="btn2" Stroke="White" Fill="#99000000" Visibility="Visible" StrokeThickness="1" />
-                        <Ellipse x:Name="btn" Stroke="White" StrokeThickness="1" Visibility="Hidden" >
-                            <Ellipse.Fill>
+                        <Rectangle x:Name="btn2" Stroke="White" Fill="#99000000" Visibility="Visible" StrokeThickness="1" />
+                        <Rectangle x:Name="btn" Stroke="White" StrokeThickness="1" Visibility="Hidden" >
+                            <Rectangle.Fill>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0.1,0.1" SpreadMethod="Repeat">
                                     <LinearGradientBrush.Transform>
                                         <TranslateTransform x:Name="trans" X="0" />
@@ -75,8 +70,8 @@
                                     <GradientStop Color="#99000000" Offset="0.5" />
                                     <GradientStop Color="#99000000" Offset="1.0" />
                                 </LinearGradientBrush>
-                            </Ellipse.Fill>
-                        </Ellipse>
+                            </Rectangle.Fill>
+                        </Rectangle>
                         <TextBlock x:Name="txt" Margin="{TemplateBinding Padding}" 
                                        FontFamily="{TemplateBinding FontFamily}" Text="{TemplateBinding Content}" 
                                        Foreground="White" FontSize="{TemplateBinding FontSize}"
@@ -172,8 +167,8 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
-                                <Rectangle Fill="White">
-                                </Rectangle>
+                                    <Rectangle Fill="White">
+                                    </Rectangle>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -188,16 +183,16 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <!-- Стиль для всплывающих подсказок -->
+    <!-- Стиль для всплывающих подсказок -->   
     <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
-        <Setter Property="TextBlock.Foreground" Value="White" />
+        <Setter Property="TextBlock.Foreground" Value="Black" />
         <Setter Property="OverridesDefaultStyle" Value="true"/>
         <Setter Property="HasDropShadow" Value="True"/>
         <Setter Property="FontFamily" Value="Arial" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToolTip">
-                    <Border Name="Border" Background="Black" 
+                    <Border Name="Border" Background="{StaticResource WindowBackground}" 
                             Width="{TemplateBinding Width}" BorderThickness="1"
                             BorderBrush="{StaticResource BorderBackground}"
                             Height="{TemplateBinding Height}">
@@ -222,9 +217,9 @@
     -->
     <Style x:Key="BaseLabelStyle" TargetType="{x:Type Label}">
         <Setter Property="Height" Value="Auto" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="16" />
         <Setter Property="IsHitTestVisible" Value="False" />
-        <Setter Property="Background" Value="#77000000" />
+        <Setter Property="Background" Value="#33ffffff" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">
@@ -251,53 +246,43 @@
     </Style>
 
     <Style x:Key="LabelNameStyle" TargetType="{x:Type Label}" BasedOn="{StaticResource BaseLabelStyle}">
-        <Setter Property="Foreground" Value="LightBlue" />
+        <Setter Property="Foreground" Value="DarkBlue" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Visibility" Value="Collapsed" />
     </Style>
 
     <Style x:Key="LabelLinkStyle" TargetType="{x:Type Label}" BasedOn="{StaticResource BaseLabelStyle}">
-        <Setter Property="Foreground" Value="LightGreen" />
+        <Setter Property="Foreground" Value="DarkGreen" />
         <Setter Property="IsHitTestVisible" Value="True" />
+        <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
     <Style x:Key="LabelNameTextStyle" TargetType="{x:Type Label}" BasedOn="{StaticResource BaseLabelStyle}">
-        <Setter Property="Foreground" Value="LightSkyBlue" />
+        <Setter Property="Foreground" Value="DarkRed" />
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
     <Style x:Key="LabelTextStyle" TargetType="{x:Type Label}" BasedOn="{StaticResource BaseLabelStyle}">
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <Style x:Key="SmileStyle" TargetType="{x:Type Image}">
+        <Setter Property="MaxHeight" Value="20" />
     </Style>
 
     <DataTemplate x:Key="SmileStyle2">
         <Image x:Name="smile" Source="{Binding Path=Image}" MaxHeight="30" />
     </DataTemplate>
 
-
     <!-- 
         Конец стилей текста в чате.
     -->
 
-    <Style x:Key="MyLabelNameStyle" TargetType="{x:Type Label}" BasedOn="{StaticResource BaseLabelStyle}">
-        <Setter Property="Foreground" Value="LightBlue" />
-        <Setter Property="FontWeight" Value="Bold" />
-    </Style>
+
 
     <!-- Стиль для сообщения в чате, можно добавить анимации появления -->
     <DataTemplate x:Key="ChatItem">
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-
-            <Viewbox VerticalAlignment="Top" HorizontalAlignment="Right" MaxHeight="20" Margin="0,0,3,0">
-                <Label Content="{Binding Path=Data.Name}" Style="{StaticResource MyLabelNameStyle}" />
-            </Viewbox>
-            
-            <Border Width="1" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
-
             <ContentPresenter x:Name="presenter" Grid.Column="1" Content="{Binding Text}" Margin="2,0" >
                 <ContentPresenter.RenderTransform>
                     <ScaleTransform x:Name="scale" CenterX="100" CenterY="20" />
@@ -352,7 +337,7 @@
             </StackPanel>
         </Border>
     </DataTemplate>
-
+    
     <!-- Контейнер содержащий текст, в котором было обращение к стримеру -->
     <Style x:Key="StreamerContainer" TargetType="{x:Type WrapPanel}">
         <Setter Property="Background" Value="#32ffffff" />
@@ -388,10 +373,10 @@
         <Setter Property="Margin" Value="2,0" />
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
+    
+   
 
-
-
-
+    
 
     <!-- Полоса прокрутки -->
     <Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">
@@ -462,8 +447,8 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
+    
+    
     <!-- Настройки -->
     <Style TargetType="{x:Type TabControl}">
         <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -541,7 +526,7 @@
         <Setter Property="Margin" Value="0,0" />
         <Setter Property="FontFamily" Value="Courier New" />
         <Setter Property="IsHitTestVisible" Value="False" />
-
+        
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">
@@ -568,7 +553,7 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
 
-
+                        
                         <Label Content="{Binding Source.Header}" 
                                 Grid.Row="0" IsHitTestVisible="False" 
                                 Style="{StaticResource LabelHeaderStyle}" />
@@ -640,7 +625,7 @@
                                     ToolTip="Закрыть" Content="r" HorizontalAlignment="Right" />
                         </StackPanel>
                     </Grid>
-
+                    
                     <ControlTemplate.Triggers>
                         <EventTrigger RoutedEvent="MouseEnter">
                             <BeginStoryboard>

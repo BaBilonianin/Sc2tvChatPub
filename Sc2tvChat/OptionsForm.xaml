@@ -25,11 +25,11 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="Общие настройки (сохраняются автоматически)"
-                   Grid.Row="0" Grid.ColumnSpan="2" FontWeight="Bold"
+                   Grid.Row="0" Grid.ColumnSpan="2" FontWeight="Bold" Style="{DynamicResource ConfigText}"
                    HorizontalAlignment="Center" VerticalAlignment="Center" />
 
                 <TextBlock Text="Убрать рамку окна чата: "
-                   Grid.Row="1" Margin="2"
+                   Grid.Row="1" Margin="2" Style="{DynamicResource ConfigText}"
                    HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" />
 
                 <CheckBox x:Name="useLayeredWindow" Grid.Row="1" Margin="2" Grid.Column="1"
@@ -41,7 +41,7 @@
 
 
                 <TextBlock Text="Скрыть смайлы: "
-                   Grid.Row="2" Margin="2"
+                   Grid.Row="2" Margin="2" Style="{DynamicResource ConfigText}"
                    HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" />
 
                 <CheckBox Grid.Row="2" Margin="2" Grid.Column="1"
@@ -51,7 +51,7 @@
 
 
                 <TextBlock Text="Внешний вид чата: "
-                   Grid.Row="3" Margin="2"
+                   Grid.Row="3" Margin="2" Style="{DynamicResource ConfigText}"
                    HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" />
 
                 <ComboBox Grid.Row="3" Grid.Column="1" Margin="2" 
@@ -61,7 +61,7 @@
 
 
                 <TextBlock Text="Поверх всех окон: "
-                   Grid.Row="4" Margin="2"
+                   Grid.Row="4" Margin="2" Style="{DynamicResource ConfigText}"
                    HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" />
                 <CheckBox Grid.Row="4" Margin="2" Grid.Column="1"
                   Content=""
@@ -70,12 +70,14 @@
 
 
                 <TextBlock Text="Показывать заголовок окна: "
-                   Grid.Row="5" Margin="2"
+                   Grid.Row="5" Margin="2" Style="{DynamicResource ConfigText}"
                    HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" />
                 <CheckBox Grid.Row="5" Margin="2" Grid.Column="1"
                   Content="(Настройки можно будет вызвать по правой кнопке мыши)"
                   IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=showWindowHeader, Mode=TwoWay}"
                   HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+
 
             </Grid>
         </TabItem>
@@ -98,15 +100,15 @@
                     <ColumnDefinition Width="32" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Размеры окна чата."
+                <TextBlock Text="Размеры окна чата." Style="{DynamicResource ConfigText}"
                    Grid.Row="0" Grid.ColumnSpan="2" FontWeight="Bold"
                    HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-                <TextBlock Text="Ширина:"
+                <TextBlock Text="Ширина:" Style="{DynamicResource ConfigText}"
                    Grid.Row="1" Margin="2"
                    HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" />
-                <TextBlock Text="Высота:"
-                   Grid.Row="2" Margin="2"
+                <TextBlock Text="Высота:" Style="{DynamicResource ConfigText}"
+                   Grid.Row="2" Margin="2" 
                    HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" />
 
 
@@ -115,6 +117,42 @@
 
                 <TextBox Grid.Column="1" Grid.Row="2" 
                          Text="{Binding Source={x:Static p:Settings.Default}, Path=height, Mode=TwoWay}" Margin="3" />
+
+
+
+            </Grid>
+        </TabItem>
+
+        <TabItem Header="Смайлы">
+            <Grid TextBlock.Foreground="{DynamicResource FontForeground}">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="32" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Добавочные смайлы." Style="{DynamicResource ConfigText}"
+                   Grid.Row="0" Grid.ColumnSpan="2" FontWeight="Bold"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                <TextBlock Text="Смайлы:" Style="{DynamicResource ConfigText}"
+                   Grid.Row="1" Margin="2"
+                   HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" />
+              
+
+
+                <TextBox Grid.Column="1" Grid.Row="1"  Grid.RowSpan="5" AcceptsReturn="True"
+                         Text="{Binding Source={x:Static p:Settings.Default}, Path=customSmiles, Mode=TwoWay}" Margin="3" />
 
 
 

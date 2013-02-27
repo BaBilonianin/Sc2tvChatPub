@@ -23,7 +23,7 @@ namespace RatChat {
             InitializeComponent();
         }
 
-       public static void ShowOptionsWindow( FrameworkElement ChatControl, RatChat.Core.ConfigStorage ChatConfigStorage ) {
+       public static bool ShowOptionsWindow( FrameworkElement ChatControl, RatChat.Core.ConfigStorage ChatConfigStorage ) {
             ChatOptionsWindow cow = new ChatOptionsWindow();
             var data = ChatControl.Tag as Tuple<RatChat.Core.IChatSource, string>;
 
@@ -76,7 +76,10 @@ namespace RatChat {
                     }
                 }
 
+                return true;
             }
+
+            return false;
         }
 
         private void Cansel_Click_1( object sender, RoutedEventArgs e ) {
