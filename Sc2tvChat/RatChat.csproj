@@ -27,8 +27,8 @@
     <InstallUrl>http://oxlamon.com/pubarea/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>sc2chat.htm</WebPage>
-    <ApplicationRevision>26</ApplicationRevision>
-    <ApplicationVersion>2.5.0.%2a</ApplicationVersion>
+    <ApplicationRevision>27</ApplicationRevision>
+    <ApplicationVersion>2.6.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -108,8 +108,13 @@
     <Compile Include="Converters\RowConverter.cs" />
     <Compile Include="XSplit\BroadcasterPlugin.cs" />
     <Compile Include="XSplit\TimedBroadcasterPlugin.cs" />
+    <Content Include="Chats\antlr.runtime.dll" />
     <Content Include="Chats\dotIRC.dll" />
+    <Content Include="Chats\FluorineFx.dll" />
+    <Content Include="Chats\log4net.dll" />
     <Content Include="Chats\Newtonsoft.Json.dll" />
+    <Content Include="Chats\RatChat.EmpireTV.dll" />
+    <Content Include="Chats\RatChat.GoodGame.dll" />
     <Content Include="Chats\RatChat.GraphCount.dll" />
     <Content Include="Chats\RatChat.Polling.dll" />
     <Content Include="Chats\RatChat.Sc2tv.dll" />

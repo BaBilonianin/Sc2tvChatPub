@@ -27,7 +27,7 @@
     </Window.Resources>
     <Window.ContextMenu>
         <ContextMenu>
-            <MenuItem x:Name="AddChatMI" Header="Добавить чат" Click="AddChat_Click" />
+            <MenuItem x:Name="AddChatMI" Header="Добавить плагин" Click="AddChat_Click" />
             <MenuItem x:Name="OptionsMI" Header="Настройка программы" Click="Button_Click_1" />
             <MenuItem x:Name="CloseMI" Header="Закрыть" Click="Button_Click_2" />
         </ContextMenu>

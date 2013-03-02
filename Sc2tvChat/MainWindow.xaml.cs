@@ -33,53 +33,43 @@ namespace RatChat {
 
             ratChatCaption.Text = "RatChat v" + GetRunningVersion();
 
-            //this.plugin = XSplit.Wpf.TimedBroadcasterPlugin.CreateInstance(
-            //   "9E1AB52C-6EC5-45F3-930F-1C91150C8425", this, 
-            //   (int)this.Width, (int)this.Height - 25, 50);
-
-            //if (this.plugin != null) {
-            //    this.plugin.StartTimer();
-            //    //this.Chats.PreviewMouseDown += this.chats_PreviewMouseDown;
-            //    //this.Chats.PreviewMouseMove += this.chats_PreviewMouseMove;
-            //}
-
             ChatSourceManager = new RatChat.ChatSourceManager();
             achievCP.Content = ChatSourceManager.Achievment;
             Properties.Settings.Default.SettingsSaving += PropertySettingsSavingEventHandler;
             Properties.Settings.Default.PropertyChanged += Default_PropertyChanged;
             Chats.DataContext = ChatSourceManager.Chats;
 
-            //testTimer = new DispatcherTimer();
-            //testTimer.Interval = TimeSpan.FromMilliseconds(50);
-            //testTimer.Tick += testTimer_Tick;
-            //testTimer.Start();
+            testTimer = new DispatcherTimer();
+            testTimer.Interval = TimeSpan.FromMilliseconds(50);
+            testTimer.Tick += testTimer_Tick;
+            testTimer.Start();
         }
 
-        //void testTimer_Tick( object sender, EventArgs e ) {
-        //    RenderVisual();
-        //}
+        void testTimer_Tick( object sender, EventArgs e ) {
+            RenderVisual();
+        }
 
         //int test = 0;
 
-        //DispatcherTimer testTimer;
+        DispatcherTimer testTimer;
 
-        //void RenderVisual() {
-        //    RenderTargetBitmap targetBitmap = new RenderTargetBitmap(
-        //        (int)ActualWidth,
-        //        (int)ActualHeight,
-        //        96d, 96d,
-        //        PixelFormats.Default);
+        void RenderVisual() {
+            RenderTargetBitmap targetBitmap = new RenderTargetBitmap(
+                (int)ActualWidth,
+                (int)ActualHeight,
+                96d, 96d,
+                PixelFormats.Default);
 
-        //    targetBitmap.Render(this);
-        //    BmpBitmapEncoder encoder = new BmpBitmapEncoder();
-        //    encoder.Frames.Add(BitmapFrame.Create(targetBitmap));
+            targetBitmap.Render(this);
+            BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(targetBitmap));
 
 
-        //    using (FileStream fs = File.Open(
-        //        string.Format("x:\\test\\image_{0:0000}.bmp", test++), FileMode.OpenOrCreate)) {
-        //        encoder.Save(fs);
-        //    }
-        //}
+            //using (FileStream fs = File.Open(
+            //    string.Format("x:\\test\\image_{0:0000}.bmp", test++), FileMode.OpenOrCreate)) {
+            //    encoder.Save(fs);
+            //}
+        }
 
         private Version GetRunningVersion() {
             if (System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed)

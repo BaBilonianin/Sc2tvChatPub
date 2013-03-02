@@ -282,6 +282,7 @@
     <Style x:Key="MyLabelNameStyle" TargetType="{x:Type Label}" BasedOn="{StaticResource BaseLabelStyle}">
         <Setter Property="Foreground" Value="LightBlue" />
         <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="IsHitTestVisible" Value="True" />
     </Style>
 
     <!-- Стиль для сообщения в чате, можно добавить анимации появления -->
@@ -293,7 +294,8 @@
             </Grid.ColumnDefinitions>
 
             <Viewbox VerticalAlignment="Top" HorizontalAlignment="Right" MaxHeight="20" Margin="0,0,3,0">
-                <Label Content="{Binding Path=Data.Name}" Style="{StaticResource MyLabelNameStyle}" />
+                <Label Content="{Binding Path=Data.Name}" ToolTip="{Binding Path=Data.Date}"
+                       Style="{StaticResource MyLabelNameStyle}" />
             </Viewbox>
             
             <Border Width="1" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
