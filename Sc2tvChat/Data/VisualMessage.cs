@@ -1,6 +1,7 @@
 ﻿using RatChat.Core;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -11,7 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace RatChat {
-    public class VisualMessage {
+    public class VisualMessage : INotifyPropertyChanged {
         const string LinkReplacer = "%LINKLINK%";
         static Regex UriDetector = new Regex(@"((http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?)");
 
@@ -20,6 +21,17 @@ namespace RatChat {
         public ChatMessage Data { get; private set; }
         public bool NeedDelete { get; set; }
         public string TalkTo { get; set; }
+        bool _DoubleName = false;
+        public bool DoubleName {
+            get { return _DoubleName; }
+            set {
+                if (_DoubleName != value) {
+                    _DoubleName = value;
+                    if (PropertyChanged != null)
+                        PropertyChanged(this, new PropertyChangedEventArgs("DoubleName"));
+                }
+            }
+        }
 
         public VisualMessage( string StreamerNick, SmilesDataDase Db, ChatMessage Data ) {
             this.Data = Data;
@@ -168,5 +180,7 @@ namespace RatChat {
 
             return false;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

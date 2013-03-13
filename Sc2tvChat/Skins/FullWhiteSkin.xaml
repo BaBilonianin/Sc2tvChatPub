@@ -1,15 +1,22 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:ctrl="clr-namespace:RatChat.Controls"
+                   xmlns:p="clr-namespace:RatChat.Properties;assembly=RatChat"
+                     xmlns:clr="clr-namespace:System;assembly=mscorlib"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+
+
+
+    <clr:String x:Key="Supports">
+        Visual_BackgroundOpacity
+    </clr:String>
+
+
+
+    <SolidColorBrush x:Key="WindowBackground" Color="#ffffffff" 
+                      Opacity="{Binding Source={x:Static p:Settings.Default}, Path=Visual_BackgroundOpacity, Mode=OneWay}" />
     
+    <SolidColorBrush x:Key="FontForeground" Color="Black" />
     
-
-
-
-
-    <SolidColorBrush x:Key="WindowBackground" Color="#88ffffff" />
-    <SolidColorBrush x:Key="FontForeground" Color="White" />
     <SolidColorBrush x:Key="BorderBackground" Color="White" />
     <LinearGradientBrush x:Key="GradientBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Color="#ffffee" Offset="0.0" />
@@ -349,7 +356,7 @@
 
     <!-- Текст в окне настройки -->
     <Style x:Key="ConfigText" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Foreground" Value="Black" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="Margin" Value="2,0" />

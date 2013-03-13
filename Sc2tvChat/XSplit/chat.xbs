@@ -1,4 +1,4 @@
-﻿<configuration id="9E1AB52C-6EC5-45F3-930F-1C91150C8425" name="RatChat">
+﻿<configuration id="3A1184B5-19A5-4384-BF12-8BB48A3C4111" name="RatChat">
 	<app imagename="RatChat.exe" />
 	<event notloaded="noconn.png" noconn="noconn.png" 
          nosignal="noconn.png" nosignaltimeout="2000" />

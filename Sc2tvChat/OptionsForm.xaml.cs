@@ -50,5 +50,13 @@ namespace RatChat {
         private void Window_Closed_1( object sender, EventArgs e ) {
             Properties.Settings.Default.Save();
         }
+
+        public string Supports {
+            get { return (string)GetValue(SupportsProperty); }
+            set { SetValue(SupportsProperty, value); }
+        }
+
+        public static DependencyProperty SupportsProperty = DependencyProperty.Register(
+            "Supports", typeof(string), typeof(OptionsForm), new PropertyMetadata(""));
     }
 }

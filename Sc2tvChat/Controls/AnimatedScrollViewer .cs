@@ -39,10 +39,12 @@ namespace RatChat.Controls {
                 scrDown = null;
             }
 
-            if ((ExtentHeight - ViewportHeight - MyOffset) > 0) {
+            if (ViewportHeight < ExtentHeight) {
                 DoubleAnimation goDown = new DoubleAnimation(
                    ExtentHeight - ViewportHeight,
                    new Duration(TimeSpan.FromMilliseconds(200)));
+
+                //goDown.EasingFunction = new BounceEase() { EasingMode = System.Windows.Media.Animation.EasingMode.EaseOut };
 
                 scrDown = new Storyboard();
                 scrDown.Children.Add(goDown);

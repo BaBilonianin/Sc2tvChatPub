@@ -3,6 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2012 for Windows Desktop
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatChat", "Sc2tvChat\RatChat.csproj", "{4FF33813-2BF7-4A85-A182-720C47D0D896}"
 	ProjectSection(ProjectDependencies) = postProject
+		{3C88D140-7A07-4056-AF81-E8288497E081} = {3C88D140-7A07-4056-AF81-E8288497E081}
 		{6545BE8B-6FAE-4AC5-88D0-1C4EC39DB36E} = {6545BE8B-6FAE-4AC5-88D0-1C4EC39DB36E}
 		{06D93698-401B-48EA-A08A-CCB6F90B60B5} = {06D93698-401B-48EA-A08A-CCB6F90B60B5}
 		{0A8AE7B7-9409-4AFB-878A-55077180F8AD} = {0A8AE7B7-9409-4AFB-878A-55077180F8AD}
@@ -31,6 +32,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluorineFx-4.0", "..\..\SDK\Tort\Source\FluorineFx\FluorineFx-4.0.csproj", "{A9B8375B-579D-4F8A-B00C-F2828DB58F3A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatChat.EmpireTV", "RatChat.EmpireTV\RatChat.EmpireTV.csproj", "{06D93698-401B-48EA-A08A-CCB6F90B60B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatChat.CybergameTV", "RatChat.CybergameTV\RatChat.CybergameTV.csproj", "{3C88D140-7A07-4056-AF81-E8288497E081}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -82,6 +85,10 @@ Global
 		{06D93698-401B-48EA-A08A-CCB6F90B60B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06D93698-401B-48EA-A08A-CCB6F90B60B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06D93698-401B-48EA-A08A-CCB6F90B60B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C88D140-7A07-4056-AF81-E8288497E081}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C88D140-7A07-4056-AF81-E8288497E081}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C88D140-7A07-4056-AF81-E8288497E081}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C88D140-7A07-4056-AF81-E8288497E081}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

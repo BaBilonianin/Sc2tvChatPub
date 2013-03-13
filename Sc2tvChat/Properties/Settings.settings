@@ -45,5 +45,17 @@
       <Value Profile="(Default)">добропони =http://i48.beon.ru/39/61/2456139/23/89931623/0_68ee8_9f7e83db_XS.png
 злопони =http://i48.beon.ru/39/61/2456139/76/89931776/41e1127276d10d6260156dd52294e7a6.png</Value>
     </Setting>
+    <Setting Name="allowTransClick" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="Visual_BackgroundOpacity" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.1</Value>
+    </Setting>
+    <Setting Name="Visual_NameFontSize" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="Visual_TextFontSize" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

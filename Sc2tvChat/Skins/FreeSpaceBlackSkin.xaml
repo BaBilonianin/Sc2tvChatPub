@@ -12,7 +12,7 @@
     </LinearGradientBrush>
 
 
-    <SolidColorBrush x:Key="WindowBackground" Color="#00000000" />
+    <SolidColorBrush x:Key="WindowBackground" Color="#ff000000" />
     <SolidColorBrush x:Key="FontForeground" Color="White" />
 
     <SolidColorBrush x:Key="BorderBackground"  Color="Transparent" />

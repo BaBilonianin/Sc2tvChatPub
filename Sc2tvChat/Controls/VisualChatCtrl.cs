@@ -72,8 +72,12 @@ namespace RatChat.Controls {
         }
 
         void Safe_Source_OnNewMessagesArrived( List<Core.ChatMessage> NewMessages ) {
-            for (int j = 0; j < NewMessages.Count; ++j)
-                ChatDataSource.Add(new VisualMessage(Source.StreamerNick, Manager.SmilesDataDase, NewMessages[j]));
+            for (int j = 0; j < NewMessages.Count; ++j) {
+                VisualMessage vm = new VisualMessage(Source.StreamerNick, Manager.SmilesDataDase, NewMessages[j]);
+                if (ChatDataSource.Count > 0)
+                    vm.DoubleName = vm.Data.Name == ChatDataSource[ChatDataSource.Count - 1].Data.Name;
+                ChatDataSource.Add(vm);
+            }
 
             if (ChatDataSource.Count > 100) {
                 while (ChatDataSource.Count > 40)

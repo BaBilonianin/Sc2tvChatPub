@@ -5,6 +5,7 @@
         xmlns:conv="clr-namespace:RatChat.Converters"
         xmlns:ctrl="clr-namespace:RatChat.Controls"
        
+      
         
         AllowsTransparency="{Binding Source={x:Static p:Settings.Default}, Path=useLayered, Mode=OneTime}"
         Height="{Binding Source={x:Static p:Settings.Default}, Path=height, Mode=TwoWay}" 
