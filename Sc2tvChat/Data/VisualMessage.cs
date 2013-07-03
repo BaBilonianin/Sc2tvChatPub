@@ -33,7 +33,40 @@ namespace RatChat {
             }
         }
 
-        public VisualMessage( string StreamerNick, SmilesDataDase Db, ChatMessage Data ) {
+        bool _ToMe = false;
+        public bool ToMe {
+            get { return _ToMe; }
+            set {
+                if (_ToMe != value) {
+                    _ToMe = value;
+                    if (PropertyChanged != null)
+                        PropertyChanged(this, new PropertyChangedEventArgs("ToMe"));
+                }
+            }
+        }
+
+        int _Sequence = 0;
+
+        /// <summary>
+        /// 0 - Это и начало и конец (одно сообщение)
+        /// 1 - Это начало сообщения
+        /// 2 - это середина
+        /// 3 - это конец
+        /// </summary>
+        public int Sequence {
+            get { return _Sequence; }
+            set {
+                if (_Sequence != value) {
+                    _Sequence = value;
+                    if (PropertyChanged != null)
+                        PropertyChanged(this, new PropertyChangedEventArgs("Sequence"));
+                }
+            }
+        }
+
+
+
+        public VisualMessage( IChatSource Source, SmilesDataDase Db, ChatMessage Data ) {
             this.Data = Data;
 
             List<Uri> Urls = new List<Uri>();
@@ -65,7 +98,9 @@ namespace RatChat {
                     UserText = UserText.Substring(nxd2 + 6);
                 }
 
-                if (TalkTo == StreamerNick) {
+                this.ToMe = TalkTo == Source.StreamerNick;
+
+                if (this.ToMe) {
                     wp.SetResourceReference(WrapPanel.StyleProperty, "StreamerContainer");
                 } else {
                     wp.SetResourceReference(WrapPanel.StyleProperty, "NormalTextContainer");
@@ -85,6 +120,8 @@ namespace RatChat {
                 wp.Children.Add(name);
                 int linkIndex = 0;
 
+                ISmileCreator creator = Source as ISmileCreator;
+
                 for (int j = 0; j < ttt.Count; ++j) {
                     if (ttt[j] == LinkReplacer) {
                         Label link = new Label() {
@@ -101,19 +138,17 @@ namespace RatChat {
                         wp.Children.Add(link);
                         linkIndex++;
                     } else {
-                        //if (j != (ttt.Count - 1))
-                        ttt[j] += ' ';
-
-                        if (CreateSmile(Db, ttt[j], wp)) {
-                            // Ура смайл ебать есть
-                        } else {
-                            Label txt = new Label() { Content = ttt[j] };
-                            if (TalkTo + ", " == ttt[j]) {
-                                txt.SetResourceReference(Label.StyleProperty, "LabelNameTextStyle");
-                            } else {
-                                txt.SetResourceReference(Label.StyleProperty, "LabelTextStyle");
+                        if (creator != null) {
+                            if (!creator.CreateSmile(ttt[j], wp)) {
+                                ttt[j] += ' ';
+                                AddWord(wp, ttt, j);
                             }
-                            wp.Children.Add(txt);
+                        } else {
+                            ttt[j] += ' ';
+
+                            if ( !CreateSmile(Db, ttt[j], wp)) {
+                                AddWord(wp, ttt, j);
+                            }
                         }
                     }
                 }
@@ -160,6 +195,16 @@ namespace RatChat {
             //}
 
             Text = wp;
+        }
+
+        private void AddWord( WrapPanel wp, List<string> ttt, int j ) {
+            Label txt = new Label() { Content = ttt[j] };
+            if (TalkTo + ", " == ttt[j]) {
+                txt.SetResourceReference(Label.StyleProperty, "LabelNameTextStyle");
+            } else {
+                txt.SetResourceReference(Label.StyleProperty, "LabelTextStyle");
+            }
+            wp.Children.Add(txt);
         }
 
         private bool CreateSmile( SmilesDataDase Db, string SmileId, WrapPanel TextPanel ) {

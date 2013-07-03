@@ -30,7 +30,7 @@ namespace RatChat.GoodGame {
         #endregion
         
         
-        const string ChatUri = "rtmp://www.goodgame.ru:1935/chat";
+        const string ChatUri = "rtmp://www.goodgame.ru:443/chat";
         
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -66,7 +66,7 @@ namespace RatChat.GoodGame {
 
                 Header = "Подключение к: " + StreamerNick;
 
-                    _NetConnection = new FluorineFx.Net.NetConnection() {
+                _NetConnection = new FluorineFx.Net.NetConnection() {
                     ObjectEncoding = FluorineFx.ObjectEncoding.AMF0
                 };
 
@@ -170,9 +170,9 @@ namespace RatChat.GoodGame {
                     Config[ConfigPrefix + ".GOODGAME.ChatName"] = m.Groups[4].Value;
                     Config[ConfigPrefix + ".GOODGAME.StreamerNick"] = StreamerNick = m.Groups[5].Value;
                 } else {
-                    _ChatID = 0;
+                    _ChatID = 1717;
                     _UserId = 0;
-                    _UserToken = "";
+                    _UserToken = "d41d8cd98f00b204e9800998ecf8427e";
                 }
             } catch {
                 _ChatID = 0;

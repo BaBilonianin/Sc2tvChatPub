@@ -30,9 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="dotIRC, Version=0.4.1.35989, Culture=neutral, PublicKeyToken=1f67a0ba34110caa, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Plugins\dotIRC.dll</HintPath>
+      <HintPath>..\Sc2tvChat\bin\Debug\Chats\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -51,6 +51,10 @@
     <Compile Include="TwitchChatSource.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Ubiquitous\dotIRC\dotIRC.csproj">
+      <Project>{47d551da-96ed-4ef6-96bf-4832059d4700}</Project>
+      <Name>dotIRC</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sc2tvChat.Core\RatChat.Core.csproj">
       <Project>{70ebadc5-d03f-4c59-bb44-896a0d023025}</Project>
       <Name>RatChat.Core</Name>

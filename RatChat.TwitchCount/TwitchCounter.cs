@@ -84,10 +84,12 @@ namespace RatChat.TwitchCount {
         }
 
         private void GetTwitchCount() {
-            Regex rx = new Regex("viewers_count.*?\\:\\\"(.*?)\\\"");
+            Regex rx = new Regex("viewers_count.*?(\\d*?)\\,");
             WebClient wc = new WebClient();
             wc.DownloadStringCompleted += new DownloadStringCompletedEventHandler(( b, a ) => {
                 if (a.Error == null) {
+                    //{"average_bitrate": 0, "viewers_count": 272, "streams_count": 1}
+
                     Match m = rx.Match(a.Result);
                     if (m.Success) {
                         Header = "[Twitch] Зрителей: " + m.Groups[1].Value + ", " + StreamerNick;
@@ -102,7 +104,8 @@ namespace RatChat.TwitchCount {
                 CountTimer.Start();
             });
             wc.DownloadStringAsync(new Uri(
-                string.Format("http://api.justin.tv/api/stream/summary.json?channel={0}&jsonp=?", StreamerNick), UriKind.RelativeOrAbsolute));
+                             //http://api.justin.tv/api/stream/summary.json?channel=Knjazevdesu&jsonp=
+                string.Format("http://api.justin.tv/api/stream/summary.json?channel={0}&jsonp=", StreamerNick), UriKind.RelativeOrAbsolute));
         }
 
         DispatcherTimer CountTimer;

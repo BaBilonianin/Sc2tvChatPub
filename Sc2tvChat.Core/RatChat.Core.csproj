@@ -49,6 +49,7 @@
     <Compile Include="ConfigValueAttribute.cs" />
     <Compile Include="IChatListener.cs" />
     <Compile Include="IChatSource.cs" />
+    <Compile Include="ISmileCreator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatChatException.cs" />
     <Compile Include="SmilesDataDase.cs" />

@@ -290,7 +290,7 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <Viewbox VerticalAlignment="Top" HorizontalAlignment="Right" MaxHeight="20" Margin="0,0,3,0">
+            <Viewbox x:Name="name" VerticalAlignment="Top" HorizontalAlignment="Right" MaxHeight="20" Margin="0,0,3,0">
                 <Label Content="{Binding Path=Data.Name}" Style="{StaticResource MyLabelNameStyle}" />
             </Viewbox>
             
@@ -304,6 +304,11 @@
         </Grid>
 
         <DataTemplate.Triggers>
+
+            <DataTrigger Binding="{Binding DoubleName}" Value="True">
+                <Setter TargetName="name" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+            
             <EventTrigger RoutedEvent="Loaded">
                 <EventTrigger.Actions>
                     <BeginStoryboard>

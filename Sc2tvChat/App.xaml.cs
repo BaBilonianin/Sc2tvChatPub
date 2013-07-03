@@ -17,6 +17,13 @@ namespace RatChat {
 
         public App(): base() {
             this.DispatcherUnhandledException += App_DispatcherUnhandledException;
+
+
+            ///
+            //Skins.PngSkin.SaveToPng(
+            //    @"C:\Users\Oxlamon\Desktop\Pictures\2.4\Skins\iPhone.png",
+            //    @"c:\Users\Oxlamon\Documents\RatChat\Skins\iPhone.png",
+            //    @"x:\Sources\Sc2tvChatPub\Sc2tvChat\Skins\iPhone.xaml");
         }
 
         void App_DispatcherUnhandledException( object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e ) {

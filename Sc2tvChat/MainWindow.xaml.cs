@@ -20,6 +20,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -163,7 +164,10 @@ namespace RatChat {
         }
 
         string _currentSkin = null;
-        
+
+        ResourceDictionary _CurrentXaml = null;
+        Dictionary<string, ResourceDictionary> LoadedSkins = new Dictionary<string, ResourceDictionary>();
+
         ChatSourceManager ChatSourceManager;
 
         public string CurrentSkin {
@@ -171,41 +175,56 @@ namespace RatChat {
             set {
                 try {
                     if (_currentSkin != value) {
-                        if (_currentSkin != "По умолчанию (встроенный)") {
-                            if (!string.IsNullOrEmpty(_currentSkin)) {
-                                ResourceDictionary skin = new ResourceDictionary();
-
-                                if (_currentSkin.StartsWith("user-")) {
-                                    skin.Source = new Uri(App.UserFolder + "/Skins/" + _currentSkin + ".xaml", UriKind.RelativeOrAbsolute);
-                                } else {
-                                    skin.Source = new Uri(App.RootFolder + "/Skins/" + _currentSkin + ".xaml", UriKind.RelativeOrAbsolute);
-                                }
-                                Application.Current.Resources.MergedDictionaries.Remove(skin);
-                            }
+                        if (_CurrentXaml != null) {
+                           // _CurrentXaml.Clear();
+                           Application.Current.Resources.MergedDictionaries.Remove(_CurrentXaml);
                         }
 
                         _currentSkin = value;
+                        _CurrentXaml = null;
 
                         if (_currentSkin == "По умолчанию (встроенный)") {
                             SetDefaultSkin();
                         } else
                             if (!string.IsNullOrEmpty(_currentSkin)) {
-                                ResourceDictionary skin = new ResourceDictionary();
-                                if (_currentSkin.StartsWith("user-")) {
-                                    skin.Source = new Uri(App.UserFolder + "/Skins/" + _currentSkin + ".xaml", UriKind.RelativeOrAbsolute);
+
+                                if (LoadedSkins.ContainsKey(_currentSkin)) {
+                                    _CurrentXaml = LoadedSkins[_currentSkin];
                                 } else {
-                                    skin.Source = new Uri(App.RootFolder + "/Skins/" + _currentSkin + ".xaml", UriKind.RelativeOrAbsolute);
-                                } 
+                                    string FileName = "";
+
+                                    if (_currentSkin.StartsWith("user-")) {
+                                        FileName = App.UserFolder + "/Skins/" + _currentSkin + ".xaml";
+                                    } else {
+                                        FileName = App.RootFolder + "/Skins/" + _currentSkin + ".xaml";
+                                    }
+
+
+
+                                    if (File.Exists(FileName)) {
+                                        _CurrentXaml = new ResourceDictionary();
+                                        _CurrentXaml.Source = new Uri(FileName, UriKind.RelativeOrAbsolute);
+
+
+                                     //   _CurrentXaml.
+
+                                    } else {
+                                        FileName = App.UserFolder + "/Skins/" + _currentSkin + ".png";
+                                        _CurrentXaml = Skins.PngSkin.LoadFromPng(FileName);
+                                    }
+
+                                    LoadedSkins[_currentSkin] = _CurrentXaml;
+                                }
+
+                                
 
                                // skin.Add
-                                UpdateSupports(skin);
-                                Application.Current.Resources.MergedDictionaries.Add(skin);
+                                UpdateSupports(_CurrentXaml);
+                                Application.Current.Resources.MergedDictionaries.Add(_CurrentXaml);
                             } else {
                                 SetDefaultSkin();
                             }
 
-
-                      
                     }
                 } catch (Exception e) {
                     MessageBox.Show("Ошибка в скине: " + e.Message);
@@ -231,7 +250,7 @@ namespace RatChat {
         private void SetDefaultSkin() {
             while (Application.Current.Resources.MergedDictionaries.Count>1)
                 Application.Current.Resources.MergedDictionaries.RemoveAt(1);
-
+            _CurrentXaml = null;
             ResourceDictionary skin = new ResourceDictionary();
             skin.Source = new Uri("Skins/DefaultSkin.xaml", UriKind.RelativeOrAbsolute);
             UpdateSupports(skin);
